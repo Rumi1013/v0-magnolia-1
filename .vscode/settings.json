@@ -1,0 +1,5 @@
+{
+    "editor.defaultFormatter": "Codeium.codeium",
+    "terminal.integrated.tabs.defaultIcon": "github",
+    "go.toolsManagement.autoUpdate": true
+}
