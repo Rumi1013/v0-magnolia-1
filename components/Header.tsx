@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { useTheme } from "next-themes"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X, MoonIcon, SunIcon, ChevronDown } from "lucide-react"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { Menu, X, ShoppingBag, User, Search, ChevronDown } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
+import { motion, AnimatePresence } from "framer-motion"
 
 type NavItem = {
   name: string
@@ -14,18 +17,16 @@ type NavItem = {
 }
 
 export default function Header() {
-  const [mounted, setMounted] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const { theme, setTheme } = useTheme()
-  const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+  const [logoLoaded, setLogoLoaded] = useState(true)
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   useEffect(() => {
-    setMounted(true)
-
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
+      setIsScrolled(window.scrollY > 10)
     }
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -101,126 +102,149 @@ export default function Header() {
   ]
 
   return (
-    <motion.header
+    <header
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300",
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-sm" : "bg-transparent",
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        isScrolled ? "bg-magnolia-white/95 backdrop-blur-md shadow-sm" : "bg-transparent",
       )}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
-        {/* Logo */}
-        <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Midnight Magnolia</span>
-            <img className="h-8 w-auto" src="/midnight-magnolia-bloom.png" alt="Midnight Magnolia Logo" />
-          </Link>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8">
-          {navItems.map((item) => (
-            <div key={item.name} className="relative" ref={(el) => (dropdownRefs.current[item.name] = el)}>
-              {item.children ? (
-                <>
-                  <button
-                    onClick={() => toggleDropdown(item.name)}
-                    className="flex items-center text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
-                    aria-expanded={activeDropdown === item.name}
-                  >
-                    {item.name}
-                    <ChevronDown
-                      className={cn(
-                        "ml-1 h-4 w-4 transition-transform",
-                        activeDropdown === item.name ? "rotate-180" : "",
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between py-4">
+          {/* Mobile menu */}
+          <Sheet>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="bg-magnolia-white">
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between mb-8">
+                  <Link href="/" className="flex items-center space-x-2">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full border border-rich-gold/50">
+                      <Image
+                        src="/abstract-geometric-logo.png"
+                        alt="Midnight Magnolia"
+                        width={40}
+                        height={40}
+                        className="h-10 w-auto object-cover"
+                        onError={() => setLogoLoaded(false)}
+                      />
+                    </div>
+                    <span className="font-playfair text-xl font-bold">Midnight Magnolia</span>
+                  </Link>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <X className="h-6 w-6" />
+                      <span className="sr-only">Close menu</span>
+                    </Button>
+                  </SheetTrigger>
+                </div>
+                <nav className="flex flex-col space-y-6 mt-4">
+                  {navItems.map((item) => (
+                    <div key={item.name} className="py-2">
+                      {item.children ? (
+                        <>
+                          <button
+                            onClick={() => toggleDropdown(item.name)}
+                            className="flex items-center w-full text-left py-2 text-foreground/80 hover:text-primary transition-colors"
+                          >
+                            <span className="font-medium">{item.name}</span>
+                            <ChevronDown
+                              className={cn(
+                                "ml-auto h-4 w-4 transition-transform",
+                                activeDropdown === item.name ? "rotate-180" : "",
+                              )}
+                            />
+                          </button>
+                          <AnimatePresence>
+                            {activeDropdown === item.name && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="pl-4 mt-1 space-y-1"
+                              >
+                                {item.children.map((child) => (
+                                  <Link
+                                    key={child.name}
+                                    href={child.href}
+                                    className="block py-2 text-sm text-foreground/70 hover:text-primary transition-colors"
+                                    onClick={() => setIsMenuOpen(false)}
+                                  >
+                                    {child.name}
+                                  </Link>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block py-2 text-foreground/80 hover:text-primary transition-colors font-medium"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {item.name}
+                        </Link>
                       )}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {activeDropdown === item.name && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute left-0 mt-2 w-48 rounded-md bg-background shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                      >
-                        <div className="py-1">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.name}
-                              href={child.href}
-                              className="block px-4 py-2 text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary"
-                              onClick={() => setActiveDropdown(null)}
-                            >
-                              {child.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </>
-              ) : (
-                <Link
-                  href={item.href}
-                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
-                >
-                  {item.name}
-                </Link>
-              )}
-            </div>
-          ))}
-        </nav>
+                    </div>
+                  ))}
+                </nav>
+                <div className="mt-auto pt-8 border-t border-gray-200">
+                  <div className="flex space-x-4">
+                    <Button variant="outline" size="icon">
+                      <User className="h-5 w-5" />
+                      <span className="sr-only">Account</span>
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <Search className="h-5 w-5" />
+                      <span className="sr-only">Search</span>
+                    </Button>
+                    <Button variant="outline" size="icon">
+                      <ShoppingBag className="h-5 w-5" />
+                      <span className="sr-only">Cart</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
 
-        {/* Actions */}
-        <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-full p-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {theme === "dark" ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-            </button>
-          )}
+          {/* Logo */}
+          <div className="flex-1 flex items-center justify-center md:justify-start">
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="relative h-12 w-12 overflow-hidden rounded-full border border-rich-gold/50">
+                <Image
+                  src="/abstract-geometric-logo.png"
+                  alt="Midnight Magnolia"
+                  width={50}
+                  height={50}
+                  className="h-12 w-auto object-cover"
+                  onError={() => setLogoLoaded(false)}
+                />
+              </div>
+              <span className="font-playfair text-2xl font-bold hidden sm:inline-block">Midnight Magnolia</span>
+            </Link>
+          </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden rounded-full p-2 bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <motion.div
-          className="md:hidden bg-background/95 backdrop-blur-md shadow-md"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="px-4 py-3 space-y-1 divide-y divide-border/20">
+          {/* Desktop navigation */}
+          <nav className="hidden md:flex space-x-8">
             {navItems.map((item) => (
-              <div key={item.name} className="py-3">
+              <div key={item.name} className="relative" ref={(el) => (dropdownRefs.current[item.name] = el)}>
                 {item.children ? (
                   <>
                     <button
                       onClick={() => toggleDropdown(item.name)}
-                      className="flex items-center w-full text-left py-2 text-foreground/80 hover:text-primary transition-colors"
+                      className="flex items-center text-sm font-medium text-foreground/80 hover:text-rich-gold transition-colors"
+                      aria-expanded={activeDropdown === item.name}
                     >
-                      <span className="font-medium">{item.name}</span>
+                      {item.name}
                       <ChevronDown
                         className={cn(
-                          "ml-auto h-4 w-4 transition-transform",
+                          "ml-1 h-4 w-4 transition-transform",
                           activeDropdown === item.name ? "rotate-180" : "",
                         )}
                       />
@@ -228,22 +252,24 @@ export default function Header() {
                     <AnimatePresence>
                       {activeDropdown === item.name && (
                         <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
-                          className="pl-4 mt-1 space-y-1"
+                          className="absolute left-0 mt-2 w-48 rounded-md bg-background shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                         >
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.name}
-                              href={child.href}
-                              className="block py-2 text-sm text-foreground/70 hover:text-primary transition-colors"
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {child.name}
-                            </Link>
-                          ))}
+                          <div className="py-1">
+                            {item.children.map((child) => (
+                              <Link
+                                key={child.name}
+                                href={child.href}
+                                className="block px-4 py-2 text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary"
+                                onClick={() => setActiveDropdown(null)}
+                              >
+                                {child.name}
+                              </Link>
+                            ))}
+                          </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -251,17 +277,35 @@ export default function Header() {
                 ) : (
                   <Link
                     href={item.href}
-                    className="block py-2 text-foreground/80 hover:text-primary transition-colors font-medium"
-                    onClick={() => setIsMenuOpen(false)}
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-rich-gold",
+                      pathname === item.href ? "text-rich-gold" : "text-midnight-blue",
+                    )}
                   >
                     {item.name}
                   </Link>
                 )}
               </div>
             ))}
+          </nav>
+
+          {/* Icons */}
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="icon" className="hidden md:flex">
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
+            </Button>
+            <Button variant="ghost" size="icon" className="hidden md:flex">
+              <User className="h-5 w-5" />
+              <span className="sr-only">Account</span>
+            </Button>
+            <Button variant="ghost" size="icon">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="sr-only">Cart</span>
+            </Button>
           </div>
-        </motion.div>
-      )}
-    </motion.header>
+        </div>
+      </div>
+    </header>
   )
 }
