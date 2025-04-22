@@ -1,16 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 
-// Default about image with a placeholder
-const DEFAULT_ABOUT_IMAGE = "/abstract-about.png"
-
 export default function AboutSection() {
-  const [imageLoaded, setImageLoaded] = useState(true)
-
   return (
     <section className="py-20 bg-magnolia-white">
       <div className="container mx-auto px-4">
@@ -51,15 +45,7 @@ export default function AboutSection() {
             <div className="relative h-[500px] w-full">
               <div className="absolute top-0 right-0 w-4/5 h-4/5 border-2 border-rich-gold rounded-lg" />
               <div className="absolute bottom-0 left-0 w-4/5 h-4/5 bg-midnight-blue/5 rounded-lg overflow-hidden">
-                {imageLoaded && (
-                  <Image
-                    src={"/placeholder.svg?height=800&width=600&query=southern+founder"}
-                    alt="Midnight Magnolia Founder"
-                    fill
-                    className="object-cover"
-                    onError={() => setImageLoaded(false)}
-                  />
-                )}
+                <Image src="/southern-town-square.png" alt="Midnight Magnolia Founder" fill className="object-cover" />
               </div>
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-sage-green rounded-full flex items-center justify-center">
                 <span className="font-playfair text-magnolia-white text-center text-sm px-4">Est. 2025</span>
