@@ -1,5 +1,7 @@
 {
     "editor.defaultFormatter": "Codeium.codeium",
     "terminal.integrated.tabs.defaultIcon": "github",
-    "go.toolsManagement.autoUpdate": true
+    "go.toolsManagement.autoUpdate": true,
+    "github-actions.workflows.pinned.refresh.enabled": true,
+    "github.experimental.multipleAccounts": true
 }
