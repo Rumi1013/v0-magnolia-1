@@ -1,8 +1,9 @@
+import MidnightMagnoliaDashboard from "@/components/dashboard/midnight-magnolia-dashboard"
+
 export default function DashboardPage() {
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <p>Dashboard content will appear here.</p>
+    <div className="min-h-screen bg-[#F8F6F0]">
+      <MidnightMagnoliaDashboard />
     </div>
   )
 }
