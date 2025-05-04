@@ -559,31 +559,31 @@ const Notion: React.FC = () => {
         </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-10">
-          <TabsList className="mb-8 bg-[#0A192F] border border-[#A3B18A]/30 p-1">
+          <TabsList className="mb-8 bg-[#0A192F] border border-[#A3B18A]/30 p-1 w-full flex flex-wrap gap-1 justify-center">
             <TabsTrigger 
               value="creator-hub" 
-              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F]"
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
             >
               Creator Hub
             </TabsTrigger>
             <TabsTrigger 
               value="explore" 
-              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F]"
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
             >
-              Explore Databases
+              Explore
             </TabsTrigger>
             <TabsTrigger 
               value="create-template" 
-              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F]"
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
             >
-              Create Template
+              Create
             </TabsTrigger>
             <TabsTrigger 
               value="add-content" 
-              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F]"
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
               disabled={!selectedDatabaseId}
             >
-              Add Content
+              Add
             </TabsTrigger>
           </TabsList>
 
@@ -916,7 +916,7 @@ const Notion: React.FC = () => {
                               {key === 'astrology' && <FaMagic className="text-[#D4AF37]" />}
                               {key === 'default' && <FaTable className="text-[#D4AF37]" />}
                             </div>
-                            <div className="font-medium text-sm">{template.name}</div>
+                            <div className="font-medium text-sm text-[#FAF3E0]">{template.name}</div>
                           </div>
                         ))}
                       </div>
