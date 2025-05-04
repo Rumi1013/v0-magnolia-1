@@ -90,9 +90,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: true, 
         status: "connected",
         integration: {
-          name: user.name,
-          type: user.type,
-          bot: user.bot
+          name: user.name || 'Notion Integration',
+          type: user.type || 'bot'
         }
       });
     } catch (error: any) {
