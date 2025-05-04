@@ -761,7 +761,7 @@ const Notion: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-sm">Updated "New Moon Ritual Worksheet" status to Complete</p>
-                            <p className="text-xs opacity-50">May 3, 2025</p>
+                            <p className="text-xs text-[#FAF3E0]">May 3, 2025</p>
                           </div>
                         </div>
                       </div>
@@ -800,18 +800,18 @@ const Notion: React.FC = () => {
                           <CardTitle className="text-[#D4AF37]">
                             {db.title?.[0]?.plain_text || 'Untitled Database'}
                           </CardTitle>
-                          <CardDescription className="font-mono text-xs break-all opacity-60">
+                          <CardDescription className="font-mono text-xs break-all text-[#FAF3E0]">
                             ID: {db.id}
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-sm opacity-70 mb-2">Properties:</p>
-                          <div className="bg-[#0A192F]/50 p-3 rounded border border-[#A3B18A]/20 text-sm opacity-80 overflow-auto max-h-32">
+                          <p className="text-sm text-[#FAF3E0] mb-2">Properties:</p>
+                          <div className="bg-[#0A192F]/50 p-3 rounded border border-[#A3B18A]/20 text-sm text-[#FAF3E0] overflow-auto max-h-32">
                             {db.properties && Object.keys(db.properties).map(propName => (
                               <div key={propName} className="mb-1 flex items-center">
                                 <span className="inline-block w-2 h-2 rounded-full bg-[#A3B18A]/50 mr-2"></span>
                                 <span className="font-medium">{propName}</span>
-                                <span className="opacity-60 text-xs ml-2">({db.properties[propName].type})</span>
+                                <span className="text-[#FAF3E0] text-xs ml-2">({db.properties[propName].type})</span>
                               </div>
                             ))}
                           </div>
@@ -832,10 +832,10 @@ const Notion: React.FC = () => {
                     <div className="col-span-2 text-center p-12 border border-dashed border-[#A3B18A]/30 rounded-md">
                       <div className="flex flex-col items-center">
                         <FaBook className="text-[#A3B18A] text-4xl mb-4 opacity-40" />
-                        <p className="text-[#FAF3E0] opacity-70 mb-2">
+                        <p className="text-[#FAF3E0] mb-2">
                           No databases found. Make sure your integration has access to pages with databases.
                         </p>
-                        <p className="text-[#FAF3E0] opacity-50 text-sm max-w-lg mb-4">
+                        <p className="text-[#FAF3E0] text-sm max-w-lg mb-4">
                           To share a page with your integration, open Notion, navigate to the page, 
                           click "Share" in the top right, and select your integration.
                         </p>
