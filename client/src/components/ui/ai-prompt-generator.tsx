@@ -119,7 +119,7 @@ export const AIPromptGenerator: React.FC<AIPromptGeneratorProps> = ({
       <CardContent className="pt-6">
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label>Content Type</Label>
+            <Label className="text-[#FAF3E0]">Content Type</Label>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(promptTemplates) as PromptType[]).map((type) => (
                 <Button
@@ -147,7 +147,7 @@ export const AIPromptGenerator: React.FC<AIPromptGeneratorProps> = ({
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <Label>Variable Input</Label>
+              <Label className="text-[#FAF3E0]">Variable Input</Label>
               <Badge variant="outline" className="bg-[#0A192F]">
                 {promptTemplates[promptType].variables.length} Variables
               </Badge>
@@ -156,7 +156,7 @@ export const AIPromptGenerator: React.FC<AIPromptGeneratorProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {promptTemplates[promptType].variables.map((variable) => (
                 <div key={variable} className="space-y-1">
-                  <Label htmlFor={variable} className="text-xs opacity-80">
+                  <Label htmlFor={variable} className="text-xs text-[#FAF3E0]">
                     {variable.replace(/_/g, ' ')}
                   </Label>
                   <Input
@@ -174,7 +174,7 @@ export const AIPromptGenerator: React.FC<AIPromptGeneratorProps> = ({
           {generatedPrompt && (
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label>Generated Prompt</Label>
+                <Label className="text-[#FAF3E0]">Generated Prompt</Label>
                 <Button
                   size="sm"
                   variant="outline"
