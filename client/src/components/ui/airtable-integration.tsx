@@ -20,7 +20,15 @@ export const AirtableIntegration: React.FC = () => {
   // Check Airtable connection status
   const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
     queryKey: ['/api/airtable/health'],
+    queryFn: async () => {
+      console.log('Checking Airtable health...');
+      const response = await apiRequest('/api/airtable/health');
+      const data = await response.json();
+      console.log('Airtable health data:', data);
+      return data;
+    },
     onSuccess: (data: any) => {
+      console.log('Health check success:', data);
       if (data?.success) {
         setConnectionStatus('connected');
       } else {
@@ -28,6 +36,7 @@ export const AirtableIntegration: React.FC = () => {
       }
     },
     onError: () => {
+      console.error('Health check error');
       setConnectionStatus('error');
     }
   });
