@@ -870,7 +870,7 @@ const Notion: React.FC = () => {
                 <CardContent className="pt-6">
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <Label htmlFor="parent-page-id">Parent Page ID</Label>
+                      <Label htmlFor="parent-page-id" className="text-[#FAF3E0]">Parent Page ID</Label>
                       <Input
                         id="parent-page-id"
                         value={parentPageId}
@@ -884,7 +884,7 @@ const Notion: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="database-title">Template Title</Label>
+                      <Label htmlFor="database-title" className="text-[#FAF3E0]">Template Title</Label>
                       <Input
                         id="database-title"
                         value={databaseTitle}
@@ -895,8 +895,8 @@ const Notion: React.FC = () => {
                     </div>
 
                     <div className="space-y-3">
-                      <Label htmlFor="template-type">Template Type</Label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <Label htmlFor="template-type" className="text-[#FAF3E0]">Template Type</Label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 rounded-md bg-[#0A192F]/80 border border-[#A3B18A]/30">
                         {Object.entries(databaseTemplates).map(([key, template]) => (
                           <div
                             key={key}
@@ -924,7 +924,7 @@ const Notion: React.FC = () => {
 
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <Label htmlFor="database-properties">Schema Properties (JSON)</Label>
+                        <Label htmlFor="database-properties" className="text-[#FAF3E0]">Schema Properties (JSON)</Label>
                         <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">Advanced</Badge>
                       </div>
                       <Textarea
@@ -1012,7 +1012,7 @@ const Notion: React.FC = () => {
                   <div className="space-y-6">
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <Label htmlFor="page-properties">Content Properties (JSON)</Label>
+                        <Label htmlFor="page-properties" className="text-[#FAF3E0]">Content Properties (JSON)</Label>
                         <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">Advanced</Badge>
                       </div>
                       <Textarea
