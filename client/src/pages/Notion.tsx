@@ -738,7 +738,7 @@ const Notion: React.FC = () => {
                             <FaStar />
                           </div>
                           <div>
-                            <p className="text-sm">Added "Monthly Affirmation Cards - May" to Printables</p>
+                            <p className="text-sm text-[#FAF3E0]">Added "Monthly Affirmation Cards - May" to Printables</p>
                             <p className="text-xs text-[#FAF3E0]">Today, 2:15 PM</p>
                           </div>
                         </div>
@@ -749,7 +749,7 @@ const Notion: React.FC = () => {
                             <FaMoon />
                           </div>
                           <div>
-                            <p className="text-sm">Created "Tarot + Astrology Content Calendar" template</p>
+                            <p className="text-sm text-[#FAF3E0]">Created "Tarot + Astrology Content Calendar" template</p>
                             <p className="text-xs text-[#FAF3E0]">Yesterday, 10:23 AM</p>
                           </div>
                         </div>
@@ -760,7 +760,7 @@ const Notion: React.FC = () => {
                             <FaDownload />
                           </div>
                           <div>
-                            <p className="text-sm">Updated "New Moon Ritual Worksheet" status to Complete</p>
+                            <p className="text-sm text-[#FAF3E0]">Updated "New Moon Ritual Worksheet" status to Complete</p>
                             <p className="text-xs text-[#FAF3E0]">May 3, 2025</p>
                           </div>
                         </div>
@@ -925,7 +925,7 @@ const Notion: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <Label htmlFor="database-properties">Schema Properties (JSON)</Label>
-                        <Badge variant="outline" className="bg-[#0A192F] text-xs">Advanced</Badge>
+                        <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">Advanced</Badge>
                       </div>
                       <Textarea
                         id="database-properties"
@@ -1000,7 +1000,7 @@ const Notion: React.FC = () => {
                   <div className="flex items-center">
                     <FaBook className="text-[#D4AF37] mr-3" />
                     <div>
-                      <p className="text-sm">Selected Database:</p>
+                      <p className="text-sm text-[#FAF3E0]">Selected Database:</p>
                       <p className="font-mono text-xs text-[#FAF3E0] overflow-hidden text-ellipsis">{selectedDatabaseId}</p>
                     </div>
                   </div>
@@ -1013,7 +1013,7 @@ const Notion: React.FC = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <Label htmlFor="page-properties">Content Properties (JSON)</Label>
-                        <Badge variant="outline" className="bg-[#0A192F] text-xs">Advanced</Badge>
+                        <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">Advanced</Badge>
                       </div>
                       <Textarea
                         id="page-properties"
