@@ -932,7 +932,7 @@ const Notion: React.FC = () => {
                         value={databasePropertiesJson}
                         onChange={(e) => setDatabasePropertiesJson(e.target.value)}
                         rows={10}
-                        className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30"
+                        className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30 text-[#FAF3E0]"
                       />
                       <p className="text-xs text-[#FAF3E0]">
                         This defines your database schema with columns like Title, Category, Status etc. Edit with caution.
@@ -1020,7 +1020,7 @@ const Notion: React.FC = () => {
                         value={pagePropertiesJson}
                         onChange={(e) => setPagePropertiesJson(e.target.value)}
                         rows={12}
-                        className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30"
+                        className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30 text-[#FAF3E0]"
                       />
                       <p className="text-xs text-[#FAF3E0]">
                         Note: The structure of properties must match the database schema. Title properties are required.
