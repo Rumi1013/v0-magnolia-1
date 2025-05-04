@@ -597,7 +597,7 @@ const Notion: React.FC = () => {
                     <CardTitle className="text-[#D4AF37] flex items-center">
                       <FaClipboardCheck className="mr-2" /> Grimoire Setup
                     </CardTitle>
-                    <CardDescription>Track your implementation progress</CardDescription>
+                    <CardDescription className="text-[#FAF3E0]">Track your implementation progress</CardDescription>
                   </CardHeader>
                   <CardContent className="pt-6">
                     <div className="space-y-4">
@@ -608,9 +608,9 @@ const Notion: React.FC = () => {
                           </div>
                           <div>
                             <h3 className="font-medium text-[#D4AF37]">{step.title}</h3>
-                            <p className="text-sm opacity-80">{step.description}</p>
+                            <p className="text-sm text-[#FAF3E0]">{step.description}</p>
                             <div className="mt-2">
-                              <Badge variant="outline" className="text-xs bg-[#0A192F] border-[#A3B18A]/30">
+                              <Badge variant="outline" className="text-xs bg-[#0A192F] text-[#FAF3E0] border-[#A3B18A]/30">
                                 {step.status === 'complete' ? 'Completed' : 'Pending'}
                               </Badge>
                             </div>
@@ -654,12 +654,12 @@ const Notion: React.FC = () => {
                           <CardContent className="pb-2">
                             <div className="flex flex-wrap gap-2 mb-3">
                               {db.properties && Object.keys(db.properties).slice(0, 3).map(propName => (
-                                <Badge key={propName} variant="outline" className="bg-[#0A192F]/50 text-xs">
+                                <Badge key={propName} variant="outline" className="bg-[#0A192F]/50 text-xs text-[#FAF3E0]">
                                   {propName}
                                 </Badge>
                               ))}
                               {db.properties && Object.keys(db.properties).length > 3 && (
-                                <Badge variant="outline" className="bg-[#0A192F]/50 text-xs">
+                                <Badge variant="outline" className="bg-[#0A192F]/50 text-xs text-[#FAF3E0]">
                                   +{Object.keys(db.properties).length - 3} more
                                 </Badge>
                               )}
