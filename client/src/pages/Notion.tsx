@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
+import ContentTypeForm from '@/components/ui/content-type-form';
 import { 
   FaBook, 
   FaMoon, 
@@ -490,56 +491,135 @@ const Notion: React.FC = () => {
 
   // State for adding a page to a database
   const [selectedDatabaseId, setSelectedDatabaseId] = useState('');
-  const [pagePropertiesJson, setPagePropertiesJson] = useState(JSON.stringify({
-    "Title": {
-      "title": [
-        {
-          "text": {
-            "content": "New Moon Tarot Reflection Worksheet"
+  const [contentType, setContentType] = useState('general');
+  const [contentTitle, setContentTitle] = useState('');
+  const [contentDescription, setContentDescription] = useState('');
+  const [contentCategory, setContentCategory] = useState('Printable');
+  const [contentMedium, setContentMedium] = useState('digital');
+  const [contentTheme, setContentTheme] = useState('Modern');
+  const [contentFormat, setContentFormat] = useState('PDF');
+  
+  // Generate page properties JSON based on form inputs
+  const generatePageProperties = () => {
+    let properties: any = {
+      "Title": {
+        "title": [
+          {
+            "text": {
+              "content": contentTitle || "Untitled Content"
+            }
           }
-        }
-      ]
-    },
-    "Description": {
-      "rich_text": [
-        {
-          "text": {
-            "content": "Monthly worksheet aligning tarot readings with moon phases"
+        ]
+      },
+      "Description": {
+        "rich_text": [
+          {
+            "text": {
+              "content": contentDescription || "No description"
+            }
           }
+        ]
+      },
+      "Status": {
+        "status": {
+          "name": "Not Started"
         }
-      ]
-    },
-    "Category": {
-      "select": {
-        "name": "Printable"
-      }
-    },
-    "Status": {
-      "status": {
-        "name": "Not Started"
-      }
-    },
-    "Priority": {
-      "select": {
-        "name": "Urgent + Important"
-      }
-    },
-    "Type": {
-      "multi_select": [
-        {
-          "name": "Tarot"
-        },
-        {
-          "name": "Grid"
+      },
+      "CreatedDate": {
+        "date": {
+          "start": new Date().toISOString().split('T')[0]
         }
-      ]
-    },
-    "CreatedDate": {
-      "date": {
-        "start": new Date().toISOString().split('T')[0]
       }
+    };
+    
+    // Add properties based on content type
+    if (contentType === 'ebook') {
+      properties.Category = {
+        "select": {
+          "name": "eBook"
+        }
+      };
+      properties.Format = {
+        "select": {
+          "name": contentFormat
+        }
+      };
+      properties.Theme = {
+        "select": {
+          "name": contentTheme
+        }
+      };
+    } else if (contentType === 'artwork') {
+      properties.Category = {
+        "select": {
+          "name": "Artwork"
+        }
+      };
+      properties.Style = {
+        "select": {
+          "name": contentTheme // Using contentTheme for style (Vintage/Modern)
+        }
+      };
+      if (contentMedium === 'both') {
+        properties.PrintFormats = {
+          "multi_select": [
+            { "name": "Digital" },
+            { "name": "Print" }
+          ]
+        };
+      } else {
+        properties.PrintFormats = {
+          "multi_select": [
+            { "name": contentMedium === 'digital' ? "Digital" : "Print" }
+          ]
+        };
+      }
+    } else if (contentType === 'printable') {
+      properties.Category = {
+        "select": {
+          "name": "Printable"
+        }
+      };
+      properties.Type = {
+        "multi_select": [
+          { "name": "Grid" }
+        ]
+      };
+    } else if (contentType === 'blog') {
+      properties.Category = {
+        "select": {
+          "name": "Blog Post"
+        }
+      };
+      properties.PublishDate = {
+        "date": {
+          "start": new Date().toISOString().split('T')[0]
+        }
+      };
+    } else if (contentType === 'service') {
+      properties.Category = {
+        "select": {
+          "name": "Service"
+        }
+      };
+      properties.PricingTier = {
+        "select": {
+          "name": "Golden Grove" // Default tier
+        }
+      };
+    } else {
+      // General content
+      properties.Category = {
+        "select": {
+          "name": contentCategory
+        }
+      };
     }
-  }, null, 2));
+    
+    return JSON.stringify(properties, null, 2);
+  };
+  
+  const [pagePropertiesJson, setPagePropertiesJson] = useState(generatePageProperties());
 
   // Query to list all databases
   interface NotionApiResponse {
@@ -644,6 +724,16 @@ const Notion: React.FC = () => {
       });
     }
   };
+  
+  // Update page properties when form inputs change
+  const updatePageProperties = () => {
+    setPagePropertiesJson(generatePageProperties());
+  };
+  
+  // Update properties whenever content type changes
+  useEffect(() => {
+    updatePageProperties();
+  }, [contentType, contentTitle, contentDescription, contentCategory, contentFormat, contentTheme, contentMedium]);
 
   // Select a database for adding a page
   const handleSelectDatabase = (databaseId: string) => {
@@ -1311,23 +1401,48 @@ const Notion: React.FC = () => {
                 </div>
               )}
               
+              <Card className="bg-[#0A192F] border-[#A3B18A]/30 shadow-lg mb-6">
+                <CardContent className="pt-6">
+                  <div className="space-y-6">
+                    <ContentTypeForm
+                      contentType={contentType}
+                      setContentType={setContentType}
+                      contentTitle={contentTitle}
+                      setContentTitle={setContentTitle}
+                      contentDescription={contentDescription}
+                      setContentDescription={setContentDescription}
+                      contentCategory={contentCategory}
+                      setContentCategory={setContentCategory}
+                      contentMedium={contentMedium}
+                      setContentMedium={setContentMedium}
+                      contentTheme={contentTheme}
+                      setContentTheme={setContentTheme}
+                      contentFormat={contentFormat}
+                      setContentFormat={setContentFormat}
+                      onPropertiesUpdate={updatePageProperties}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+              
               <Card className="bg-[#0A192F] border-[#A3B18A]/30 shadow-lg">
                 <CardContent className="pt-6">
                   <div className="space-y-6">
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <Label htmlFor="page-properties" className="text-[#FAF3E0]">Content Properties (JSON)</Label>
+                        <Label htmlFor="page-properties" className="text-[#FAF3E0]">Generated JSON Properties</Label>
                         <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">Advanced</Badge>
                       </div>
                       <Textarea
                         id="page-properties"
                         value={pagePropertiesJson}
                         onChange={(e) => setPagePropertiesJson(e.target.value)}
-                        rows={12}
+                        rows={8}
                         className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30 text-[#FAF3E0]"
                       />
                       <p className="text-xs text-[#FAF3E0]">
-                        Note: The structure of properties must match the database schema. Title properties are required.
+                        Note: The properties are automatically generated based on your selections above. 
+                        You can manually edit this JSON if needed.
                       </p>
                     </div>
 
