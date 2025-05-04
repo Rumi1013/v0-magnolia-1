@@ -72,7 +72,7 @@ export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
           {getIcon(tier.icon)}
         </motion.div>
         <h3 className="font-playfair text-2xl text-[#D4AF37] mb-1">{tier.name}</h3>
-        <p className="text-[#FAF3E0]/70 text-sm italic mb-3">{tier.tagline}</p>
+        <p className="text-[#FAF3E0] text-sm italic mb-3">{tier.tagline}</p>
         <div className="text-2xl font-bold text-[#FAF3E0] mb-2">{tier.price}</div>
         <div className={`w-16 h-0.5 ${isGolden ? 'bg-[#D4AF37]/50' : 'bg-[#A3B18A]/50'} mx-auto`}></div>
       </div>

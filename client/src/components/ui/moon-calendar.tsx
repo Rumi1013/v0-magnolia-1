@@ -107,7 +107,7 @@ export const MoonCalendar: React.FC<MoonCalendarProps> = ({
                   <div className="flex justify-between">
                     <div>
                       <h3 className="font-medium text-[#D4AF37]">{moon.phase}</h3>
-                      <p className="text-xs opacity-80">
+                      <p className="text-xs text-[#FAF3E0]">
                         {new Date(moon.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} • {moon.zSign} • {moon.element}
                       </p>
                     </div>
