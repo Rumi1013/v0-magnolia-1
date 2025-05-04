@@ -686,7 +686,7 @@ const Notion: React.FC = () => {
                           <FaPlus />
                         </div>
                         <h3 className="font-medium text-[#D4AF37] mb-2">Create New Template</h3>
-                        <p className="text-sm opacity-70 mb-4">
+                        <p className="text-sm text-[#FAF3E0] mb-4">
                           Design a custom database for your content needs
                         </p>
                         <Button 
@@ -862,7 +862,7 @@ const Notion: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-playfair text-[#D4AF37]">Create Content Template</h2>
-                  <p className="text-sm opacity-70">Design a new database for your content workflow</p>
+                  <p className="text-sm text-[#FAF3E0]">Design a new database for your content workflow</p>
                 </div>
               </div>
               
@@ -878,7 +878,7 @@ const Notion: React.FC = () => {
                         placeholder="Enter the ID of the page where the database will be created"
                         className="bg-[#0A192F]/60 border-[#A3B18A]/30"
                       />
-                      <p className="text-xs opacity-70">
+                      <p className="text-xs text-[#FAF3E0]">
                         Note: Your integration must have access to this page. Page IDs are found in the URL when viewing a page.
                       </p>
                     </div>
@@ -934,7 +934,7 @@ const Notion: React.FC = () => {
                         rows={10}
                         className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30"
                       />
-                      <p className="text-xs opacity-70">
+                      <p className="text-xs text-[#FAF3E0]">
                         This defines your database schema with columns like Title, Category, Status etc. Edit with caution.
                       </p>
                     </div>
@@ -991,7 +991,7 @@ const Notion: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-2xl font-playfair text-[#D4AF37]">Add New Content</h2>
-                  <p className="text-sm opacity-70">Create a new entry in your content database</p>
+                  <p className="text-sm text-[#FAF3E0]">Create a new entry in your content database</p>
                 </div>
               </div>
               
@@ -1022,7 +1022,7 @@ const Notion: React.FC = () => {
                         rows={12}
                         className="font-mono text-sm bg-[#0A192F]/60 border-[#A3B18A]/30"
                       />
-                      <p className="text-xs opacity-70">
+                      <p className="text-xs text-[#FAF3E0]">
                         Note: The structure of properties must match the database schema. Title properties are required.
                       </p>
                     </div>
