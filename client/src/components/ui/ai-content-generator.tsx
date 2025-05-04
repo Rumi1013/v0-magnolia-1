@@ -23,7 +23,8 @@ import {
   FaFileAlt,
   FaShoppingBag,
   FaClipboardList,
-  FaPalette
+  FaPalette,
+  FaDatabase
 } from 'react-icons/fa';
 
 export const AIContentGenerator: React.FC = () => {
