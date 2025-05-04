@@ -291,6 +291,224 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== AIRTABLE API ROUTES =====
+  
+  // Check Airtable integration health
+  app.get("/api/airtable/health", async (_req: Request, res: Response) => {
+    try {
+      // Try listing bases to verify API key works
+      await airtableService.listBases();
+      res.json({ 
+        success: true, 
+        status: "connected"
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Airtable integration is not working properly");
+    }
+  });
+
+  // List all Airtable bases
+  app.get("/api/airtable/bases", async (_req: Request, res: Response) => {
+    try {
+      const bases = await airtableService.listBases();
+      res.json({ success: true, bases });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to list Airtable bases");
+    }
+  });
+
+  // Get a specific base by ID
+  app.get("/api/airtable/bases/:baseId", async (req: Request, res: Response) => {
+    try {
+      const { baseId } = req.params;
+      const base = await airtableService.getBase(baseId);
+      res.json({ success: true, base });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get Airtable base");
+    }
+  });
+
+  // Get tables for a specific base
+  app.get("/api/airtable/bases/:baseId/tables", async (req: Request, res: Response) => {
+    try {
+      const { baseId } = req.params;
+      const tables = await airtableService.getTables(baseId);
+      res.json({ success: true, tables });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get tables from Airtable base");
+    }
+  });
+
+  // Get records from a specific table
+  app.get("/api/airtable/bases/:baseId/tables/:tableId/records", async (req: Request, res: Response) => {
+    try {
+      const { baseId, tableId } = req.params;
+      const records = await airtableService.getRecords(baseId, tableId);
+      res.json({ success: true, records });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get records from Airtable table");
+    }
+  });
+
+  // Get schema for a specific table
+  app.get("/api/airtable/bases/:baseId/tables/:tableId/schema", async (req: Request, res: Response) => {
+    try {
+      const { baseId, tableId } = req.params;
+      const schema = await airtableService.getTableSchema(baseId, tableId);
+      res.json({ success: true, schema });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get schema from Airtable table");
+    }
+  });
+
+  // Convert Airtable schema to Notion schema
+  app.post("/api/airtable/convert-schema", async (req: Request, res: Response) => {
+    try {
+      const { schema } = req.body;
+      const notionSchema = airtableService.convertToNotionSchema(schema);
+      res.json({ success: true, notionSchema });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to convert schema to Notion format");
+    }
+  });
+
+  // Import records from Airtable to Notion
+  app.post("/api/airtable/import-to-notion", async (req: Request, res: Response) => {
+    try {
+      const { baseId, tableId, notionDatabaseId, fieldMappings } = req.body;
+      const importedCount = await airtableService.importToNotion(
+        baseId,
+        tableId,
+        notionDatabaseId,
+        fieldMappings,
+        notionService
+      );
+      res.json({ success: true, importedCount });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to import records to Notion");
+    }
+  });
+
+  // ===== OPENAI API ROUTES =====
+  
+  // Check OpenAI integration health
+  app.get("/api/openai/health", async (_req: Request, res: Response) => {
+    try {
+      // Generate a simple completion to verify API key works
+      const testPrompt = "Hello, this is a test.";
+      const response = await openaiService.generateTarotReading("The Fool", "general");
+      res.json({ 
+        success: true, 
+        status: "connected"
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "OpenAI integration is not working properly");
+    }
+  });
+
+  // Generate a tarot reading
+  app.post("/api/openai/tarot-reading", async (req: Request, res: Response) => {
+    try {
+      const { cardName, queryType } = req.body;
+      const reading = await openaiService.generateTarotReading(
+        cardName,
+        queryType || "general"
+      );
+      res.json({ success: true, reading });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate tarot reading");
+    }
+  });
+
+  // Generate affirmations
+  app.post("/api/openai/affirmations", async (req: Request, res: Response) => {
+    try {
+      const { theme, count, mood } = req.body;
+      const affirmations = await openaiService.generateAffirmations(
+        theme,
+        count || 5,
+        mood || "positive"
+      );
+      res.json({ success: true, affirmations });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate affirmations");
+    }
+  });
+
+  // Generate a content brief
+  app.post("/api/openai/content-brief", async (req: Request, res: Response) => {
+    try {
+      const { contentType, theme, additionalContext } = req.body;
+      const brief = await openaiService.generateContentBrief(
+        contentType,
+        theme,
+        additionalContext
+      );
+      res.json({ success: true, brief });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate content brief");
+    }
+  });
+
+  // Generate a product description
+  app.post("/api/openai/product-description", async (req: Request, res: Response) => {
+    try {
+      const { productType, title, features, targetAudience } = req.body;
+      const description = await openaiService.generateProductDescription(
+        productType,
+        title,
+        features,
+        targetAudience
+      );
+      res.json({ success: true, description });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate product description");
+    }
+  });
+
+  // Generate image prompts
+  app.post("/api/openai/image-prompts", async (req: Request, res: Response) => {
+    try {
+      const { subject, style, count } = req.body;
+      const prompts = await openaiService.generateImagePrompts(
+        subject,
+        style,
+        count || 3
+      );
+      res.json({ success: true, prompts });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate image prompts");
+    }
+  });
+
+  // Generate a worksheet structure
+  app.post("/api/openai/worksheet", async (req: Request, res: Response) => {
+    try {
+      const { topic, purpose } = req.body;
+      const worksheet = await openaiService.generateWorksheetStructure(
+        topic,
+        purpose
+      );
+      res.json({ success: true, worksheet });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate worksheet structure");
+    }
+  });
+
+  // Generate moon phase content
+  app.post("/api/openai/moon-phase-content", async (req: Request, res: Response) => {
+    try {
+      const { phase, contentType } = req.body;
+      const content = await openaiService.generateMoonPhaseContent(
+        phase,
+        contentType
+      );
+      res.json({ success: true, content });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate moon phase content");
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
