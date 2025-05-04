@@ -11,7 +11,8 @@ const moonPhases = [
     phase: 'New Moon', 
     zSign: 'Taurus',
     element: 'Earth',
-    color: 'bg-blue-500/80',
+    color: 'bg-blue-600',
+    bgColor: 'bg-blue-900/40',
     textColor: 'text-white'
   },
   { 
@@ -19,7 +20,8 @@ const moonPhases = [
     phase: 'First Quarter', 
     zSign: 'Leo',
     element: 'Fire',
-    color: 'bg-blue-400/70',
+    color: 'bg-blue-500',
+    bgColor: 'bg-blue-800/40',
     textColor: 'text-white'
   },
   { 
@@ -27,7 +29,8 @@ const moonPhases = [
     phase: 'Full Moon', 
     zSign: 'Scorpio',
     element: 'Water',
-    color: 'bg-purple-500/80',
+    color: 'bg-purple-600',
+    bgColor: 'bg-purple-900/40',
     textColor: 'text-white'
   },
   { 
@@ -35,15 +38,17 @@ const moonPhases = [
     phase: 'Last Quarter', 
     zSign: 'Aquarius',
     element: 'Air',
-    color: 'bg-yellow-500/60',
-    textColor: 'text-gray-800'
+    color: 'bg-amber-500',
+    bgColor: 'bg-amber-800/40',
+    textColor: 'text-white'
   },
   { 
     date: '2025-05-29', 
     phase: 'New Moon', 
     zSign: 'Gemini',
     element: 'Air',
-    color: 'bg-blue-500/80',
+    color: 'bg-blue-600',
+    bgColor: 'bg-blue-900/40',
     textColor: 'text-white'
   }
 ];
