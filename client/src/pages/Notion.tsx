@@ -139,11 +139,16 @@ const Notion: React.FC = () => {
   }, null, 2));
 
   // Query to list all databases
+  interface NotionApiResponse {
+    success: boolean;
+    databases: Array<any>;
+  }
+  
   const { 
     data: databasesData, 
     isLoading: isLoadingDatabases, 
     refetch: refetchDatabases 
-  } = useQuery({
+  } = useQuery<NotionApiResponse>({
     queryKey: ['/api/notion/databases'],
     enabled: activeTab === 'explore' || activeTab === 'creator-hub'
   });
@@ -405,39 +410,41 @@ const Notion: React.FC = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    {databasesData?.databases?.slice(0, 4).map((db: any) => (
-                      <Card key={db.id} className="bg-[#0A192F] border-[#A3B18A]/30 hover:border-[#A3B18A] transition-all duration-300">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-[#D4AF37] text-lg">
-                            {getDisplayTitle(db)}
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="pb-2">
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {db.properties && Object.keys(db.properties).slice(0, 3).map(propName => (
-                              <Badge key={propName} variant="outline" className="bg-[#0A192F]/50 text-xs">
-                                {propName}
-                              </Badge>
-                            ))}
-                            {db.properties && Object.keys(db.properties).length > 3 && (
-                              <Badge variant="outline" className="bg-[#0A192F]/50 text-xs">
-                                +{Object.keys(db.properties).length - 3} more
-                              </Badge>
-                            )}
-                          </div>
-                        </CardContent>
-                        <CardFooter className="pt-0">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleSelectDatabase(db.id)}
-                            className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F] text-xs w-full"
-                          >
-                            <FaPlus className="mr-2" /> Add Content
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    ))}
+                    {databasesData?.databases && databasesData.databases.length > 0 ? 
+                      databasesData.databases.slice(0, 4).map((db: any) => (
+                        <Card key={db.id} className="bg-[#0A192F] border-[#A3B18A]/30 hover:border-[#A3B18A] transition-all duration-300">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-[#D4AF37] text-lg">
+                              {getDisplayTitle(db)}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="pb-2">
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {db.properties && Object.keys(db.properties).slice(0, 3).map(propName => (
+                                <Badge key={propName} variant="outline" className="bg-[#0A192F]/50 text-xs">
+                                  {propName}
+                                </Badge>
+                              ))}
+                              {db.properties && Object.keys(db.properties).length > 3 && (
+                                <Badge variant="outline" className="bg-[#0A192F]/50 text-xs">
+                                  +{Object.keys(db.properties).length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                          </CardContent>
+                          <CardFooter className="pt-0">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleSelectDatabase(db.id)}
+                              className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F] text-xs w-full"
+                            >
+                              <FaPlus className="mr-2" /> Add Content
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      ))
+                    : null}
 
                     {/* Create new template card */}
                     <Card className="bg-[#0A192F] border-dashed border-[#A3B18A]/30 hover:border-[#A3B18A] transition-all duration-300">
@@ -527,7 +534,7 @@ const Notion: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {databasesData?.databases?.length > 0 ? (
+                  {databasesData?.databases && databasesData.databases.length > 0 ? (
                     databasesData.databases.map((db: any) => (
                       <Card key={db.id} className="bg-[#0A192F] border-[#A3B18A]/50 shadow-lg hover:border-[#A3B18A] transition-all duration-300">
                         <CardHeader>
