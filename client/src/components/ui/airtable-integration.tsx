@@ -99,7 +99,7 @@ export const AirtableIntegration: React.FC = () => {
   // Import records mutation
   const importRecordsMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/airtable/import-to-notion', {
+      const response = await apiRequest('/api/airtable/import-to-notion', {
         method: 'POST',
         body: JSON.stringify({
           baseId: selectedBase,
@@ -111,6 +111,7 @@ export const AirtableIntegration: React.FC = () => {
           'Content-Type': 'application/json'
         }
       });
+      return response.json();
     },
     onSuccess: (data) => {
       toast({
@@ -138,19 +139,21 @@ export const AirtableIntegration: React.FC = () => {
           'Content-Type': 'application/json'
         }
       });
+      const convertData = await convertResponse.json();
 
       // Then create database with converted schema
-      return apiRequest('/api/notion/databases', {
+      const dbResponse = await apiRequest('/api/notion/databases', {
         method: 'POST',
         body: JSON.stringify({
           parentPageId: data.parentPageId,
           title: data.title,
-          properties: convertResponse.notionSchema
+          properties: convertData.notionSchema
         }),
         headers: {
           'Content-Type': 'application/json'
         }
       });
+      return dbResponse.json();
     },
     onSuccess: (data) => {
       toast({
