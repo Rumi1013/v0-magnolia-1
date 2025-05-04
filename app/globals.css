@@ -24,8 +24,8 @@
   --ring: 224.3 76.3% 48%;
 
   /* Brand colors */
-  --midnight-blue: #0a192f;
-  --magnolia-white: #faf3e0;
+  --midnight-blue: #191970;
+  --magnolia-white: #f8f6f0;
   --rich-gold: #d4af37;
   --sage-green: #a3b18a;
 }
@@ -40,10 +40,19 @@
 }
 
 @layer utilities {
+  /* Modified grid background for smoother appearance on mobile */
   .bg-grid-white\/\[0\.02\] {
-    background-size: 30px 30px;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px; /* Increased size for less choppy appearance */
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+  }
+
+  /* Remove grid on mobile devices */
+  @media (max-width: 768px) {
+    .bg-grid-white\/\[0\.02\] {
+      background-image: none;
+      background-color: #0f0f1a; /* Solid background color instead */
+    }
   }
 
   /* Reduced animation speed for accessibility */
@@ -86,5 +95,32 @@
 
   .font-ui {
     font-family: var(--font-montserrat);
+  }
+
+  /* Custom scrollbar for better mobile experience */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: var(--magnolia-white);
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--midnight-blue);
+    border-radius: 3px;
+  }
+
+  /* Mobile-friendly touch targets */
+  @media (max-width: 768px) {
+    button,
+    a,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }

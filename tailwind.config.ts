@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss"
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -23,6 +23,8 @@ const config = {
         heading: ["var(--font-playfair-display)"],
         body: ["var(--font-lora)"],
         ui: ["var(--font-montserrat)"],
+        serif: ["var(--font-playfair-display)", "Georgia", "serif"],
+        sans: ["var(--font-montserrat)", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -59,10 +61,10 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
         // Brand colors
-        "midnight-blue": "#0a192f",
-        "magnolia-white": "#faf3e0",
-        "rich-gold": "#d4af37",
-        "sage-green": "#a3b18a",
+        "midnight-blue": "#191970",
+        "magnolia-white": "#F8F6F0",
+        "rich-gold": "#D4AF37",
+        "sage-green": "#A3B18A",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -83,9 +85,13 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [],
 } satisfies Config
 
 export default config

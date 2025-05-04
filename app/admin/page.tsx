@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,29 +16,48 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+
+  // Clear any previous auth on mount
+  useEffect(() => {
+    // Clear previous authentication to ensure fresh login
+    document.cookie = "adminAuthenticated=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+    localStorage.removeItem("adminToken")
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setIsSubmitting(true)
 
     // Simple credential check for demo purposes
     if (email === "latisha@midnight-magnolia.com" && password === "1234") {
-      // Set a cookie and localStorage item to simulate authentication
-      document.cookie = "adminAuthenticated=true; path=/; max-age=86400"
-      localStorage.setItem("adminToken", "demo-token-12345")
+      try {
+        // Set a cookie and localStorage item to simulate authentication
+        document.cookie = "adminAuthenticated=true; path=/; max-age=86400"
+        localStorage.setItem("adminToken", "demo-token-12345")
 
-      // Redirect to admin dashboard
-      router.push("/admin/dashboard")
+        // Redirect to admin dashboard
+        setTimeout(() => {
+          router.push("/admin/dashboard")
+        }, 500)
+      } catch (err) {
+        console.error("Authentication error:", err)
+        setError("Authentication failed. Please try again.")
+        setIsSubmitting(false)
+      }
     } else {
       setError("Invalid email or password")
+      setIsSubmitting(false)
     }
   }
 
   return (
     <div className="min-h-screen bg-[#0F0F1A] flex items-center justify-center p-4">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.02]" />
+      {/* Solid background for mobile */}
+      <div className="absolute inset-0 overflow-hidden bg-[#0F0F1A]">
+        <div className="absolute inset-0 bg-grid-white/[0.02] hidden md:block" />
       </div>
 
       <div className="w-full max-w-md z-10">
@@ -51,7 +70,7 @@ export default function AdminLogin() {
           </Link>
         </div>
 
-        <Card className="border border-[#D4AF37]/20 bg-[#191970]/30 backdrop-blur-sm">
+        <Card className="border border-[#D4AF37]/20 bg-[#191970]/80 backdrop-blur-sm">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-serif text-white text-center">Admin Access</CardTitle>
             <CardDescription className="text-gray-300 text-center">
@@ -98,8 +117,21 @@ export default function AdminLogin() {
                 </div>
               </div>
               {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
-              <Button type="submit" className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/80 text-[#191970] font-medium">
-                <Lock className="mr-2 h-4 w-4" /> Sign In
+              <Button
+                type="submit"
+                className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/80 text-[#191970] font-medium"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 border-2 border-[#191970] border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Signing In...
+                  </div>
+                ) : (
+                  <>
+                    <Lock className="mr-2 h-4 w-4" /> Sign In
+                  </>
+                )}
               </Button>
             </form>
           </CardContent>

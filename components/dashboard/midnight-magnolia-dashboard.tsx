@@ -12,7 +12,7 @@ const techArchitecture = {
   backend: [
     { name: "Supabase", use: "Auth and backend data" },
     { name: "make.com & Windsurf", use: "Visual automation workflows" },
-    { name: "Azure Functions", use: "Custom logic and scalable tasks" },
+    { name: "Netlify Functions", use: "Custom logic and scalable tasks" }, // Replaced Azure with Netlify
   ],
   aiCreative: [
     { name: "OpenAI, Anthropic", use: "Language tasks" },
@@ -470,20 +470,23 @@ const icons = {
 
 const MidnightMagnoliaDashboard = () => {
   const [activeTab, setActiveTab] = useState("colors")
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Render Tech Architecture Section
   const renderTechArchitecture = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Technology Architecture</h3>
-      <p className="mb-6">Complete developer and automation strategy for Midnight Magnolia's digital ecosystem.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Technology Architecture</h3>
+      <p className="mb-6 text-[#191970]">
+        Complete developer and automation strategy for Midnight Magnolia's digital ecosystem.
+      </p>
 
       <div className="space-y-8">
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-blue-900 text-white p-4">
+        <div className="border rounded-lg overflow-hidden border-[#191970]">
+          <div className="bg-[#191970] text-[#F8F6F0] p-4">
             <h4 className="font-serif text-xl">Vision Statement</h4>
           </div>
-          <div className="p-4">
-            <p className="italic mb-4">
+          <div className="p-4 bg-[#F8F6F0]">
+            <p className="italic mb-4 text-[#191970]">
               "Midnight Magnolia is a sacred business incubator and creative sanctuary rooted in Southern Gothic
               aesthetics and healing-centered technology. Its core applications include digital journaling tools,
               AI-assisted content, automation workflows, and incubator offerings for trauma-informed creators. The tech
@@ -493,14 +496,14 @@ const MidnightMagnoliaDashboard = () => {
         </div>
 
         {Object.entries(techArchitecture).map(([key, items]) => (
-          <div key={key} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={key} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{key.charAt(0).toUpperCase() + key.slice(1)}</h4>
             </div>
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <ul className="list-disc list-inside space-y-1">
                 {items.map((item, index) => (
-                  <li key={index}>
+                  <li key={index} className="text-[#191970]">
                     <span className="font-medium">{item.name}:</span> {item.use}
                   </li>
                 ))}
@@ -515,24 +518,24 @@ const MidnightMagnoliaDashboard = () => {
   // Render Notion Template Section
   const renderNotionTemplate = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Notion Command Center</h3>
-      <p className="mb-6">Template for Midnight Magnolia's project management and daily workflow.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Notion Command Center</h3>
+      <p className="mb-6 text-[#191970]">Template for Midnight Magnolia's project management and daily workflow.</p>
 
       <div className="space-y-8">
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-blue-900 text-white p-4">
+        <div className="border rounded-lg overflow-hidden border-[#191970]">
+          <div className="bg-[#191970] text-[#F8F6F0] p-4">
             <h4 className="font-serif text-xl">{notionTemplate.title}</h4>
           </div>
-          <div className="p-4 space-y-6">
+          <div className="p-4 space-y-6 bg-[#F8F6F0]">
             {notionTemplate.sections.map((section, index) => (
-              <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                <h5 className="font-serif text-lg mb-2">{section.name}</h5>
+              <div key={index} className="border-b pb-4 last:border-b-0 last:pb-0 border-[#191970]/20">
+                <h5 className="font-serif text-lg mb-2 text-[#191970]">{section.name}</h5>
 
                 {section.items && (
                   <ul className="list-inside space-y-1">
                     {section.items.map((item, i) => (
-                      <li key={i} className="flex items-center">
-                        <input type="checkbox" className="mr-2 h-4 w-4 rounded" />
+                      <li key={i} className="flex items-center text-[#191970]">
+                        <input type="checkbox" className="mr-2 h-4 w-4 rounded accent-[#D4AF37]" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -542,21 +545,23 @@ const MidnightMagnoliaDashboard = () => {
                 {section.links && (
                   <ul className="list-inside space-y-1">
                     {section.links.map((link, i) => (
-                      <li key={i} className="text-blue-700 hover:underline cursor-pointer">
+                      <li key={i} className="text-[#191970] hover:underline cursor-pointer">
                         {link}
                       </li>
                     ))}
                   </ul>
                 )}
 
-                {section.description && <p className="text-gray-600 italic">{section.description}</p>}
+                {section.description && <p className="text-[#191970]/80 italic">{section.description}</p>}
 
                 {section.affirmation && (
-                  <p className="mt-2 text-blue-900 italic font-medium">"{section.affirmation}"</p>
+                  <p className="mt-2 text-[#191970] italic font-medium">"{section.affirmation}"</p>
                 )}
 
                 {section.quote && (
-                  <div className="bg-blue-50 border-l-4 border-blue-900 p-3 mt-2 italic">"{section.quote}"</div>
+                  <div className="bg-[#191970]/10 border-l-4 border-[#191970] p-3 mt-2 italic text-[#191970]">
+                    "{section.quote}"
+                  </div>
                 )}
               </div>
             ))}
@@ -569,24 +574,26 @@ const MidnightMagnoliaDashboard = () => {
   // Render Business Services Section
   const renderBusinessServices = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Business Services</h3>
-      <p className="mb-6">
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Business Services</h3>
+      <p className="mb-6 text-[#191970]">
         Professional documentation and digital identity solutions by Latisha and Midnight Magnolia.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {businessServices.map((service, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden h-full">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden h-full border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{service.name}</h4>
             </div>
-            <div className="p-4 flex flex-col h-full">
-              <p className="mb-4">{service.description}</p>
+            <div className="p-4 flex flex-col h-full bg-[#F8F6F0]">
+              <p className="mb-4 text-[#191970]">{service.description}</p>
               <div className="mt-auto">
-                <h5 className="font-medium mb-2">Offerings:</h5>
+                <h5 className="font-medium mb-2 text-[#191970]">Offerings:</h5>
                 <ul className="list-disc list-inside space-y-1">
                   {service.offerings.map((item, i) => (
-                    <li key={i}>{item}</li>
+                    <li key={i} className="text-[#191970]">
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -600,28 +607,32 @@ const MidnightMagnoliaDashboard = () => {
   // Render Tech Access Section
   const renderTechAccess = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Technology Access Initiatives</h3>
-      <p className="mb-6">Programs to increase Black women's access to technology for career advancement.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Technology Access Initiatives</h3>
+      <p className="mb-6 text-[#191970]">
+        Programs to increase Black women's access to technology for career advancement.
+      </p>
 
       <div className="space-y-8">
         {techAccessInitiatives.map((initiative, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{initiative.name}</h4>
-              <p className="text-sm text-blue-100">Focus: {initiative.focus}</p>
+              <p className="text-sm text-[#F8F6F0]/90">Focus: {initiative.focus}</p>
             </div>
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <div className="mb-4">
-                <h5 className="font-medium mb-2">Programs:</h5>
+                <h5 className="font-medium mb-2 text-[#191970]">Programs:</h5>
                 <ul className="list-disc list-inside space-y-1">
                   {initiative.programs.map((program, i) => (
-                    <li key={i}>{program}</li>
+                    <li key={i} className="text-[#191970]">
+                      {program}
+                    </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-                <h5 className="font-medium mb-1">Impact:</h5>
-                <p>{initiative.impact}</p>
+              <div className="bg-[#191970]/10 border-l-4 border-[#191970] p-4">
+                <h5 className="font-medium mb-1 text-[#191970]">Impact:</h5>
+                <p className="text-[#191970]">{initiative.impact}</p>
               </div>
             </div>
           </div>
@@ -633,36 +644,38 @@ const MidnightMagnoliaDashboard = () => {
   // Render Affiliate Programs Section
   const renderAffiliates = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Affiliate Programs</h3>
-      <p className="mb-6">Curated product recommendations that complement Midnight Magnolia offerings.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Affiliate Programs</h3>
+      <p className="mb-6 text-[#191970]">
+        Curated product recommendations that complement Midnight Magnolia offerings.
+      </p>
 
       <div className="space-y-8">
         {affiliatePrograms.map((program, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{program.platform}</h4>
             </div>
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <div className="mb-4">
-                <h5 className="font-medium mb-2">Implementation:</h5>
-                <p>{program.implementation}</p>
+                <h5 className="font-medium mb-2 text-[#191970]">Implementation:</h5>
+                <p className="text-[#191970]">{program.implementation}</p>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse">
                   <thead>
-                    <tr className="bg-blue-50">
-                      <th className="py-2 px-4 border text-left">Category</th>
-                      <th className="py-2 px-4 border text-left">Commission</th>
-                      <th className="py-2 px-4 border text-left">Best Sellers</th>
+                    <tr className="bg-[#191970]/10">
+                      <th className="py-2 px-4 border text-left text-[#191970] font-serif">Category</th>
+                      <th className="py-2 px-4 border text-left text-[#191970] font-serif">Commission</th>
+                      <th className="py-2 px-4 border text-left text-[#191970] font-serif">Best Sellers</th>
                     </tr>
                   </thead>
                   <tbody>
                     {program.categories.map((category, i) => (
-                      <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                        <td className="py-2 px-4 border">{category.name}</td>
-                        <td className="py-2 px-4 border">{category.commission}</td>
-                        <td className="py-2 px-4 border">
+                      <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-[#F8F6F0]"}>
+                        <td className="py-2 px-4 border text-[#191970]">{category.name}</td>
+                        <td className="py-2 px-4 border text-[#191970]">{category.commission}</td>
+                        <td className="py-2 px-4 border text-[#191970]">
                           <ul className="list-disc list-inside">
                             {category.bestSellers.map((item, j) => (
                               <li key={j}>{item}</li>
@@ -684,28 +697,32 @@ const MidnightMagnoliaDashboard = () => {
   // Render Nonprofit Initiatives Section
   const renderNonprofit = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Nonprofit Initiatives</h3>
-      <p className="mb-6">Data-driven social impact programs supporting survivors and vulnerable communities.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Nonprofit Initiatives</h3>
+      <p className="mb-6 text-[#191970]">
+        Data-driven social impact programs supporting survivors and vulnerable communities.
+      </p>
 
       <div className="space-y-8">
         {nonprofitInitiatives.map((initiative, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{initiative.name}</h4>
-              <p className="text-sm text-blue-100">Focus: {initiative.focus}</p>
+              <p className="text-sm text-[#F8F6F0]/90">Focus: {initiative.focus}</p>
             </div>
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <div className="mb-4">
-                <h5 className="font-medium mb-2">Programs:</h5>
+                <h5 className="font-medium mb-2 text-[#191970]">Programs:</h5>
                 <ul className="list-disc list-inside space-y-1">
                   {initiative.programs.map((program, i) => (
-                    <li key={i}>{program}</li>
+                    <li key={i} className="text-[#191970]">
+                      {program}
+                    </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-                <h5 className="font-medium mb-1">Data Initiative:</h5>
-                <p>{initiative.dataInitiatives}</p>
+              <div className="bg-[#191970]/10 border-l-4 border-[#191970] p-4">
+                <h5 className="font-medium mb-1 text-[#191970]">Data Initiative:</h5>
+                <p className="text-[#191970]">{initiative.dataInitiatives}</p>
               </div>
             </div>
           </div>
@@ -717,29 +734,33 @@ const MidnightMagnoliaDashboard = () => {
   // Render Digital Wellness Section
   const renderDigitalWellness = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Digital Wellness Offerings</h3>
-      <p className="mb-6">Web and mobile experiences complementing physical journals and wellness products.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Digital Wellness Offerings</h3>
+      <p className="mb-6 text-[#191970]">
+        Web and mobile experiences complementing physical journals and wellness products.
+      </p>
 
       <div className="space-y-8">
         {digitalWellnessOfferings.map((offering, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{offering.name}</h4>
-              <p className="text-sm text-blue-100">Type: {offering.type}</p>
+              <p className="text-sm text-[#F8F6F0]/90">Type: {offering.type}</p>
             </div>
-            <div className="p-4">
-              <p className="mb-4">{offering.description}</p>
+            <div className="p-4 bg-[#F8F6F0]">
+              <p className="mb-4 text-[#191970]">{offering.description}</p>
               <div className="mb-4">
-                <h5 className="font-medium mb-2">Key Features:</h5>
+                <h5 className="font-medium mb-2 text-[#191970]">Key Features:</h5>
                 <ul className="list-disc list-inside space-y-1">
                   {offering.features.map((feature, i) => (
-                    <li key={i}>{feature}</li>
+                    <li key={i} className="text-[#191970]">
+                      {feature}
+                    </li>
                   ))}
                 </ul>
               </div>
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <h5 className="font-medium mb-1">Automations:</h5>
-                <p>{offering.automations}</p>
+              <div className="bg-[#D4AF37]/10 border-l-4 border-[#D4AF37] p-4">
+                <h5 className="font-medium mb-1 text-[#191970]">Automations:</h5>
+                <p className="text-[#191970]">{offering.automations}</p>
               </div>
             </div>
           </div>
@@ -751,38 +772,44 @@ const MidnightMagnoliaDashboard = () => {
   // Render Blog and Memoir Section
   const renderBlog = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">{blogAndMemoir.title}</h3>
-      <p className="mb-6">Personal narrative and community storytelling by {blogAndMemoir.author}</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">{blogAndMemoir.title}</h3>
+      <p className="mb-6 text-[#191970]">Personal narrative and community storytelling by {blogAndMemoir.author}</p>
 
-      <div className="mb-8 p-4 border rounded-md">
-        <h4 className="text-xl font-serif mb-4">Memoir Project: {blogAndMemoir.memoirDetails.workingTitle}</h4>
+      <div className="mb-8 p-4 border rounded-md border-[#191970]">
+        <h4 className="text-xl font-serif mb-4 text-[#191970]">
+          Memoir Project: {blogAndMemoir.memoirDetails.workingTitle}
+        </h4>
 
         <div className="mb-4">
-          <h5 className="font-medium mb-2">Key Themes:</h5>
+          <h5 className="font-medium mb-2 text-[#191970]">Key Themes:</h5>
           <ul className="list-disc list-inside space-y-1">
             {blogAndMemoir.memoirDetails.themes.map((theme, index) => (
-              <li key={index}>{theme}</li>
+              <li key={index} className="text-[#191970]">
+                {theme}
+              </li>
             ))}
           </ul>
         </div>
 
         <div>
-          <h5 className="font-medium mb-2">Structure:</h5>
-          <p>{blogAndMemoir.memoirDetails.structure}</p>
-          <p className="mt-2">{blogAndMemoir.memoirDetails.timeline}</p>
+          <h5 className="font-medium mb-2 text-[#191970]">Structure:</h5>
+          <p className="text-[#191970]">{blogAndMemoir.memoirDetails.structure}</p>
+          <p className="mt-2 text-[#191970]">{blogAndMemoir.memoirDetails.timeline}</p>
         </div>
       </div>
 
       <div className="space-y-6">
         {blogAndMemoir.series.map((series, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{series.name}</h4>
             </div>
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <ul className="list-disc list-inside space-y-2">
                 {series.posts.map((post, i) => (
-                  <li key={i}>{post}</li>
+                  <li key={i} className="text-[#191970]">
+                    {post}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -796,18 +823,18 @@ const MidnightMagnoliaDashboard = () => {
   const renderColorPalette = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-white rounded-lg shadow">
       <div className="col-span-1 md:col-span-2">
-        <h3 className="text-2xl font-serif mb-4">Brand Color Palette</h3>
-        <p className="mb-6">Apply these colors consistently across all brand materials.</p>
+        <h3 className="text-2xl font-serif mb-4 text-[#191970]">Brand Color Palette</h3>
+        <p className="mb-6 text-[#191970]">Apply these colors consistently across all brand materials.</p>
       </div>
 
       {Object.entries(brandColors).map(([key, color]) => (
-        <div key={key} className="flex items-center space-x-4 p-4 border rounded-md">
+        <div key={key} className="flex items-center space-x-4 p-4 border rounded-md border-[#191970]">
           <div className="w-16 h-16 rounded-md shadow-md" style={{ backgroundColor: color.hex }}></div>
           <div>
-            <h4 className="font-serif font-semibold text-lg">{color.name}</h4>
-            <p className="text-sm">HEX: {color.hex}</p>
-            <p className="text-sm">RGB: {color.rgb}</p>
-            <p className="text-sm">CMYK: {color.cmyk}</p>
+            <h4 className="font-serif font-semibold text-lg text-[#191970]">{color.name}</h4>
+            <p className="text-sm text-[#191970]">HEX: {color.hex}</p>
+            <p className="text-sm text-[#191970]">RGB: {color.rgb}</p>
+            <p className="text-sm text-[#191970]">CMYK: {color.cmyk}</p>
           </div>
         </div>
       ))}
@@ -817,48 +844,54 @@ const MidnightMagnoliaDashboard = () => {
   // Render Typography Section
   const renderTypography = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Typography System</h3>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Typography System</h3>
 
       <div className="mb-8">
-        <h4 className="text-lg font-serif font-semibold mb-2">Primary Font: {typography.primary.name}</h4>
-        <p className="mb-4">Used for headings, logo, and important statements</p>
+        <h4 className="text-lg font-serif font-semibold mb-2 text-[#191970]">
+          Primary Font: {typography.primary.name}
+        </h4>
+        <p className="mb-4 text-[#191970]">Used for headings, logo, and important statements</p>
 
         <div className="space-y-4">
-          <div className="p-4 border rounded-md">
-            <h1 className="text-3xl font-serif font-bold">Heading 1 - Playfair Display Bold (32px)</h1>
+          <div className="p-4 border rounded-md border-[#191970]">
+            <h1 className="text-3xl font-serif font-bold text-[#191970]">Heading 1 - Playfair Display Bold (32px)</h1>
           </div>
 
-          <div className="p-4 border rounded-md">
-            <h2 className="text-2xl font-serif font-semibold">Heading 2 - Playfair Display SemiBold (24px)</h2>
+          <div className="p-4 border rounded-md border-[#191970]">
+            <h2 className="text-2xl font-serif font-semibold text-[#191970]">
+              Heading 2 - Playfair Display SemiBold (24px)
+            </h2>
           </div>
 
-          <div className="p-4 border rounded-md">
-            <h3 className="text-xl font-serif">Heading 3 - Playfair Display Regular (20px)</h3>
+          <div className="p-4 border rounded-md border-[#191970]">
+            <h3 className="text-xl font-serif text-[#191970]">Heading 3 - Playfair Display Regular (20px)</h3>
           </div>
         </div>
       </div>
 
       <div>
-        <h4 className="text-lg font-serif font-semibold mb-2">Secondary Font: {typography.secondary.name}</h4>
-        <p className="mb-4">Used for body text, navigation, and descriptions</p>
+        <h4 className="text-lg font-serif font-semibold mb-2 text-[#191970]">
+          Secondary Font: {typography.secondary.name}
+        </h4>
+        <p className="mb-4 text-[#191970]">Used for body text, navigation, and descriptions</p>
 
         <div className="space-y-4">
-          <div className="p-4 border rounded-md">
-            <p className="text-base">
+          <div className="p-4 border rounded-md border-[#191970]">
+            <p className="text-base text-[#191970]">
               Body Text - Montserrat Regular (16px) This is the primary text style used for paragraphs and general
               content across the brand.
             </p>
           </div>
 
-          <div className="p-4 border rounded-md">
-            <p className="text-sm">
+          <div className="p-4 border rounded-md border-[#191970]">
+            <p className="text-sm text-[#191970]">
               Secondary Text - Montserrat Light (14px) Used for supporting text, captions, and smaller elements
               throughout the design.
             </p>
           </div>
 
-          <div className="p-4 border rounded-md">
-            <button className="bg-blue-900 text-white px-4 py-2 uppercase tracking-wider">
+          <div className="p-4 border rounded-md border-[#191970]">
+            <button className="bg-[#191970] text-[#F8F6F0] px-4 py-2 uppercase tracking-wider font-sans">
               Button Text - Montserrat Medium
             </button>
           </div>
@@ -870,34 +903,34 @@ const MidnightMagnoliaDashboard = () => {
   // Render Icons Section
   const renderIcons = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Brand & UI Icons</h3>
-      <p className="mb-6">Consistent visual elements to reinforce brand identity across touchpoints.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Brand & UI Icons</h3>
+      <p className="mb-6 text-[#191970]">Consistent visual elements to reinforce brand identity across touchpoints.</p>
 
       <div className="mb-8">
-        <h4 className="text-xl font-serif font-semibold mb-3">Brand Icons</h4>
+        <h4 className="text-xl font-serif font-semibold mb-3 text-[#191970]">Brand Icons</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {icons.brand.map((icon, index) => (
-            <div key={index} className="border p-4 rounded-md">
-              <div className="h-16 w-16 bg-blue-900 flex items-center justify-center rounded-full mb-3 mx-auto">
-                <div className="text-white text-2xl font-serif">{icon.name.charAt(0)}</div>
+            <div key={index} className="border p-4 rounded-md border-[#191970]">
+              <div className="h-16 w-16 bg-[#191970] flex items-center justify-center rounded-full mb-3 mx-auto">
+                <div className="text-[#F8F6F0] text-2xl font-serif">{icon.name.charAt(0)}</div>
               </div>
-              <h5 className="font-serif text-center mb-2">{icon.name}</h5>
-              <p className="text-sm text-center">{icon.usage}</p>
+              <h5 className="font-serif text-center mb-2 text-[#191970]">{icon.name}</h5>
+              <p className="text-sm text-center text-[#191970]">{icon.usage}</p>
             </div>
           ))}
         </div>
       </div>
 
       <div>
-        <h4 className="text-xl font-serif font-semibold mb-3">UI Icons</h4>
+        <h4 className="text-xl font-serif font-semibold mb-3 text-[#191970]">UI Icons</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {icons.ui.map((icon, index) => (
-            <div key={index} className="border p-4 rounded-md">
-              <div className="h-16 w-16 bg-blue-50 border-2 border-blue-900 flex items-center justify-center rounded-md mb-3 mx-auto">
-                <span className="text-blue-900 text-xl">{icon.icon}</span>
+            <div key={index} className="border p-4 rounded-md border-[#191970]">
+              <div className="h-16 w-16 bg-[#F8F6F0] border-2 border-[#191970] flex items-center justify-center rounded-md mb-3 mx-auto">
+                <span className="text-[#191970] text-xl">{icon.icon}</span>
               </div>
-              <h5 className="font-serif text-center mb-2">{icon.name}</h5>
-              <p className="text-sm text-center">{icon.usage}</p>
+              <h5 className="font-serif text-center mb-2 text-[#191970]">{icon.name}</h5>
+              <p className="text-sm text-center text-[#191970]">{icon.usage}</p>
             </div>
           ))}
         </div>
@@ -908,56 +941,64 @@ const MidnightMagnoliaDashboard = () => {
   // Render Audience Section
   const renderAudience = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Target Audience</h3>
-      <p className="mb-6">
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Target Audience</h3>
+      <p className="mb-6 text-[#191970]">
         Understanding our ideal customers to inform product development, marketing, and brand voice.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-blue-900 text-white p-4">
+        <div className="border rounded-lg overflow-hidden border-[#191970]">
+          <div className="bg-[#191970] text-[#F8F6F0] p-4">
             <h4 className="font-serif text-xl">Primary Audience</h4>
           </div>
-          <div className="p-4">
-            <p className="font-medium mb-2">Demographic: {targetAudience.primary.demographic}</p>
+          <div className="p-4 bg-[#F8F6F0]">
+            <p className="font-medium mb-2 text-[#191970]">Demographic: {targetAudience.primary.demographic}</p>
             <div className="mb-4">
-              <h5 className="font-medium mb-1">Interests:</h5>
+              <h5 className="font-medium mb-1 text-[#191970]">Interests:</h5>
               <ul className="list-disc list-inside">
                 {targetAudience.primary.interests.map((interest, index) => (
-                  <li key={index}>{interest}</li>
+                  <li key={index} className="text-[#191970]">
+                    {interest}
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h5 className="font-medium mb-1">Traits:</h5>
+              <h5 className="font-medium mb-1 text-[#191970]">Traits:</h5>
               <ul className="list-disc list-inside">
                 {targetAudience.primary.traits.map((trait, index) => (
-                  <li key={index}>{trait}</li>
+                  <li key={index} className="text-[#191970]">
+                    {trait}
+                  </li>
                 ))}
               </ul>
             </div>
           </div>
         </div>
 
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-blue-900 text-white p-4">
+        <div className="border rounded-lg overflow-hidden border-[#191970]">
+          <div className="bg-[#191970] text-[#F8F6F0] p-4">
             <h4 className="font-serif text-xl">Secondary Audience</h4>
           </div>
-          <div className="p-4">
-            <p className="font-medium mb-2">Demographic: {targetAudience.secondary.demographic}</p>
+          <div className="p-4 bg-[#F8F6F0]">
+            <p className="font-medium mb-2 text-[#191970]">Demographic: {targetAudience.secondary.demographic}</p>
             <div className="mb-4">
-              <h5 className="font-medium mb-1">Interests:</h5>
+              <h5 className="font-medium mb-1 text-[#191970]">Interests:</h5>
               <ul className="list-disc list-inside">
                 {targetAudience.secondary.interests.map((interest, index) => (
-                  <li key={index}>{interest}</li>
+                  <li key={index} className="text-[#191970]">
+                    {interest}
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h5 className="font-medium mb-1">Traits:</h5>
+              <h5 className="font-medium mb-1 text-[#191970]">Traits:</h5>
               <ul className="list-disc list-inside">
                 {targetAudience.secondary.traits.map((trait, index) => (
-                  <li key={index}>{trait}</li>
+                  <li key={index} className="text-[#191970]">
+                    {trait}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -965,11 +1006,11 @@ const MidnightMagnoliaDashboard = () => {
         </div>
       </div>
 
-      <div className="border rounded-md p-4">
-        <h4 className="font-serif text-lg mb-3">Psychographic Profile</h4>
+      <div className="border rounded-md p-4 border-[#191970]">
+        <h4 className="font-serif text-lg mb-3 text-[#191970]">Psychographic Profile</h4>
         <div className="flex flex-wrap gap-2">
           {targetAudience.psychographics.map((item, index) => (
-            <span key={index} className="bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-blue-900">
+            <span key={index} className="bg-[#191970]/10 border border-[#191970] rounded-full px-4 py-1 text-[#191970]">
               {item}
             </span>
           ))}
@@ -981,22 +1022,25 @@ const MidnightMagnoliaDashboard = () => {
   // Render Products Section
   const renderProducts = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Product Categories</h3>
-      <p className="mb-6">Core product lines that represent the Midnight Magnolia brand.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Product Categories</h3>
+      <p className="mb-6 text-[#191970]">Core product lines that represent the Midnight Magnolia brand.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {productCategories.map((category, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{category.name}</h4>
             </div>
-            <div className="p-4">
-              <p className="mb-3">{category.description}</p>
+            <div className="p-4 bg-[#F8F6F0]">
+              <p className="mb-3 text-[#191970]">{category.description}</p>
               <div>
-                <h5 className="font-medium mb-2">Product Items:</h5>
+                <h5 className="font-medium mb-2 text-[#191970]">Product Items:</h5>
                 <div className="flex flex-wrap gap-2">
                   {category.items.map((item, i) => (
-                    <span key={i} className="bg-blue-50 border border-blue-100 rounded-md px-3 py-1 text-sm">
+                    <span
+                      key={i}
+                      className="bg-[#191970]/10 border border-[#191970] rounded-md px-3 py-1 text-sm text-[#191970]"
+                    >
                       {item}
                     </span>
                   ))}
@@ -1012,27 +1056,30 @@ const MidnightMagnoliaDashboard = () => {
   // Render Brand Voice Section
   const renderTone = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Brand Voice & Tone</h3>
-      <p className="mb-6">How we communicate with our audience across all touchpoints.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Brand Voice & Tone</h3>
+      <p className="mb-6 text-[#191970]">How we communicate with our audience across all touchpoints.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="border rounded-md p-4">
-          <h4 className="font-serif text-lg mb-3">Tone Elements</h4>
+        <div className="border rounded-md p-4 border-[#191970]">
+          <h4 className="font-serif text-lg mb-3 text-[#191970]">Tone Elements</h4>
           <div className="mb-4">
-            <h5 className="font-medium mb-2">Use These Tones:</h5>
+            <h5 className="font-medium mb-2 text-[#191970]">Use These Tones:</h5>
             <div className="flex flex-wrap gap-2">
               {brandVoice.tone.primary.map((tone, index) => (
-                <span key={index} className="bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-blue-900">
+                <span
+                  key={index}
+                  className="bg-[#191970]/10 border border-[#191970] rounded-full px-4 py-1 text-[#191970]"
+                >
                   {tone}
                 </span>
               ))}
             </div>
           </div>
           <div>
-            <h5 className="font-medium mb-2">Avoid These Tones:</h5>
+            <h5 className="font-medium mb-2 text-[#191970]">Avoid These Tones:</h5>
             <div className="flex flex-wrap gap-2">
               {brandVoice.tone.avoid.map((tone, index) => (
-                <span key={index} className="bg-red-50 border border-red-200 rounded-full px-4 py-1 text-red-700">
+                <span key={index} className="bg-red-50 border border-red-500 rounded-full px-4 py-1 text-red-700">
                   {tone}
                 </span>
               ))}
@@ -1040,23 +1087,26 @@ const MidnightMagnoliaDashboard = () => {
           </div>
         </div>
 
-        <div className="border rounded-md p-4">
-          <h4 className="font-serif text-lg mb-3">Vocabulary</h4>
+        <div className="border rounded-md p-4 border-[#191970]">
+          <h4 className="font-serif text-lg mb-3 text-[#191970]">Vocabulary</h4>
           <div className="mb-4">
-            <h5 className="font-medium mb-2">Preferred Words:</h5>
+            <h5 className="font-medium mb-2 text-[#191970]">Preferred Words:</h5>
             <div className="flex flex-wrap gap-2">
               {brandVoice.vocabulary.use.map((word, index) => (
-                <span key={index} className="bg-blue-50 border border-blue-200 rounded-full px-4 py-1 text-blue-900">
+                <span
+                  key={index}
+                  className="bg-[#191970]/10 border border-[#191970] rounded-full px-4 py-1 text-[#191970]"
+                >
                   {word}
                 </span>
               ))}
             </div>
           </div>
           <div>
-            <h5 className="font-medium mb-2">Words to Avoid:</h5>
+            <h5 className="font-medium mb-2 text-[#191970]">Words to Avoid:</h5>
             <div className="flex flex-wrap gap-2">
               {brandVoice.vocabulary.avoid.map((word, index) => (
-                <span key={index} className="bg-red-50 border border-red-200 rounded-full px-4 py-1 text-red-700">
+                <span key={index} className="bg-red-50 border border-red-500 rounded-full px-4 py-1 text-red-700">
                   {word}
                 </span>
               ))}
@@ -1065,11 +1115,11 @@ const MidnightMagnoliaDashboard = () => {
         </div>
       </div>
 
-      <div className="border rounded-md p-4">
-        <h4 className="font-serif text-lg mb-3">Key Messaging</h4>
+      <div className="border rounded-md p-4 border-[#191970]">
+        <h4 className="font-serif text-lg mb-3 text-[#191970]">Key Messaging</h4>
         <div className="space-y-2">
           {brandVoice.messaging.map((message, index) => (
-            <div key={index} className="p-3 bg-blue-50 border-l-4 border-blue-900 rounded-r-md">
+            <div key={index} className="p-3 bg-[#191970]/10 border-l-4 border-[#191970] rounded-r-md text-[#191970]">
               {message}
             </div>
           ))}
@@ -1081,33 +1131,35 @@ const MidnightMagnoliaDashboard = () => {
   // Render Workflows Section
   const renderWorkflows = () => (
     <div className="p-6 bg-white rounded-lg shadow">
-      <h3 className="text-2xl font-serif mb-4">Workflow Automation</h3>
-      <p className="mb-6">Streamlined processes to help with executive dysfunction challenges.</p>
+      <h3 className="text-2xl font-serif mb-4 text-[#191970]">Workflow Automation</h3>
+      <p className="mb-6 text-[#191970]">Streamlined processes to help with executive dysfunction challenges.</p>
 
       <div className="space-y-8">
         {workflows.map((workflow, index) => (
-          <div key={index} className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-900 text-white p-4">
+          <div key={index} className="border rounded-lg overflow-hidden border-[#191970]">
+            <div className="bg-[#191970] text-[#F8F6F0] p-4">
               <h4 className="font-serif text-xl">{workflow.name}</h4>
               <div className="flex flex-wrap gap-2 mt-2">
                 {workflow.platforms.map((platform, i) => (
-                  <span key={i} className="px-2 py-1 bg-blue-800 rounded-md text-sm">
+                  <span key={i} className="px-2 py-1 bg-[#191970]/80 rounded-md text-sm text-[#F8F6F0]">
                     {platform}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="p-4">
+            <div className="p-4 bg-[#F8F6F0]">
               <ol className="list-decimal list-inside space-y-2 mb-4">
                 {workflow.steps.map((step, i) => (
-                  <li key={i}>{step}</li>
+                  <li key={i} className="text-[#191970]">
+                    {step}
+                  </li>
                 ))}
               </ol>
 
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-                <p className="font-medium mb-1">Automation:</p>
-                <p>{workflow.automation}</p>
+              <div className="bg-[#D4AF37]/10 border-l-4 border-[#D4AF37] p-4">
+                <p className="font-medium mb-1 text-[#191970]">Automation:</p>
+                <p className="text-[#191970]">{workflow.automation}</p>
               </div>
             </div>
           </div>
@@ -1156,119 +1208,158 @@ const MidnightMagnoliaDashboard = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <div className="bg-blue-900 text-white p-6 rounded-t-lg">
+      <div className="bg-[#191970] text-[#F8F6F0] p-6 rounded-t-lg">
         <h1 className="text-3xl font-serif mb-2">Midnight Magnolia</h1>
-        <h2 className="text-xl">Visual Brand Dashboard</h2>
+        <h2 className="text-xl font-sans">Visual Brand Dashboard</h2>
       </div>
 
-      <div className="bg-blue-100 p-4 flex overflow-x-auto">
+      {/* Mobile menu button */}
+      <div className="bg-[#F8F6F0] p-4 border-b border-[#191970]/20 md:hidden">
         <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "colors" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("colors")}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="w-full flex items-center justify-between p-3 bg-[#191970] text-[#F8F6F0] rounded-md"
         >
-          Color Palette
+          <span className="font-serif">
+            {activeTab === "colors"
+              ? "Color Palette"
+              : activeTab === "typography"
+                ? "Typography"
+                : activeTab === "icons"
+                  ? "Icons"
+                  : activeTab === "audience"
+                    ? "Audience"
+                    : activeTab === "products"
+                      ? "Products"
+                      : activeTab === "businessServices"
+                        ? "Business Services"
+                        : activeTab === "techAccess"
+                          ? "Tech Access"
+                          : activeTab === "digitalWellness"
+                            ? "Digital Wellness"
+                            : activeTab === "nonprofit"
+                              ? "Nonprofit"
+                              : activeTab === "affiliates"
+                                ? "Affiliates"
+                                : activeTab === "tone"
+                                  ? "Brand Voice"
+                                  : activeTab === "workflows"
+                                    ? "Workflows"
+                                    : activeTab === "architecture"
+                                      ? "Tech Architecture"
+                                      : activeTab === "notion"
+                                        ? "Notion Template"
+                                        : "Blog & Memoir"}
+          </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-5 w-5 transition-transform ${mobileMenuOpen ? "rotate-180" : ""}`}
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
         </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "typography" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("typography")}
-        >
-          Typography
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "icons" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("icons")}
-        >
-          Icons
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "audience" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("audience")}
-        >
-          Audience
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "products" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("products")}
-        >
-          Products
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "businessServices" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("businessServices")}
-        >
-          Business Services
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "techAccess" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("techAccess")}
-        >
-          Tech Access
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "digitalWellness" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("digitalWellness")}
-        >
-          Digital Wellness
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "nonprofit" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("nonprofit")}
-        >
-          Nonprofit
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "affiliates" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("affiliates")}
-        >
-          Affiliates
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "tone" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("tone")}
-        >
-          Brand Voice
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "workflows" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("workflows")}
-        >
-          Workflows
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "architecture" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("architecture")}
-        >
-          Tech Architecture
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "notion" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("notion")}
-        >
-          Notion Template
-        </button>
-        <button
-          className={`px-4 py-2 mr-2 rounded-md ${activeTab === "blog" ? "bg-white font-medium" : "bg-transparent"}`}
-          onClick={() => setActiveTab("blog")}
-        >
-          Blog & Memoir
-        </button>
+
+        {/* Mobile dropdown menu */}
+        {mobileMenuOpen && (
+          <div className="mt-2 bg-[#F8F6F0] border border-[#191970]/20 rounded-md shadow-lg overflow-hidden">
+            <div className="max-h-80 overflow-y-auto">
+              {[
+                { id: "colors", label: "Color Palette" },
+                { id: "typography", label: "Typography" },
+                { id: "icons", label: "Icons" },
+                { id: "audience", label: "Audience" },
+                { id: "products", label: "Products" },
+                { id: "businessServices", label: "Business Services" },
+                { id: "techAccess", label: "Tech Access" },
+                { id: "digitalWellness", label: "Digital Wellness" },
+                { id: "nonprofit", label: "Nonprofit" },
+                { id: "affiliates", label: "Affiliates" },
+                { id: "tone", label: "Brand Voice" },
+                { id: "workflows", label: "Workflows" },
+                { id: "architecture", label: "Tech Architecture" },
+                { id: "notion", label: "Notion Template" },
+                { id: "blog", label: "Blog & Memoir" },
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  className={`w-full text-left p-3 ${activeTab === item.id ? "bg-[#191970]/10 text-[#191970] font-medium" : "text-[#191970]"}`}
+                  onClick={() => {
+                    setActiveTab(item.id)
+                    setMobileMenuOpen(false)
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop horizontal scrolling tabs */}
+      <div className="hidden md:block bg-[#F8F6F0] p-4 border-b border-[#191970]/20">
+        <div className="flex overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#191970] scrollbar-track-[#F8F6F0]">
+          {[
+            { id: "colors", label: "Color Palette" },
+            { id: "typography", label: "Typography" },
+            { id: "icons", label: "Icons" },
+            { id: "audience", label: "Audience" },
+            { id: "products", label: "Products" },
+            { id: "businessServices", label: "Business Services" },
+            { id: "techAccess", label: "Tech Access" },
+            { id: "digitalWellness", label: "Digital Wellness" },
+            { id: "nonprofit", label: "Nonprofit" },
+            { id: "affiliates", label: "Affiliates" },
+            { id: "tone", label: "Brand Voice" },
+            { id: "workflows", label: "Workflows" },
+            { id: "architecture", label: "Tech Architecture" },
+            { id: "notion", label: "Notion Template" },
+            { id: "blog", label: "Blog & Memoir" },
+          ].map((item) => (
+            <button
+              key={item.id}
+              className={`px-4 py-2 mr-2 whitespace-nowrap rounded-md font-serif ${
+                activeTab === item.id
+                  ? "bg-[#191970] text-[#F8F6F0] font-medium"
+                  : "bg-[#191970]/10 text-[#191970] hover:bg-[#191970]/20"
+              }`}
+              onClick={() => setActiveTab(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="mt-4">{renderContent()}</div>
 
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-        <h3 className="text-lg font-serif font-semibold mb-2">Rumi-Nations LLC Contact Information</h3>
-        <p className="mb-1">10070 Dorchester Rd, #51599, Summerville, SC 29485</p>
-        <p className="mb-1">Phone: (803) 387-2552</p>
-        <p className="mb-1">Website: www.rumi-nations.shop</p>
-        <div className="flex space-x-4 mt-2">
-          <a href="https://www.facebook.com/ruminationsshop" className="text-blue-900 hover:underline">
+      <div className="mt-6 p-4 bg-[#191970]/5 rounded-lg border border-[#191970]/20">
+        <h3 className="text-lg font-serif font-semibold mb-2 text-[#191970]">Rumi-Nations LLC Contact Information</h3>
+        <p className="mb-1 text-[#191970]">10070 Dorchester Rd, #51599, Summerville, SC 29485</p>
+        <p className="mb-1 text-[#191970]">Phone: (803) 387-2552</p>
+        <p className="mb-1 text-[#191970]">Website: www.rumi-nations.shop</p>
+        <div className="flex flex-wrap gap-4 mt-2">
+          <a
+            href="https://www.facebook.com/ruminationsshop"
+            className="text-[#191970] hover:text-[#D4AF37] hover:underline"
+          >
             Facebook
           </a>
-          <a href="https://www.instagram.com/rumi_nationz/" className="text-blue-900 hover:underline">
+          <a
+            href="https://www.instagram.com/rumi_nationz/"
+            className="text-[#191970] hover:text-[#D4AF37] hover:underline"
+          >
             Instagram
           </a>
-          <a href="https://www.linkedin.com/in/latishavwaters/" className="text-blue-900 hover:underline">
+          <a
+            href="https://www.linkedin.com/in/latishavwaters/"
+            className="text-[#191970] hover:text-[#D4AF37] hover:underline"
+          >
             LinkedIn
           </a>
         </div>

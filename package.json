@@ -63,7 +63,8 @@
     "@supabase/supabase-js": "latest",
     "child_process": "latest",
     "fs": "latest",
-    "path": "latest"
+    "path": "latest",
+    "url": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

@@ -1,132 +1,218 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import Image from "next/image"
-import { Star } from "lucide-react"
+import type React from "react"
+
+import { useState, useEffect, useRef } from "react"
+import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react"
 
 type Testimonial = {
-  id: string
+  id: number
   name: string
   role: string
   company: string
-  testimonial: string
-  rating: number
-  image?: string
-  date: string
+  content: string
+  image: string
 }
 
-export function TestimonialsSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+const testimonials: Testimonial[] = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "Founder",
+    company: "Southern Charm Boutique",
+    content:
+      "Midnight Magnolia transformed our online presence with a website that perfectly captures our brand's southern elegance. Their attention to detail and understanding of our aesthetic was remarkable.",
+    image: "/professional-black-woman.png",
+  },
+  {
+    id: 2,
+    name: "Marcus Williams",
+    role: "Creative Director",
+    company: "Heritage Design Co.",
+    content:
+      "The workflow automation solutions provided by Midnight Magnolia have saved us countless hours. Their understanding of both technology and southern business culture makes them an invaluable partner.",
+    image: "/creative-director-woman.png",
+  },
+  {
+    id: 3,
+    name: "Eliza Thompson",
+    role: "Author",
+    company: "Southern Stories Press",
+    content:
+      "Working with Midnight Magnolia on my author website was a dream. They understood the nuances of southern gothic aesthetics and created a digital space that feels like stepping into one of my novels.",
+    image: "/woman-journaling-adhd.png",
+  },
+]
 
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const response = await fetch("/api/testimonials")
+export default function TestimonialsSection() {
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchEnd, setTouchEnd] = useState<number | null>(null)
+  const autoplayRef = useRef<NodeJS.Timeout | null>(null)
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch testimonials")
-        }
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50
 
-        const data = await response.json()
-        setTestimonials(data.testimonials)
-      } catch (err) {
-        console.error("Error fetching testimonials:", err)
-        setError("Failed to load testimonials. Please try again later.")
-      } finally {
-        setIsLoading(false)
-      }
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      nextTestimonial()
+    }
+    if (isRightSwipe) {
+      prevTestimonial()
     }
 
-    fetchTestimonials()
-  }, [])
+    // Reset values
+    setTouchStart(null)
+    setTouchEnd(null)
+  }
+
+  const nextTestimonial = () => {
+    setActiveIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))
+  }
+
+  const prevTestimonial = () => {
+    setActiveIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))
+  }
+
+  // Autoplay functionality
+  useEffect(() => {
+    autoplayRef.current = setInterval(() => {
+      nextTestimonial()
+    }, 8000)
+
+    return () => {
+      if (autoplayRef.current) {
+        clearInterval(autoplayRef.current)
+      }
+    }
+  }, [activeIndex])
+
+  // Pause autoplay on hover
+  const pauseAutoplay = () => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current)
+    }
+  }
+
+  // Resume autoplay on mouse leave
+  const resumeAutoplay = () => {
+    if (autoplayRef.current) {
+      clearInterval(autoplayRef.current)
+    }
+    autoplayRef.current = setInterval(() => {
+      nextTestimonial()
+    }, 8000)
+  }
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }).map((_, i) => (
-      <Star key={i} className={`w-4 h-4 ${i < rating ? "text-[#D4AF37] fill-[#D4AF37]" : "text-gray-400"}`} />
+      <Star key={i} size={18} className={`\${i < rating ? "text-[#D4AF37] fill-[#D4AF37]" : "text-gray-400"}`} />
     ))
   }
 
-  if (error) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-red-400">{error}</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="py-16">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-serif text-[#FAF3E0] mb-4">What Our Clients Say</h2>
-        <p className="text-gray-300 max-w-2xl mx-auto">
-          Discover why clients choose Midnight Magnolia for their digital needs.
-        </p>
-      </div>
+    <section
+      className="py-16 bg-[#F8F6F0]"
+      onMouseEnter={pauseAutoplay}
+      onMouseLeave={resumeAutoplay}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-serif text-[#191970] mb-4">What Our Clients Say</h2>
+          <p className="text-[#191970]/80 max-w-2xl mx-auto">
+            Discover how Midnight Magnolia has helped businesses across the South elevate their digital presence with
+            southern elegance and modern technology.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {isLoading
-          ? // Skeleton loading state
-            Array.from({ length: 3 }).map((_, i) => (
-              <Card key={i} className="bg-[#191970]/30 border border-[#D4AF37]/20">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Skeleton className="h-12 w-12 rounded-full mr-4" />
-                    <div>
-                      <Skeleton className="h-4 w-32 mb-2" />
-                      <Skeleton className="h-3 w-24" />
-                    </div>
-                  </div>
-                  <div className="flex mb-4">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Skeleton key={i} className="h-4 w-4 mr-1 rounded-full" />
-                    ))}
-                  </div>
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-3/4 mb-4" />
-                  <Skeleton className="h-3 w-24 ml-auto" />
-                </CardContent>
-              </Card>
-            ))
-          : testimonials.map((testimonial) => (
-              <Card
-                key={testimonial.id}
-                className="bg-[#191970]/30 border border-[#D4AF37]/20 hover:shadow-lg hover:shadow-[#D4AF37]/10 transition-all"
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4 bg-[#D4AF37]/20">
-                      {testimonial.image ? (
-                        <Image
+        <div className="relative max-w-4xl mx-auto">
+          {/* Testimonial Cards */}
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
+              {testimonials.map((testimonial) => (
+                <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
+                  <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 relative">
+                    <Quote className="absolute top-6 left-6 text-[#D4AF37]/20 h-12 w-12" />
+                    <div className="flex flex-col md:flex-row items-center gap-6">
+                      <div className="relative h-24 w-24 rounded-full overflow-hidden flex-shrink-0 border-4 border-[#D4AF37]/20">
+                        <img
                           src={testimonial.image || "/placeholder.svg"}
                           alt={testimonial.name}
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
+                          loading="lazy"
                         />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-[#D4AF37] font-serif text-lg">{testimonial.name.charAt(0)}</span>
+                      </div>
+                      <div className="flex-1 text-center md:text-left">
+                        <div className="flex justify-center md:justify-start mb-4">
+                          {renderStars(testimonial.rating)}
                         </div>
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-[#FAF3E0]">{testimonial.name}</h3>
-                      <p className="text-sm text-gray-400">
-                        {testimonial.role}, {testimonial.company}
-                      </p>
+                        <p className="text-[#191970] mb-6 italic">"{testimonial.content}"</p>
+                        <div>
+                          <h4 className="font-serif text-lg text-[#191970] font-medium">{testimonial.name}</h4>
+                          <p className="text-sm text-[#191970]/70">
+                            {testimonial.role}, {testimonial.company}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex mb-4">{renderStars(testimonial.rating)}</div>
-                  <p className="text-gray-300 mb-4">{testimonial.testimonial}</p>
-                  <p className="text-right text-sm text-gray-400">{testimonial.date}</p>
-                </CardContent>
-              </Card>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevTestimonial}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-6 bg-[#191970] text-white p-2 rounded-full shadow-lg hover:bg-[#191970]/80 transition-colors z-10"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button
+            onClick={nextTestimonial}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-6 bg-[#191970] text-white p-2 rounded-full shadow-lg hover:bg-[#191970]/80 transition-colors z-10"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Indicators */}
+          <div className="flex justify-center mt-8 space-x-2">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveIndex(index)}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  activeIndex === index ? "bg-[#D4AF37]" : "bg-[#191970]/20"
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
             ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
+
+export { TestimonialsSection }

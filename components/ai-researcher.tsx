@@ -6,7 +6,7 @@ import { Bot, FileText, ArrowRight } from "lucide-react"
 import { RoboAnimation } from "./robo-animation"
 import Link from "next/link"
 
-export function AIResearcher() {
+export default function AIResearcher() {
   return (
     <section id="researcher" className="py-16 sm:py-20 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
