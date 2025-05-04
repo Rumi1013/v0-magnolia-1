@@ -17,6 +17,7 @@ import {
   FaStar, 
   FaMagic, 
   FaTable, 
+  FaPalette,
   FaPlus,
   FaCopy,
   FaExternalLinkAlt, 
@@ -71,6 +72,8 @@ const Notion: React.FC = () => {
               { "name": "Affirmation", "color": "blue" },
               { "name": "Printable", "color": "green" },
               { "name": "eBook", "color": "yellow" },
+              { "name": "Artwork", "color": "pink" },
+              { "name": "Vintage Collection", "color": "brown" },
               { "name": "Astrology", "color": "orange" }
             ]
           }
@@ -247,6 +250,150 @@ const Notion: React.FC = () => {
               { "name": "Rich Gold", "color": "yellow" },
               { "name": "Cream", "color": "gray" },
               { "name": "Lavender", "color": "purple" }
+            ]
+          }
+        }
+      }
+    },
+    ebook: {
+      name: "eBook Production",
+      schema: {
+        "Title": {
+          "title": {}
+        },
+        "Description": {
+          "rich_text": {}
+        },
+        "Format": {
+          "select": {
+            "options": [
+              { "name": "PDF", "color": "red" },
+              { "name": "EPUB", "color": "blue" },
+              { "name": "Mobi", "color": "green" },
+              { "name": "Print-Ready", "color": "yellow" }
+            ]
+          }
+        },
+        "PageCount": {
+          "number": {}
+        },
+        "CoverImage": {
+          "url": {}
+        },
+        "Theme": {
+          "select": {
+            "options": [
+              { "name": "Modern", "color": "blue" },
+              { "name": "Vintage", "color": "brown" },
+              { "name": "Mystical", "color": "purple" },
+              { "name": "Minimalist", "color": "gray" }
+            ]
+          }
+        },
+        "Chapters": {
+          "rich_text": {}
+        },
+        "PublishDate": {
+          "date": {}
+        },
+        "Status": {
+          "status": {
+            "options": [
+              { "name": "Outlining", "color": "blue" },
+              { "name": "Writing", "color": "yellow" },
+              { "name": "Editing", "color": "orange" },
+              { "name": "Design", "color": "purple" },
+              { "name": "Published", "color": "green" }
+            ]
+          }
+        },
+        "PricingTier": {
+          "select": {
+            "options": [
+              { "name": "Free", "color": "gray" },
+              { "name": "Magnolia Seed", "color": "green" },
+              { "name": "Crescent Bloom", "color": "blue" },
+              { "name": "Golden Grove", "color": "yellow" },
+              { "name": "Moonlit Sanctuary", "color": "purple" },
+              { "name": "House of Midnight", "color": "black" }
+            ]
+          }
+        }
+      }
+    },
+    artwork: {
+      name: "Artwork Collection",
+      schema: {
+        "Title": {
+          "title": {}
+        },
+        "Description": {
+          "rich_text": {}
+        },
+        "Style": {
+          "select": {
+            "options": [
+              { "name": "Vintage", "color": "brown" },
+              { "name": "Modern", "color": "blue" },
+              { "name": "Mixed Media", "color": "purple" },
+              { "name": "AI Generated", "color": "gray" },
+              { "name": "Hand-Illustrated", "color": "green" }
+            ]
+          }
+        },
+        "Collection": {
+          "select": {
+            "options": [
+              { "name": "Tarot", "color": "purple" },
+              { "name": "Botanical", "color": "green" },
+              { "name": "Celestial", "color": "blue" },
+              { "name": "Vintage Ephemera", "color": "brown" },
+              { "name": "Mystical Creatures", "color": "pink" }
+            ]
+          }
+        },
+        "ImageURL": {
+          "url": {}
+        },
+        "ArtistAttribution": {
+          "rich_text": {}
+        },
+        "LicenseInfo": {
+          "select": {
+            "options": [
+              { "name": "Public Domain", "color": "gray" },
+              { "name": "Creative Commons", "color": "blue" },
+              { "name": "Licensed", "color": "green" },
+              { "name": "Original Work", "color": "purple" }
+            ]
+          }
+        },
+        "Dimensions": {
+          "rich_text": {}
+        },
+        "PublishDate": {
+          "date": {}
+        },
+        "Tags": {
+          "multi_select": {
+            "options": [
+              { "name": "Moon", "color": "blue" },
+              { "name": "Stars", "color": "yellow" },
+              { "name": "Botanical", "color": "green" },
+              { "name": "Mystical", "color": "purple" },
+              { "name": "Vintage", "color": "brown" },
+              { "name": "Tarot", "color": "red" }
+            ]
+          }
+        },
+        "PrintFormats": {
+          "multi_select": {
+            "options": [
+              { "name": "Digital", "color": "blue" },
+              { "name": "Postcard", "color": "green" },
+              { "name": "Poster", "color": "yellow" },
+              { "name": "Sticker", "color": "red" },
+              { "name": "Card", "color": "purple" }
             ]
           }
         }
@@ -1068,6 +1215,8 @@ const Notion: React.FC = () => {
                               {key === 'tarot' && <FaMoon className="text-[#D4AF37]" />}
                               {key === 'affirmation' && <FaStar className="text-[#D4AF37]" />}
                               {key === 'astrology' && <FaMagic className="text-[#D4AF37]" />}
+                              {key === 'ebook' && <FaBook className="text-[#D4AF37]" />}
+                              {key === 'artwork' && <FaImage className="text-[#D4AF37]" />}
                               {key === 'default' && <FaTable className="text-[#D4AF37]" />}
                             </div>
                             <div className="font-medium text-sm text-[#FAF3E0]">{template.name}</div>
