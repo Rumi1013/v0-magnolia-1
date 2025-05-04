@@ -33,6 +33,8 @@ import {
 } from 'react-icons/fa';
 import MoonCalendar from '@/components/ui/moon-calendar';
 import AIPromptGenerator from '@/components/ui/ai-prompt-generator';
+import AirtableIntegration from '@/components/ui/airtable-integration';
+import AIContentGenerator from '@/components/ui/ai-content-generator';
 
 const Notion: React.FC = () => {
   const { toast } = useToast();
