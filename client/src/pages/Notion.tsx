@@ -17,7 +17,9 @@ import {
   FaStar, 
   FaMagic, 
   FaTable, 
-  FaPlus, 
+  FaPlus,
+  FaCopy,
+  FaExternalLinkAlt, 
   FaDownload, 
   FaSyncAlt, 
   FaClipboardCheck,
@@ -665,15 +667,41 @@ const Notion: React.FC = () => {
                               )}
                             </div>
                           </CardContent>
-                          <CardFooter className="pt-0">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleSelectDatabase(db.id)}
-                              className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F] text-xs w-full"
-                            >
-                              <FaPlus className="mr-2" /> Add Content
-                            </Button>
+                          <CardFooter className="pt-0 flex flex-col space-y-2">
+                            <div className="flex space-x-2 w-full">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleSelectDatabase(db.id)}
+                                className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F] text-xs flex-1"
+                              >
+                                <FaPlus className="mr-1" /> Add
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(db.id);
+                                  toast({
+                                    title: "Copied",
+                                    description: "Database ID copied to clipboard"
+                                  });
+                                }}
+                                className="text-[#D4AF37] border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A192F] text-xs"
+                              >
+                                <FaCopy className="mr-1" /> Copy ID
+                              </Button>
+                            </div>
+                            <div className="flex space-x-2 w-full">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => window.open(`https://www.notion.so/${db.id.replace(/-/g, '')}`, '_blank')}
+                                className="text-blue-400 border-blue-400 hover:bg-blue-400 hover:text-[#0A192F] text-xs flex-1"
+                              >
+                                <FaExternalLinkAlt className="mr-1" /> Open in Notion
+                              </Button>
+                            </div>
                           </CardFooter>
                         </Card>
                       ))
@@ -816,15 +844,41 @@ const Notion: React.FC = () => {
                             ))}
                           </div>
                         </CardContent>
-                        <CardFooter className="flex justify-end gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleSelectDatabase(db.id)}
-                            className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F]"
-                          >
-                            <FaPlus className="mr-2" /> Add Entry
-                          </Button>
+                        <CardFooter className="pt-0 flex flex-col space-y-2">
+                          <div className="flex space-x-2 w-full">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleSelectDatabase(db.id)}
+                              className="text-[#A3B18A] border-[#A3B18A] hover:bg-[#A3B18A] hover:text-[#0A192F] text-xs flex-1"
+                            >
+                              <FaPlus className="mr-1" /> Add Entry
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                navigator.clipboard.writeText(db.id);
+                                toast({
+                                  title: "Copied",
+                                  description: "Database ID copied to clipboard"
+                                });
+                              }}
+                              className="text-[#D4AF37] border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0A192F] text-xs"
+                            >
+                              <FaCopy className="mr-1" /> Copy ID
+                            </Button>
+                          </div>
+                          <div className="flex space-x-2 w-full">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => window.open(`https://www.notion.so/${db.id.replace(/-/g, '')}`, '_blank')}
+                              className="text-blue-400 border-blue-400 hover:bg-blue-400 hover:text-[#0A192F] text-xs flex-1"
+                            >
+                              <FaExternalLinkAlt className="mr-1" /> Open in Notion
+                            </Button>
+                          </div>
                         </CardFooter>
                       </Card>
                     ))
