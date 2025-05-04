@@ -41,11 +41,14 @@ export const AirtableIntegration: React.FC = () => {
     queryKey: ['/api/airtable/bases'],
     enabled: connectionStatus === 'connected',
     queryFn: async () => {
+      console.log('Fetching Airtable bases...');
       const response = await apiRequest('/api/airtable/bases');
-      return response.json();
+      const data = await response.json();
+      console.log('Airtable bases API response:', data);
+      return data;
     },
     onSuccess: (data) => {
-      console.log('Airtable Bases Data:', data);
+      console.log('Airtable Bases Data in onSuccess:', data);
     },
     onError: (error) => {
       console.error('Error fetching Airtable bases:', error);
@@ -229,6 +232,11 @@ export const AirtableIntegration: React.FC = () => {
     );
   };
 
+  // For debugging purposes
+  useEffect(() => {
+    console.log('Current basesData state:', basesData);
+  }, [basesData]);
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -251,6 +259,27 @@ export const AirtableIntegration: React.FC = () => {
           {connectionStatus === 'checking' ? 'Checking Connection...' :
            connectionStatus === 'connected' ? 'Connected' : 'Connection Error'}
         </Badge>
+      </div>
+
+      {/* DEBUG INFO */}
+      <div className="bg-black/50 p-3 rounded border border-yellow-500/30 mt-2 mb-4">
+        <h3 className="text-yellow-400 font-mono text-sm">Debug Information</h3>
+        <div className="text-white font-mono text-xs mt-2">
+          <p>isLoadingBases: {isLoadingBases ? 'true' : 'false'}</p>
+          <p>connectionStatus: {connectionStatus}</p>
+          <p>basesData present: {basesData ? 'yes' : 'no'}</p>
+          {basesData && (
+            <>
+              <p>basesData.success: {basesData.success ? 'true' : 'false'}</p>
+              <p>basesData.bases: {basesData.bases ? `Array(${basesData.bases.length})` : 'undefined'}</p>
+              {basesData.bases && basesData.bases.length > 0 && (
+                <div className="mt-1 ml-2">
+                  <p>First base: {JSON.stringify(basesData.bases[0])}</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       {connectionStatus === 'error' ? (
