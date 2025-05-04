@@ -553,7 +553,7 @@ const Notion: React.FC = () => {
           className="text-center mb-12"
         >
           <h1 className="font-playfair text-4xl md:text-5xl text-[#D4AF37] mb-4">The Digital Grimoire</h1>
-          <p className="text-xl max-w-3xl mx-auto opacity-80">
+          <p className="text-xl max-w-3xl mx-auto text-[#FAF3E0]">
             Midnight Magnolia Creator Hub - Your central command center for content creation, automation, and distribution
           </p>
         </motion.div>
@@ -633,7 +633,7 @@ const Notion: React.FC = () => {
               {/* Right column - Content grid & databases */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-playfair text-[#D4AF37] mb-4">Content Databases</h2>
-                <p className="text-sm opacity-80 mb-6">
+                <p className="text-sm text-[#FAF3E0] mb-6">
                   Use these templates to organize and automate your content creation workflow
                 </p>
 
@@ -708,7 +708,7 @@ const Notion: React.FC = () => {
                       <FaCalendarAlt className="mr-1" /> May 2025
                     </Badge>
                   </div>
-                  <p className="text-sm opacity-80 mt-0 mb-2">
+                  <p className="text-sm text-[#FAF3E0] mt-0 mb-2">
                     Align your content creation with lunar cycles for more powerful cosmic connections
                   </p>
                   <MoonCalendar />
@@ -721,7 +721,7 @@ const Notion: React.FC = () => {
                       <FaMagic className="mr-1" /> AI Powered
                     </Badge>
                   </div>
-                  <p className="text-sm opacity-80 mt-0 mb-2">
+                  <p className="text-sm text-[#FAF3E0] mt-0 mb-2">
                     Generate AI prompts to assist your content creation workflow
                   </p>
                   <AIPromptGenerator />
