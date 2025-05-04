@@ -23,7 +23,11 @@ import {
   FaDownload, 
   FaSyncAlt, 
   FaClipboardCheck,
-  FaCalendarAlt
+  FaCalendarAlt,
+  FaExclamationTriangle,
+  FaQuestion,
+  FaCode,
+  FaLink
 } from 'react-icons/fa';
 import MoonCalendar from '@/components/ui/moon-calendar';
 import AIPromptGenerator from '@/components/ui/ai-prompt-generator';
@@ -34,15 +38,20 @@ const Notion: React.FC = () => {
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
   
   // Check Notion API connection status
-  const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
-    queryKey: ['/api/notion/health'],
-    onSuccess: (data) => {
-      setConnectionStatus(data?.success ? 'connected' : 'error');
-    },
-    onError: () => {
-      setConnectionStatus('error');
-    }
+  const { data: apiHealth, isLoading: isCheckingConnection } = useQuery<{ success: boolean }>({
+    queryKey: ['/api/notion/health']
   });
+
+  // Update connection status when health data changes
+  React.useEffect(() => {
+    if (!isCheckingConnection) {
+      if (apiHealth?.success) {
+        setConnectionStatus('connected');
+      } else {
+        setConnectionStatus('error');
+      }
+    }
+  }, [apiHealth, isCheckingConnection]);
   
   // Predefined database templates
   const databaseTemplates = {
@@ -651,13 +660,34 @@ const Notion: React.FC = () => {
                   Use these templates to organize and automate your content creation workflow
                 </p>
 
-                {isLoadingDatabases ? (
+                {isLoadingDatabases || isCheckingConnection ? (
                   <div className="text-center p-6 border border-dashed border-[#A3B18A]/30 rounded-md">
                     <p className="text-[#A3B18A]">Loading creator databases...</p>
                   </div>
+                ) : connectionStatus === 'error' ? (
+                  <Card className="bg-[#0A192F] border-red-400/30 shadow-lg mb-8">
+                    <CardHeader className="border-b border-red-400/20">
+                      <CardTitle className="text-red-400 flex items-center">
+                        <FaExclamationTriangle className="mr-2" /> Notion API Connection Error
+                      </CardTitle>
+                      <CardDescription className="text-[#FAF3E0]">
+                        Unable to connect to the Notion API. Please check your integration settings.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-6 space-y-4">
+                      <div className="bg-red-950/20 border border-red-400/20 rounded-md p-4">
+                        <h3 className="font-medium text-red-400 mb-2">Troubleshooting Steps:</h3>
+                        <ol className="list-decimal list-inside space-y-2 text-[#FAF3E0]">
+                          <li>Verify that your Notion API key is correct and active</li>
+                          <li>Ensure your integration has been properly set up in the Notion dashboard</li>
+                          <li>Check that your integration has been granted access to the pages you want to work with</li>
+                        </ol>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    {databasesData?.databases && databasesData.databases.length > 0 ? 
+                    {databasesData?.databases && databasesData.databases.length > 0 ? (
                       databasesData.databases.slice(0, 4).map((db: any) => (
                         <Card key={db.id} className="bg-[#0A192F] border-[#A3B18A]/30 hover:border-[#A3B18A] transition-all duration-300">
                           <CardHeader className="pb-2">
@@ -717,7 +747,65 @@ const Notion: React.FC = () => {
                           </CardFooter>
                         </Card>
                       ))
-                    : null}
+                    ) : connectionStatus === 'connected' ? (
+                      <Card className="bg-[#0A192F] border-[#D4AF37]/30 shadow-lg col-span-2">
+                        <CardHeader className="border-b border-[#D4AF37]/20">
+                          <CardTitle className="text-[#D4AF37] flex items-center">
+                            <FaQuestion className="mr-2" /> Getting Started with Digital Grimoire
+                          </CardTitle>
+                          <CardDescription className="text-[#FAF3E0]">
+                            Set up your Notion integration to begin creating magical content
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="pt-6 space-y-6">
+                          <div className="space-y-4">
+                            <div className="bg-[#0A192F] border border-[#D4AF37]/20 rounded-md p-4">
+                              <h3 className="font-medium text-[#D4AF37] mb-2 flex items-center">
+                                <FaLink className="mr-2" /> Step 1: Set Up Pages in Notion
+                              </h3>
+                              <p className="text-sm text-[#FAF3E0] mb-2">
+                                Your Notion integration is connected, but you need to create pages or databases to work with.
+                              </p>
+                              <ol className="list-decimal list-inside space-y-2 text-[#FAF3E0] text-sm pl-2">
+                                <li>Go to your Notion workspace</li>
+                                <li>Create a new page to host your Digital Grimoire databases</li>
+                                <li>Share this page with your integration by clicking "Share" and selecting your integration</li>
+                              </ol>
+                            </div>
+                            
+                            <div className="bg-[#0A192F] border border-[#D4AF37]/20 rounded-md p-4">
+                              <h3 className="font-medium text-[#D4AF37] mb-2 flex items-center">
+                                <FaCode className="mr-2" /> Step 2: Create Your First Database
+                              </h3>
+                              <p className="text-sm text-[#FAF3E0] mb-2">
+                                Now you're ready to create your first content database.
+                              </p>
+                              <ol className="list-decimal list-inside space-y-2 text-[#FAF3E0] text-sm pl-2">
+                                <li>Go to the "Create" tab above</li>
+                                <li>Enter the Page ID of your shared Notion page</li>
+                                <li>Choose a template (like "Tarot Card Database" or "Affirmation Grid")</li>
+                                <li>Enter a title for your database</li>
+                                <li>Click "Create Database" to deploy your first content system</li>
+                              </ol>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4 pt-4 border-t border-[#D4AF37]/20">
+                            <p className="text-sm text-[#FAF3E0] italic">
+                              Tip: To find a Page ID in Notion, open the page, click "Share", and copy the link. The Page ID is the string of characters at the end of the URL.
+                            </p>
+                          </div>
+                        </CardContent>
+                        <CardFooter className="border-t border-[#D4AF37]/20 pt-4">
+                          <Button 
+                            onClick={() => setActiveTab('create-template')}
+                            className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80"
+                          >
+                            <FaPlus className="mr-2" /> Create Your First Database
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    ) : null}
 
                     {/* Create new template card */}
                     <Card className="bg-[#0A192F] border-dashed border-[#A3B18A]/30 hover:border-[#A3B18A] transition-all duration-300">
