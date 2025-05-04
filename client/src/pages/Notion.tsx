@@ -1216,7 +1216,7 @@ const Notion: React.FC = () => {
                               {key === 'affirmation' && <FaStar className="text-[#D4AF37]" />}
                               {key === 'astrology' && <FaMagic className="text-[#D4AF37]" />}
                               {key === 'ebook' && <FaBook className="text-[#D4AF37]" />}
-                              {key === 'artwork' && <FaImage className="text-[#D4AF37]" />}
+                              {key === 'artwork' && <FaPalette className="text-[#D4AF37]" />}
                               {key === 'default' && <FaTable className="text-[#D4AF37]" />}
                             </div>
                             <div className="font-medium text-sm text-[#FAF3E0]">{template.name}</div>
@@ -1275,7 +1275,8 @@ const Notion: React.FC = () => {
                           <li>• Affirmations - Daily/monthly affirmations</li>
                           <li>• Grids - Tarot or affirmation grids</li>
                           <li>• Printables - Downloadable worksheets</li>
-                          <li>• eBooks - Digital books and guides</li>
+                          <li>• eBooks - Digital books and guides (modern & vintage)</li>
+                          <li>• Artwork - Illustrations and vintage ephemera</li>
                         </ul>
                       </div>
                     </div>
