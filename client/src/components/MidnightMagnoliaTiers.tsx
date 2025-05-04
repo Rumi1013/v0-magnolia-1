@@ -147,17 +147,17 @@ export const MidnightMagnoliaTiers: React.FC = () => {
         <div className="space-y-6">
           <div className="border border-[#A3B18A]/30 rounded-lg p-6 transition-all duration-300 hover:border-[#A3B18A]">
             <h3 className="font-playfair text-xl text-[#D4AF37] mb-2">How do I access my membership benefits?</h3>
-            <p className="text-[#FAF3E0]/80">Once you join, you'll receive an email with login details to our member portal where all digital content is available. Physical items are shipped quarterly to the address provided during signup.</p>
+            <p className="text-[#FAF3E0]">Once you join, you'll receive an email with login details to our member portal where all digital content is available. Physical items are shipped quarterly to the address provided during signup.</p>
           </div>
           
           <div className="border border-[#A3B18A]/30 rounded-lg p-6 transition-all duration-300 hover:border-[#A3B18A]">
             <h3 className="font-playfair text-xl text-[#D4AF37] mb-2">Can I upgrade or downgrade my membership?</h3>
-            <p className="text-[#FAF3E0]/80">Yes, you can change your membership tier at any time through your account settings. Changes will take effect at your next billing cycle.</p>
+            <p className="text-[#FAF3E0]">Yes, you can change your membership tier at any time through your account settings. Changes will take effect at your next billing cycle.</p>
           </div>
           
           <div className="border border-[#A3B18A]/30 rounded-lg p-6 transition-all duration-300 hover:border-[#A3B18A]">
             <h3 className="font-playfair text-xl text-[#D4AF37] mb-2">When are community gatherings held?</h3>
-            <p className="text-[#FAF3E0]/80">Community gatherings for eligible tiers are held monthly on the full moon. Calendar invites are sent to members with details for joining the virtual sessions.</p>
+            <p className="text-[#FAF3E0]">Community gatherings for eligible tiers are held monthly on the full moon. Calendar invites are sent to members with details for joining the virtual sessions.</p>
           </div>
         </div>
       </motion.div>
