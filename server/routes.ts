@@ -2,6 +2,8 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { notionService } from "./notion";
+import { airtableService } from "./airtable";
+import { openaiService } from "./openai";
 import { z } from "zod";
 
 // Create schemas for request validation
