@@ -22,22 +22,26 @@ export const AirtableIntegration: React.FC = () => {
     queryKey: ['/api/airtable/health'],
     queryFn: async () => {
       console.log('Checking Airtable health...');
-      const response = await apiRequest('/api/airtable/health');
-      const data = await response.json();
-      console.log('Airtable health data:', data);
-      return data;
-    },
-    onSuccess: (data: any) => {
-      console.log('Health check success:', data);
-      if (data?.success) {
-        setConnectionStatus('connected');
-      } else {
+      try {
+        const response = await apiRequest('/api/airtable/health');
+        const data = await response.json();
+        console.log('Airtable health data:', data);
+        
+        // Set connection status directly from the queryFn
+        if (data?.success && data?.status === 'connected') {
+          console.log('Setting connection status to connected');
+          setConnectionStatus('connected');
+        } else {
+          console.log('Setting connection status to error (data not successful)');
+          setConnectionStatus('error');
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('Airtable health check error:', error);
         setConnectionStatus('error');
+        throw error;
       }
-    },
-    onError: () => {
-      console.error('Health check error');
-      setConnectionStatus('error');
     }
   });
 
@@ -45,24 +49,31 @@ export const AirtableIntegration: React.FC = () => {
   const { 
     data: basesData, 
     isLoading: isLoadingBases,
-    refetch: refetchBases
+    refetch: refetchBases,
+    error: basesError
   } = useQuery({
     queryKey: ['/api/airtable/bases'],
     enabled: connectionStatus === 'connected',
     queryFn: async () => {
       console.log('Fetching Airtable bases...');
-      const response = await apiRequest('/api/airtable/bases');
-      const data = await response.json();
-      console.log('Airtable bases API response:', data);
-      return data;
-    },
-    onSuccess: (data) => {
-      console.log('Airtable Bases Data in onSuccess:', data);
-    },
-    onError: (error) => {
-      console.error('Error fetching Airtable bases:', error);
+      try {
+        const response = await apiRequest('/api/airtable/bases');
+        const data = await response.json();
+        console.log('Airtable bases API response:', data);
+        return data;
+      } catch (error) {
+        console.error('Error in Airtable bases queryFn:', error);
+        throw error;
+      }
     }
   });
+  
+  // Log error if present
+  useEffect(() => {
+    if (basesError) {
+      console.error('Bases query error:', basesError);
+    }
+  }, [basesError]);
 
   // Get tables for selected base
   const {
@@ -245,6 +256,15 @@ export const AirtableIntegration: React.FC = () => {
   useEffect(() => {
     console.log('Current basesData state:', basesData);
   }, [basesData]);
+  
+  // For debugging the connection status
+  useEffect(() => {
+    console.log('Connection status changed to:', connectionStatus);
+    if (connectionStatus === 'connected') {
+      console.log('Connection is now connected, refetching bases...');
+      refetchBases();
+    }
+  }, [connectionStatus, refetchBases]);
 
   return (
     <div className="space-y-6">
