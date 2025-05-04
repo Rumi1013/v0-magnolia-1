@@ -847,6 +847,18 @@ const Notion: React.FC = () => {
             >
               Add
             </TabsTrigger>
+            <TabsTrigger 
+              value="airtable" 
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
+            >
+              <FaTable className="mr-1 hidden md:inline" /> Airtable
+            </TabsTrigger>
+            <TabsTrigger 
+              value="ai-content" 
+              className="data-[state=active]:bg-[#D4AF37] data-[state=active]:text-[#0A192F] text-sm md:text-base min-w-[110px] flex-grow md:flex-grow-0"
+            >
+              <FaMagic className="mr-1 hidden md:inline" /> AI Content
+            </TabsTrigger>
           </TabsList>
 
           {/* Creator Hub Tab */}
@@ -1483,6 +1495,20 @@ const Notion: React.FC = () => {
                   </CardContent>
                 </Card>
               </div>
+            </div>
+          </TabsContent>
+
+          {/* Airtable Integration Tab */}
+          <TabsContent value="airtable">
+            <div className="max-w-5xl mx-auto">
+              <AirtableIntegration />
+            </div>
+          </TabsContent>
+
+          {/* AI Content Generator Tab */}
+          <TabsContent value="ai-content">
+            <div className="max-w-5xl mx-auto">
+              <AIContentGenerator />
             </div>
           </TabsContent>
         </Tabs>
