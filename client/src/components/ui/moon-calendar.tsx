@@ -121,7 +121,7 @@ export const MoonCalendar: React.FC<MoonCalendarProps> = ({
                   </div>
                   
                   <div className="mt-3 space-y-2">
-                    <p className="text-xs font-medium opacity-80">Suggested Content:</p>
+                    <p className="text-xs font-medium text-[#FAF3E0]">Suggested Content:</p>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                       {getContentIdeas(moon.phase).map((idea, i) => (
                         <div 

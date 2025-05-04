@@ -82,7 +82,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <div className="text-center md:text-left mb-6 md:mb-0">
               <h2 className="font-playfair text-[#D4AF37] text-2xl mb-1">Midnight Magnolia</h2>
-              <p className="text-[#FAF3E0]/60">Nurturing spirits through ancestral wisdom</p>
+              <p className="text-[#FAF3E0]">Nurturing spirits through ancestral wisdom</p>
             </div>
             
             <div className="flex space-x-4">
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
           </div>
           
           <div className="border-t border-[#A3B18A]/20 pt-6 text-center md:text-left">
-            <p className="text-[#FAF3E0]/60 text-sm">
+            <p className="text-[#FAF3E0] text-sm">
               &copy; {new Date().getFullYear()} Midnight Magnolia. All rights reserved.
             </p>
           </div>
