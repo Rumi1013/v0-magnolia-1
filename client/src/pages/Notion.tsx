@@ -20,70 +20,303 @@ import {
   FaPlus, 
   FaDownload, 
   FaSyncAlt, 
-  FaClipboardCheck
+  FaClipboardCheck,
+  FaCalendarAlt
 } from 'react-icons/fa';
+import MoonCalendar from '@/components/ui/moon-calendar';
+import AIPromptGenerator from '@/components/ui/ai-prompt-generator';
 
 const Notion: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('creator-hub');
   
+  // Predefined database templates
+  const databaseTemplates = {
+    default: {
+      name: "General Content",
+      schema: {
+        "Title": {
+          "title": {}
+        },
+        "Description": {
+          "rich_text": {}
+        },
+        "Category": {
+          "select": {
+            "options": [
+              { "name": "Tarot", "color": "purple" },
+              { "name": "Affirmation", "color": "blue" },
+              { "name": "Printable", "color": "green" },
+              { "name": "eBook", "color": "yellow" },
+              { "name": "Astrology", "color": "orange" }
+            ]
+          }
+        },
+        "Status": {
+          "status": {
+            "options": [
+              { "name": "Not Started", "color": "red" },
+              { "name": "In Progress", "color": "yellow" },
+              { "name": "Completed", "color": "green" }
+            ]
+          }
+        },
+        "Priority": {
+          "select": {
+            "options": [
+              { "name": "Urgent + Important", "color": "red" },
+              { "name": "Not Urgent + Important", "color": "blue" },
+              { "name": "Urgent + Not Important", "color": "yellow" },
+              { "name": "Not Urgent + Not Important", "color": "gray" }
+            ]
+          }
+        },
+        "Type": {
+          "multi_select": {
+            "options": [
+              { "name": "Zine", "color": "purple" },
+              { "name": "Tarot", "color": "blue" },
+              { "name": "Grid", "color": "green" },
+              { "name": "AI Brief", "color": "orange" }
+            ]
+          }
+        },
+        "CreatedDate": {
+          "date": {}
+        },
+        "CreativeCommonsSources": {
+          "url": {}
+        }
+      }
+    },
+    tarot: {
+      name: "Tarot Card Database",
+      schema: {
+        "CardName": {
+          "title": {}
+        },
+        "Description": {
+          "rich_text": {}
+        },
+        "Arcana": {
+          "select": {
+            "options": [
+              { "name": "Major", "color": "purple" },
+              { "name": "Minor - Cups", "color": "blue" },
+              { "name": "Minor - Wands", "color": "orange" },
+              { "name": "Minor - Swords", "color": "gray" },
+              { "name": "Minor - Pentacles", "color": "green" }
+            ]
+          }
+        },
+        "Keywords": {
+          "multi_select": {
+            "options": [
+              { "name": "Transformation", "color": "purple" },
+              { "name": "Intuition", "color": "blue" },
+              { "name": "Creativity", "color": "yellow" },
+              { "name": "Abundance", "color": "green" },
+              { "name": "Challenge", "color": "red" }
+            ]
+          }
+        },
+        "UprightMeaning": {
+          "rich_text": {}
+        },
+        "ReversedMeaning": {
+          "rich_text": {}
+        },
+        "Element": {
+          "select": {
+            "options": [
+              { "name": "Fire", "color": "orange" },
+              { "name": "Water", "color": "blue" },
+              { "name": "Air", "color": "gray" },
+              { "name": "Earth", "color": "green" },
+              { "name": "Spirit", "color": "purple" }
+            ]
+          }
+        },
+        "Numerology": {
+          "number": {}
+        },
+        "ImageURL": {
+          "url": {}
+        },
+        "MoonPhaseAssociation": {
+          "select": {
+            "options": [
+              { "name": "New Moon", "color": "blue" },
+              { "name": "Waxing Crescent", "color": "blue" },
+              { "name": "First Quarter", "color": "blue" },
+              { "name": "Waxing Gibbous", "color": "blue" },
+              { "name": "Full Moon", "color": "purple" },
+              { "name": "Waning Gibbous", "color": "yellow" },
+              { "name": "Last Quarter", "color": "yellow" },
+              { "name": "Waning Crescent", "color": "yellow" }
+            ]
+          }
+        }
+      }
+    },
+    affirmation: {
+      name: "Affirmation Grid",
+      schema: {
+        "AffirmationTitle": {
+          "title": {}
+        },
+        "Affirmation": {
+          "rich_text": {}
+        },
+        "Theme": {
+          "select": {
+            "options": [
+              { "name": "Abundance", "color": "green" },
+              { "name": "Self-Love", "color": "pink" },
+              { "name": "Creativity", "color": "orange" },
+              { "name": "Healing", "color": "blue" },
+              { "name": "Transformation", "color": "purple" },
+              { "name": "Courage", "color": "yellow" },
+              { "name": "Peace", "color": "gray" }
+            ]
+          }
+        },
+        "MoonPhase": {
+          "select": {
+            "options": [
+              { "name": "New Moon", "color": "blue" },
+              { "name": "Waxing Moon", "color": "blue" },
+              { "name": "Full Moon", "color": "purple" },
+              { "name": "Waning Moon", "color": "yellow" },
+              { "name": "Any", "color": "gray" }
+            ]
+          }
+        },
+        "DailyOrRitual": {
+          "select": {
+            "options": [
+              { "name": "Daily", "color": "blue" },
+              { "name": "Ritual", "color": "purple" }
+            ]
+          }
+        },
+        "Chakra": {
+          "multi_select": {
+            "options": [
+              { "name": "Root", "color": "red" },
+              { "name": "Sacral", "color": "orange" },
+              { "name": "Solar Plexus", "color": "yellow" },
+              { "name": "Heart", "color": "green" },
+              { "name": "Throat", "color": "blue" },
+              { "name": "Third Eye", "color": "purple" },
+              { "name": "Crown", "color": "purple" }
+            ]
+          }
+        },
+        "ImagePrompt": {
+          "rich_text": {}
+        },
+        "BackgroundColor": {
+          "select": {
+            "options": [
+              { "name": "Midnight Blue", "color": "blue" },
+              { "name": "Sage Green", "color": "green" },
+              { "name": "Rich Gold", "color": "yellow" },
+              { "name": "Cream", "color": "gray" },
+              { "name": "Lavender", "color": "purple" }
+            ]
+          }
+        }
+      }
+    },
+    astrology: {
+      name: "Astrology Content Calendar",
+      schema: {
+        "EventTitle": {
+          "title": {}
+        },
+        "Description": {
+          "rich_text": {}
+        },
+        "CelestialEvent": {
+          "select": {
+            "options": [
+              { "name": "New Moon", "color": "blue" },
+              { "name": "Full Moon", "color": "purple" },
+              { "name": "Solar Eclipse", "color": "yellow" },
+              { "name": "Lunar Eclipse", "color": "purple" },
+              { "name": "Mercury Retrograde", "color": "gray" },
+              { "name": "Venus Retrograde", "color": "pink" },
+              { "name": "Mars Retrograde", "color": "red" },
+              { "name": "Equinox", "color": "green" },
+              { "name": "Solstice", "color": "orange" }
+            ]
+          }
+        },
+        "Date": {
+          "date": {}
+        },
+        "ZodiacSign": {
+          "select": {
+            "options": [
+              { "name": "Aries", "color": "red" },
+              { "name": "Taurus", "color": "green" },
+              { "name": "Gemini", "color": "yellow" },
+              { "name": "Cancer", "color": "blue" },
+              { "name": "Leo", "color": "orange" },
+              { "name": "Virgo", "color": "green" },
+              { "name": "Libra", "color": "blue" },
+              { "name": "Scorpio", "color": "red" },
+              { "name": "Sagittarius", "color": "orange" },
+              { "name": "Capricorn", "color": "gray" },
+              { "name": "Aquarius", "color": "blue" },
+              { "name": "Pisces", "color": "purple" }
+            ]
+          }
+        },
+        "ContentType": {
+          "multi_select": {
+            "options": [
+              { "name": "Tarot Spread", "color": "purple" },
+              { "name": "Affirmation Grid", "color": "blue" },
+              { "name": "Ritual Guide", "color": "green" },
+              { "name": "Journal Prompt", "color": "yellow" },
+              { "name": "Meditation", "color": "gray" }
+            ]
+          }
+        },
+        "Element": {
+          "select": {
+            "options": [
+              { "name": "Fire", "color": "orange" },
+              { "name": "Earth", "color": "green" },
+              { "name": "Air", "color": "gray" },
+              { "name": "Water", "color": "blue" }
+            ]
+          }
+        },
+        "Status": {
+          "status": {
+            "options": [
+              { "name": "Planning", "color": "blue" },
+              { "name": "Creating", "color": "yellow" },
+              { "name": "Reviewing", "color": "orange" },
+              { "name": "Scheduled", "color": "green" },
+              { "name": "Published", "color": "purple" }
+            ]
+          }
+        }
+      }
+    }
+  };
+
   // State for creating a database
   const [parentPageId, setParentPageId] = useState('');
   const [databaseTitle, setDatabaseTitle] = useState('');
-  const [databasePropertiesJson, setDatabasePropertiesJson] = useState(JSON.stringify({
-    "Title": {
-      "title": {}
-    },
-    "Description": {
-      "rich_text": {}
-    },
-    "Category": {
-      "select": {
-        "options": [
-          { "name": "Tarot", "color": "purple" },
-          { "name": "Affirmation", "color": "blue" },
-          { "name": "Printable", "color": "green" },
-          { "name": "eBook", "color": "yellow" },
-          { "name": "Astrology", "color": "orange" }
-        ]
-      }
-    },
-    "Status": {
-      "status": {
-        "options": [
-          { "name": "Not Started", "color": "red" },
-          { "name": "In Progress", "color": "yellow" },
-          { "name": "Completed", "color": "green" }
-        ]
-      }
-    },
-    "Priority": {
-      "select": {
-        "options": [
-          { "name": "Urgent + Important", "color": "red" },
-          { "name": "Not Urgent + Important", "color": "blue" },
-          { "name": "Urgent + Not Important", "color": "yellow" },
-          { "name": "Not Urgent + Not Important", "color": "gray" }
-        ]
-      }
-    },
-    "Type": {
-      "multi_select": {
-        "options": [
-          { "name": "Zine", "color": "purple" },
-          { "name": "Tarot", "color": "blue" },
-          { "name": "Grid", "color": "green" },
-          { "name": "AI Brief", "color": "orange" }
-        ]
-      }
-    },
-    "CreatedDate": {
-      "date": {}
-    },
-    "CreativeCommonsSources": {
-      "url": {}
-    }
-  }, null, 2));
+  const [selectedTemplate, setSelectedTemplate] = useState('default');
+  const [databasePropertiesJson, setDatabasePropertiesJson] = useState(
+    JSON.stringify(databaseTemplates.default.schema, null, 2)
+  );
 
   // State for adding a page to a database
   const [selectedDatabaseId, setSelectedDatabaseId] = useState('');
@@ -468,6 +701,32 @@ const Notion: React.FC = () => {
                   </div>
                 )}
 
+                <div className="grid grid-cols-1 gap-6 mt-10">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-2xl font-playfair text-[#D4AF37]">Moon Phase Content Calendar</h2>
+                    <Badge variant="outline" className="bg-[#0A192F] border-[#D4AF37]/50 text-[#D4AF37]">
+                      <FaCalendarAlt className="mr-1" /> May 2025
+                    </Badge>
+                  </div>
+                  <p className="text-sm opacity-80 mt-0 mb-2">
+                    Align your content creation with lunar cycles for more powerful cosmic connections
+                  </p>
+                  <MoonCalendar />
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 mt-10">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-2xl font-playfair text-[#D4AF37]">Content Automation Cask</h2>
+                    <Badge variant="outline" className="bg-[#0A192F] border-[#D4AF37]/50 text-[#D4AF37]">
+                      <FaMagic className="mr-1" /> AI Powered
+                    </Badge>
+                  </div>
+                  <p className="text-sm opacity-80 mt-0 mb-2">
+                    Generate AI prompts to assist your content creation workflow
+                  </p>
+                  <AIPromptGenerator />
+                </div>
+
                 {/* Recent activity section */}
                 <h2 className="text-2xl font-playfair text-[#D4AF37] mb-4 mt-8">Recent Activity</h2>
                 <Card className="bg-[#0A192F] border-[#A3B18A]/30">
@@ -633,6 +892,34 @@ const Notion: React.FC = () => {
                         placeholder="e.g., Content Calendar, Tarot Card Database, etc."
                         className="bg-[#0A192F]/60 border-[#A3B18A]/30"
                       />
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label htmlFor="template-type">Template Type</Label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {Object.entries(databaseTemplates).map(([key, template]) => (
+                          <div
+                            key={key}
+                            onClick={() => {
+                              setSelectedTemplate(key);
+                              setDatabasePropertiesJson(JSON.stringify(template.schema, null, 2));
+                            }}
+                            className={`cursor-pointer p-3 rounded-md border transition-all flex flex-col items-center text-center ${
+                              selectedTemplate === key
+                                ? 'border-[#D4AF37] bg-[#D4AF37]/10'
+                                : 'border-[#A3B18A]/30 hover:border-[#A3B18A]/70'
+                            }`}
+                          >
+                            <div className="h-10 w-10 rounded-full flex items-center justify-center mb-2 bg-[#0A192F]/70">
+                              {key === 'tarot' && <FaMoon className="text-[#D4AF37]" />}
+                              {key === 'affirmation' && <FaStar className="text-[#D4AF37]" />}
+                              {key === 'astrology' && <FaMagic className="text-[#D4AF37]" />}
+                              {key === 'default' && <FaTable className="text-[#D4AF37]" />}
+                            </div>
+                            <div className="font-medium text-sm">{template.name}</div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="space-y-2">
