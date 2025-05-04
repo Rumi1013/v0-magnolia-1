@@ -39,7 +39,17 @@ export const AirtableIntegration: React.FC = () => {
     refetch: refetchBases
   } = useQuery({
     queryKey: ['/api/airtable/bases'],
-    enabled: connectionStatus === 'connected'
+    enabled: connectionStatus === 'connected',
+    queryFn: async () => {
+      const response = await apiRequest('/api/airtable/bases');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log('Airtable Bases Data:', data);
+    },
+    onError: (error) => {
+      console.error('Error fetching Airtable bases:', error);
+    }
   });
 
   // Get tables for selected base
@@ -52,7 +62,8 @@ export const AirtableIntegration: React.FC = () => {
     enabled: !!selectedBase && connectionStatus === 'connected',
     queryFn: async () => {
       if (!selectedBase) return null;
-      return apiRequest(`/api/airtable/bases/${selectedBase}/tables`);
+      const response = await apiRequest(`/api/airtable/bases/${selectedBase}/tables`);
+      return response.json();
     }
   });
 
@@ -66,7 +77,8 @@ export const AirtableIntegration: React.FC = () => {
     enabled: !!selectedBase && !!selectedTable && connectionStatus === 'connected',
     queryFn: async () => {
       if (!selectedBase || !selectedTable) return null;
-      return apiRequest(`/api/airtable/bases/${selectedBase}/tables/${selectedTable}/schema`);
+      const response = await apiRequest(`/api/airtable/bases/${selectedBase}/tables/${selectedTable}/schema`);
+      return response.json();
     }
   });
 
@@ -77,7 +89,11 @@ export const AirtableIntegration: React.FC = () => {
     refetch: refetchNotionDbs
   } = useQuery({
     queryKey: ['/api/notion/databases'],
-    enabled: connectionStatus === 'connected'
+    enabled: connectionStatus === 'connected',
+    queryFn: async () => {
+      const response = await apiRequest('/api/notion/databases');
+      return response.json();
+    }
   });
 
   // Import records mutation
