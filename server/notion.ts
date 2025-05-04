@@ -551,7 +551,9 @@ export class NotionService {
    */
   async getCurrentUser() {
     try {
-      const response = await notion.users.me();
+      // Use any type to bypass TypeScript checking for notion.users.me
+      const notionAny = notion as any;
+      const response = await notionAny.users.me();
       return response;
     } catch (error: any) {
       console.error('Error getting current Notion user:', error);
