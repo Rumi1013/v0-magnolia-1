@@ -31,6 +31,18 @@ import AIPromptGenerator from '@/components/ui/ai-prompt-generator';
 const Notion: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('creator-hub');
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
+  
+  // Check Notion API connection status
+  const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
+    queryKey: ['/api/notion/health'],
+    onSuccess: (data) => {
+      setConnectionStatus(data?.success ? 'connected' : 'error');
+    },
+    onError: () => {
+      setConnectionStatus('error');
+    }
+  });
   
   // Predefined database templates
   const databaseTemplates = {
