@@ -739,7 +739,7 @@ const Notion: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-sm">Added "Monthly Affirmation Cards - May" to Printables</p>
-                            <p className="text-xs opacity-50">Today, 2:15 PM</p>
+                            <p className="text-xs text-[#FAF3E0]">Today, 2:15 PM</p>
                           </div>
                         </div>
                       </div>
@@ -750,7 +750,7 @@ const Notion: React.FC = () => {
                           </div>
                           <div>
                             <p className="text-sm">Created "Tarot + Astrology Content Calendar" template</p>
-                            <p className="text-xs opacity-50">Yesterday, 10:23 AM</p>
+                            <p className="text-xs text-[#FAF3E0]">Yesterday, 10:23 AM</p>
                           </div>
                         </div>
                       </div>
@@ -957,7 +957,7 @@ const Notion: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <h4 className="font-medium text-[#D4AF37]">Recommended Properties</h4>
-                        <ul className="text-sm space-y-1 opacity-80">
+                        <ul className="text-sm space-y-1 text-[#FAF3E0]">
                           <li>• Title (title) - Every database needs a title field</li>
                           <li>• Description (rich_text) - Details about the content</li>
                           <li>• Category (select) - Content category</li>
@@ -967,7 +967,7 @@ const Notion: React.FC = () => {
                       </div>
                       <div className="space-y-2">
                         <h4 className="font-medium text-[#D4AF37]">Content Types</h4>
-                        <ul className="text-sm space-y-1 opacity-80">
+                        <ul className="text-sm space-y-1 text-[#FAF3E0]">
                           <li>• Tarot - Card meanings, spreads, rituals</li>
                           <li>• Affirmations - Daily/monthly affirmations</li>
                           <li>• Grids - Tarot or affirmation grids</li>
@@ -1001,7 +1001,7 @@ const Notion: React.FC = () => {
                     <FaBook className="text-[#D4AF37] mr-3" />
                     <div>
                       <p className="text-sm">Selected Database:</p>
-                      <p className="font-mono text-xs opacity-70 overflow-hidden text-ellipsis">{selectedDatabaseId}</p>
+                      <p className="font-mono text-xs text-[#FAF3E0] overflow-hidden text-ellipsis">{selectedDatabaseId}</p>
                     </div>
                   </div>
                 </div>
@@ -1044,7 +1044,7 @@ const Notion: React.FC = () => {
                   <CardContent className="pt-6 space-y-4">
                     <div>
                       <h4 className="font-medium text-[#D4AF37] mb-2">Content Automation Flow</h4>
-                      <ol className="list-decimal pl-5 space-y-2 text-sm opacity-80">
+                      <ol className="list-decimal pl-5 space-y-2 text-sm text-[#FAF3E0]">
                         <li>Add content entries to your Notion databases</li>
                         <li>Group related content into monthly curated bundles</li>
                         <li>Set up automation casks for printables and AI workflows</li>
@@ -1054,7 +1054,7 @@ const Notion: React.FC = () => {
                     
                     <div>
                       <h4 className="font-medium text-[#D4AF37] mb-2">Next Steps</h4>
-                      <p className="text-sm opacity-80">
+                      <p className="text-sm text-[#FAF3E0]">
                         After adding your content, explore the "Creator Hub" tab to track your implementation progress 
                         and manage your creative workflow according to The Digital Grimoire strategy.
                       </p>
