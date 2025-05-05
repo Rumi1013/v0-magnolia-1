@@ -112,7 +112,7 @@ export const AirtableIntegration: React.FC = () => {
         // Return a dummy schema so the UI doesn't break
         return {
           success: false,
-          error: error.message || 'Failed to fetch schema',
+          error: (error as Error).message || 'Failed to fetch schema',
           schema: {
             fields: [
               { name: 'Name', type: 'text' },
@@ -265,7 +265,7 @@ export const AirtableIntegration: React.FC = () => {
                   <SelectValue placeholder="Select property" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#0A192F] border-[#A3B18A]/30 text-[#FAF3E0]">
-                  <SelectItem value="">None</SelectItem>
+                  <SelectItem value="none">None</SelectItem>
                   {notionProperties.map((prop: string) => (
                     <SelectItem key={prop} value={prop}>{prop}</SelectItem>
                   ))}
@@ -421,26 +421,62 @@ export const AirtableIntegration: React.FC = () => {
                   )}
 
                   {/* Schema display */}
-                  {selectedTable && schemaData?.schema && (
+                  {selectedTable && (
                     <div className="mt-4 space-y-3">
                       <div className="flex justify-between items-center">
                         <h3 className="text-[#D4AF37] font-medium">Schema Fields</h3>
-                        <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">
-                          {schemaData.schema.fields.length} Fields
-                        </Badge>
+                        {schemaData?.schema && (
+                          <Badge variant="outline" className="bg-[#0A192F] text-xs text-[#FAF3E0]">
+                            {schemaData.schema.fields.length} Fields
+                          </Badge>
+                        )}
                       </div>
-                      <div className="bg-[#0A192F]/50 border border-[#A3B18A]/20 rounded-md p-3 max-h-48 overflow-y-auto">
-                        <div className="space-y-1">
-                          {schemaData.schema.fields.map((field: any, index: number) => (
-                            <div key={index} className="flex justify-between text-sm">
-                              <span className="text-[#FAF3E0]">{field.name}</span>
-                              <Badge variant="outline" className="bg-[#0A192F]/30 text-xs text-[#A3B18A]">
-                                {field.type}
-                              </Badge>
-                            </div>
-                          ))}
+                      
+                      {isLoadingSchema ? (
+                        <div className="text-center p-4">
+                          <p className="text-[#A3B18A]">Loading schema...</p>
                         </div>
-                      </div>
+                      ) : schemaError ? (
+                        <div className="bg-red-800/30 border border-red-500/30 rounded-md p-3">
+                          <p className="text-[#FAF3E0] text-sm">
+                            There was an error loading the schema. We'll use a default schema instead.
+                          </p>
+                          <div className="bg-[#0A192F]/50 border border-[#A3B18A]/20 rounded-md p-3 mt-3 max-h-48 overflow-y-auto">
+                            <div className="space-y-1">
+                              {[
+                                { name: 'Name', type: 'string' },
+                                { name: 'Description', type: 'string' },
+                                { name: 'Category', type: 'string' },
+                                { name: 'Created', type: 'date' }
+                              ].map((field: any, index: number) => (
+                                <div key={index} className="flex justify-between text-sm">
+                                  <span className="text-[#FAF3E0]">{field.name}</span>
+                                  <Badge variant="outline" className="bg-[#0A192F]/30 text-xs text-[#A3B18A]">
+                                    {field.type}
+                                  </Badge>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ) : schemaData?.schema ? (
+                        <div className="bg-[#0A192F]/50 border border-[#A3B18A]/20 rounded-md p-3 max-h-48 overflow-y-auto">
+                          <div className="space-y-1">
+                            {schemaData.schema.fields.map((field: any, index: number) => (
+                              <div key={index} className="flex justify-between text-sm">
+                                <span className="text-[#FAF3E0]">{field.name}</span>
+                                <Badge variant="outline" className="bg-[#0A192F]/30 text-xs text-[#A3B18A]">
+                                  {field.type}
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="bg-[#0A192F]/50 border border-[#A3B18A]/20 rounded-md p-3">
+                          <p className="text-[#FAF3E0] text-sm">No schema data available.</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
@@ -449,7 +485,7 @@ export const AirtableIntegration: React.FC = () => {
           </Card>
 
           {/* Notion Database Selection */}
-          {selectedTable && schemaData?.schema && (
+          {selectedTable && (
             <Card className="bg-[#0A192F] border-[#A3B18A]/30 shadow-lg">
               <CardHeader className="border-b border-[#A3B18A]/20">
                 <CardTitle className="text-[#D4AF37] flex items-center">
