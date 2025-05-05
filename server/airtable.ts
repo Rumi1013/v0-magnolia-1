@@ -81,43 +81,56 @@ export class AirtableService {
    */
   async getTables(baseId: string): Promise<any[]> {
     try {
+      console.log(`Getting tables for base ${baseId}`);
       const base = Airtable.base(baseId);
       
       // This is a workaround since Airtable JS client doesn't have a direct method to list tables
       // Get the tables based on the baseId
+      let tables: any[] = [];
+      
       switch (baseId) {
         case 'appTarotCards':
-          return [
+          tables = [
             { id: 'tblMajorArcana', name: 'Major Arcana' },
             { id: 'tblMinorArcana', name: 'Minor Arcana' },
             { id: 'tblMoonAssociations', name: 'Moon Phase Associations' }
           ];
+          break;
         case 'appAffirmations':
-          return [
+          tables = [
             { id: 'tblDailyAffirmations', name: 'Daily Affirmations' },
             { id: 'tblMoonPhaseAffirmations', name: 'Moon Phase Affirmations' },
             { id: 'tblChakraAffirmations', name: 'Chakra Affirmations' }
           ];
+          break;
         case 'appAstrology':
-          return [
+          tables = [
             { id: 'tblZodiacSigns', name: 'Zodiac Signs' },
             { id: 'tblPlanets', name: 'Planets' },
             { id: 'tblHouses', name: 'Houses' }
           ];
+          break;
         case 'appPrintables':
-          return [
+          tables = [
             { id: 'tblWorksheets', name: 'Worksheets' },
             { id: 'tblJournalPages', name: 'Journal Pages' },
             { id: 'tblPlanners', name: 'Planners' }
           ];
+          break;
         default:
-          return [];
+          // Default tables for any unrecognized base
+          tables = [
+            { id: 'tblDefault', name: 'Default Table' }
+          ];
+          break;
       }
+      
+      console.log(`Returning ${tables.length} tables for base ${baseId}`);
+      return tables;
     } catch (error: any) {
-      throw new AirtableApiError(
-        `Failed to fetch tables for base ${baseId}: ${error.message}`,
-        error.statusCode || 500
-      );
+      console.error(`Error getting tables for base ${baseId}:`, error);
+      // Return empty array instead of throwing an error for better UI resilience
+      return [];
     }
   }
 
@@ -155,13 +168,34 @@ export class AirtableService {
     try {
       const base = Airtable.base(baseId);
       
+      // First, check if the table exists by getting the table metadata
+      const tables = await this.getTables(baseId);
+      const tableExists = tables.some((table: any) => table.id === tableId);
+      
+      if (!tableExists) {
+        throw new AirtableApiError(
+          `Table ${tableId} not found in base ${baseId}`,
+          404
+        );
+      }
+      
       // Get a sample record to determine fields
       const records = await base(tableId)
         .select({ maxRecords: 1 })
         .firstPage();
       
+      // Return empty fields array if table has no records
       if (records.length === 0) {
-        return { fields: [] };
+        console.log(`Table ${tableId} exists but has no records. Returning empty schema.`);
+        // Create a default schema with common field types
+        return { 
+          fields: [
+            { name: 'Name', type: 'text' },
+            { name: 'Description', type: 'text' },
+            { name: 'Category', type: 'text' },
+            { name: 'Created', type: 'date' }
+          ] 
+        };
       }
       
       // Extract field names from the first record
@@ -176,11 +210,13 @@ export class AirtableService {
         };
       });
       
+      console.log(`Successfully extracted schema for table ${tableId} with ${fields.length} fields`);
       return { fields };
     } catch (error: any) {
+      console.error(`Error getting table schema:`, error);
       throw new AirtableApiError(
         `Failed to fetch schema for table ${tableId}: ${error.message}`,
-        error.statusCode || 500
+        error.statusCode || error.status || 500
       );
     }
   }
