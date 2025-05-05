@@ -317,31 +317,77 @@ export class AirtableService {
     notionService: any
   ): Promise<number> {
     try {
-      const records = await this.getRecords(baseId, tableId);
-      let importedCount = 0;
+      // Validate required fields
+      if (!baseId) throw new AirtableApiError('Base ID is required', 400);
+      if (!tableId) throw new AirtableApiError('Table ID is required', 400);
+      if (!notionDatabaseId) throw new AirtableApiError('Notion Database ID is required', 400);
+      if (!fieldMappings || Object.keys(fieldMappings).length === 0) {
+        throw new AirtableApiError('Field mappings are required', 400);
+      }
       
+      console.log(`Importing records from ${baseId}/${tableId} to Notion database ${notionDatabaseId}`);
+      console.log('With field mappings:', fieldMappings);
+      
+      // Get records
+      const records = await this.getRecords(baseId, tableId);
+      console.log(`Fetched ${records.length} records from Airtable`);
+      
+      if (records.length === 0) {
+        return 0; // Nothing to import
+      }
+      
+      let importedCount = 0;
+      const errors: any[] = [];
+      
+      // Process each record 
       for (const record of records) {
-        const notionProperties: any = {};
-        
-        // Map Airtable fields to Notion properties based on fieldMappings
-        Object.entries(fieldMappings).forEach(([airtableField, notionField]) => {
-          const value = record.fields[airtableField];
+        try {
+          const notionProperties: any = {};
           
-          if (value !== undefined) {
-            notionProperties[notionField as string] = this.convertFieldValueToNotion(
-              value,
-              notionField as string
-            );
+          // Map Airtable fields to Notion properties based on fieldMappings
+          Object.entries(fieldMappings).forEach(([airtableField, notionField]) => {
+            // Skip if mapping value is null, empty, or 'none'
+            if (!notionField || notionField === 'none') return;
+            
+            const value = record.fields[airtableField];
+            
+            // Only add property if value exists
+            if (value !== undefined && value !== null) {
+              notionProperties[notionField as string] = this.convertFieldValueToNotion(
+                value,
+                notionField as string
+              );
+            }
+          });
+          
+          // Skip if no properties to add
+          if (Object.keys(notionProperties).length === 0) {
+            console.log(`Skipping record ${record.id} - no valid properties to map`);
+            continue;
           }
-        });
-        
-        // Add to Notion
-        await notionService.addDatabasePage(notionDatabaseId, notionProperties);
-        importedCount++;
+          
+          // Add to Notion
+          console.log(`Adding record to Notion with properties:`, notionProperties);
+          await notionService.addDatabasePage(notionDatabaseId, notionProperties);
+          importedCount++;
+        } catch (recordError: any) {
+          console.error(`Error importing record ${record.id}:`, recordError);
+          errors.push({
+            recordId: record.id,
+            error: recordError.message
+          });
+          // Continue with next record
+        }
+      }
+      
+      // If we have errors but imported some records, log them but still return success
+      if (errors.length > 0) {
+        console.warn(`Completed with ${errors.length} errors and ${importedCount} successes`);
       }
       
       return importedCount;
     } catch (error: any) {
+      console.error('Import to Notion error:', error);
       throw new AirtableApiError(
         `Failed to import records to Notion: ${error.message}`,
         error.statusCode || 500
