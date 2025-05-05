@@ -148,19 +148,40 @@ export const AirtableIntegration: React.FC = () => {
   // Import records mutation
   const importRecordsMutation = useMutation({
     mutationFn: async () => {
+      // Filter out any mappings with 'none' value
+      const validMappings: Record<string, string> = {};
+      Object.entries(fieldMappings).forEach(([key, value]) => {
+        if (value && value !== 'none') {
+          validMappings[key] = value;
+        }
+      });
+      
+      // Check if we have any valid mappings
+      if (Object.keys(validMappings).length === 0) {
+        throw new Error("No valid field mappings selected. Please map at least one field.");
+      }
+      
+      console.log('Sending import request with mappings:', validMappings);
+      
       const response = await apiRequest('/api/airtable/import-to-notion', {
         method: 'POST',
         body: JSON.stringify({
           baseId: selectedBase,
           tableId: selectedTable,
           notionDatabaseId: selectedNotionDb,
-          fieldMappings
+          fieldMappings: validMappings
         }),
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      return response.json();
+      
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.error || "Import failed");
+      }
+      
+      return result;
     },
     onSuccess: (data) => {
       toast({
@@ -169,6 +190,7 @@ export const AirtableIntegration: React.FC = () => {
       });
     },
     onError: (error: any) => {
+      console.error('Import error:', error);
       toast({
         title: "Import Failed",
         description: `Failed to import records: ${error.message}`,
@@ -244,14 +266,51 @@ export const AirtableIntegration: React.FC = () => {
 
     const notionProperties = Object.keys(notionDb.properties);
 
+    // Count how many mappings are selected
+    const selectedMappingsCount = Object.values(fieldMappings)
+      .filter(value => value && value !== 'none').length;
+    
     return (
       <div className="space-y-4 mt-4">
-        <h3 className="text-[#D4AF37] font-medium">Field Mappings</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-[#D4AF37] font-medium">Field Mappings</h3>
+          <Badge 
+            variant={selectedMappingsCount > 0 ? "default" : "outline"}
+            className={`${
+              selectedMappingsCount > 0 
+                ? "bg-green-500/20 text-green-300" 
+                : "bg-yellow-500/20 text-yellow-300"
+            }`}
+          >
+            {selectedMappingsCount} {selectedMappingsCount === 1 ? 'Field' : 'Fields'} Mapped
+          </Badge>
+        </div>
+        
+        <div className="bg-blue-900/20 border border-blue-400/20 rounded-md p-3 mb-3">
+          <div className="text-[#FAF3E0] text-sm">
+            <p className="flex items-center">
+              <FaLink className="text-blue-300 mr-2" /> 
+              <span>Map Airtable fields to Notion properties. At least one mapping is required for import.</span>
+            </p>
+          </div>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {schemaData.schema.fields.map((field: any, index: number) => (
-            <div key={index} className="flex items-center space-x-2 bg-[#0A192F]/70 p-2 rounded-md border border-[#A3B18A]/20">
+            <div 
+              key={index} 
+              className={`flex items-center space-x-2 p-2 rounded-md border ${
+                fieldMappings[field.name] && fieldMappings[field.name] !== 'none'
+                  ? 'bg-[#0A192F]/90 border-green-500/30'
+                  : 'bg-[#0A192F]/70 border-[#A3B18A]/20'
+              }`}
+            >
               <div className="flex-1 text-[#FAF3E0]">{field.name}</div>
-              <FaLink className="text-[#A3B18A]" />
+              <FaLink className={`${
+                fieldMappings[field.name] && fieldMappings[field.name] !== 'none'
+                  ? 'text-green-400'
+                  : 'text-[#A3B18A]'
+              }`} />
               <Select
                 value={fieldMappings[field.name] || ''}
                 onValueChange={(value) => {
@@ -576,7 +635,19 @@ export const AirtableIntegration: React.FC = () => {
                   </>
                 )}
               </CardContent>
-              <CardFooter className="border-t border-[#A3B18A]/20 pt-4 flex justify-end">
+              <CardFooter className="border-t border-[#A3B18A]/20 pt-4 flex flex-col md:flex-row items-center gap-4">
+                <div className="flex-1 text-[#FAF3E0] text-sm">
+                  {!selectedBase || !selectedTable ? (
+                    <span className="text-red-300">⚠️ Please select a table from Airtable</span>
+                  ) : !selectedNotionDb ? (
+                    <span className="text-red-300">⚠️ Please select a Notion database</span>
+                  ) : Object.values(fieldMappings).filter(v => v && v !== 'none').length === 0 ? (
+                    <span className="text-yellow-300">⚠️ Map at least one field to continue</span>
+                  ) : (
+                    <span className="text-green-300">✅ Ready to import {Object.values(fieldMappings).filter(v => v && v !== 'none').length} mapped fields</span>
+                  )}
+                </div>
+                
                 <Button
                   onClick={() => importRecordsMutation.mutate()}
                   disabled={
@@ -584,9 +655,9 @@ export const AirtableIntegration: React.FC = () => {
                     !selectedBase || 
                     !selectedTable || 
                     !selectedNotionDb || 
-                    Object.keys(fieldMappings).length === 0
+                    Object.values(fieldMappings).filter(v => v && v !== 'none').length === 0
                   }
-                  className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80"
+                  className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80 min-w-[200px]"
                 >
                   <FaFileImport className="mr-2" />
                   {importRecordsMutation.isPending 
