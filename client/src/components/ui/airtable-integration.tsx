@@ -545,11 +545,21 @@ export const AirtableIntegration: React.FC = () => {
                         const title = prompt("Enter database title:", defaultTitle);
                         if (!title) return;
                         
+                        // Get schema - use default if not available
+                        const schema = schemaData?.schema || {
+                          fields: [
+                            { name: 'Name', type: 'text' },
+                            { name: 'Description', type: 'text' },
+                            { name: 'Category', type: 'text' },
+                            { name: 'Created', type: 'date' }
+                          ]
+                        };
+                        
                         // Create the database
                         createDbFromSchemaMutation.mutate({
                           parentPageId,
                           title,
-                          schema: schemaData.schema
+                          schema: schema
                         });
                       }}
                       variant="outline"
