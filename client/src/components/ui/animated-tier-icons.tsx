@@ -171,15 +171,24 @@ export const CrescentBloomIcon: React.FC = () => {
 
 // Golden Grove Icon (Animated Tree)
 export const GoldenGroveIcon: React.FC = () => {
+  const controls = useAnimation();
+  const [key, setKey] = useState(0);
+  
+  useEffect(() => {
+    controls.start({ opacity: 1 });
+    setKey(prev => prev + 1);
+  }, [controls]);
+  
   return (
     <motion.svg 
+      key={key}
       width="48" 
       height="48" 
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={controls}
       transition={{ duration: 0.5 }}
     >
       {/* Tree Trunk */}
@@ -246,15 +255,24 @@ export const GoldenGroveIcon: React.FC = () => {
 
 // Moonlit Sanctuary Icon (Animated Lotus/Sanctuary)
 export const MoonlitSanctuaryIcon: React.FC = () => {
+  const controls = useAnimation();
+  const [key, setKey] = useState(0);
+  
+  useEffect(() => {
+    controls.start({ opacity: 1 });
+    setKey(prev => prev + 1);
+  }, [controls]);
+  
   return (
     <motion.svg 
+      key={key}
       width="48" 
       height="48" 
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={controls}
       transition={{ duration: 0.5 }}
     >
       {/* Moon */}
@@ -325,15 +343,24 @@ export const MoonlitSanctuaryIcon: React.FC = () => {
 
 // House of Midnight Icon (Animated Mansion/Temple)
 export const HouseOfMidnightIcon: React.FC = () => {
+  const controls = useAnimation();
+  const [key, setKey] = useState(0);
+  
+  useEffect(() => {
+    controls.start({ opacity: 1 });
+    setKey(prev => prev + 1);
+  }, [controls]);
+  
   return (
     <motion.svg 
+      key={key}
       width="48" 
       height="48" 
       viewBox="0 0 48 48" 
       fill="none" 
       xmlns="http://www.w3.org/2000/svg"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={controls}
       transition={{ duration: 0.5 }}
     >
       {/* House Base */}
