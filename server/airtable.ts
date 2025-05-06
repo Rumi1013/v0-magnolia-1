@@ -179,20 +179,34 @@ export class AirtableService {
         );
       }
       
-      // Get a sample record to determine fields
+      // Check if we have predefined field types for this table
+      const knownFieldTypes = this.getKnownFieldTypes(baseId, tableId);
+      
+      // If we have predefined field types, use them
+      if (knownFieldTypes) {
+        console.log(`Using predefined schema for ${baseId}/${tableId}`);
+        const fields = Object.entries(knownFieldTypes).map(([fieldName, fieldType]) => ({
+          name: fieldName,
+          type: fieldType
+        }));
+        return { fields };
+      }
+      
+      // Otherwise, get a sample record to determine fields
+      console.log(`Retrieving schema from sample record for ${baseId}/${tableId}`);
       const records = await base(tableId)
         .select({ maxRecords: 1 })
         .firstPage();
       
       // Return empty fields array if table has no records
       if (records.length === 0) {
-        console.log(`Table ${tableId} exists but has no records. Returning empty schema.`);
+        console.log(`Table ${tableId} exists but has no records. Returning default schema.`);
         // Create a default schema with common field types
         return { 
           fields: [
-            { name: 'Name', type: 'text' },
-            { name: 'Description', type: 'text' },
-            { name: 'Category', type: 'text' },
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'longtext' },
+            { name: 'Category', type: 'select' },
             { name: 'Created', type: 'date' }
           ] 
         };
@@ -214,10 +228,45 @@ export class AirtableService {
       return { fields };
     } catch (error: any) {
       console.error(`Error getting table schema:`, error);
-      throw new AirtableApiError(
-        `Failed to fetch schema for table ${tableId}: ${error.message}`,
-        error.statusCode || error.status || 500
-      );
+      
+      // Provide a fallback schema based on table ID
+      if (baseId === 'appTarotCards') {
+        return {
+          fields: [
+            { name: 'CardName', type: 'string' },
+            { name: 'ArcanaType', type: 'select' },
+            { name: 'UprightMeaning', type: 'longtext' },
+            { name: 'Affirmation', type: 'longtext' },
+            { name: 'JournalPrompt', type: 'longtext' }
+          ]
+        };
+      } else if (baseId === 'appAffirmations') {
+        return {
+          fields: [
+            { name: 'Text', type: 'longtext' },
+            { name: 'Theme', type: 'select' },
+            { name: 'MoonPhase', type: 'select' }
+          ]
+        };
+      } else if (baseId === 'appPrintables') {
+        return {
+          fields: [
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'longtext' },
+            { name: 'Type', type: 'select' }
+          ]
+        };
+      }
+      
+      // Generic fallback
+      return {
+        fields: [
+          { name: 'Name', type: 'string' },
+          { name: 'Description', type: 'longtext' },
+          { name: 'Category', type: 'select' },
+          { name: 'Created', type: 'date' }
+        ]
+      };
     }
   }
 
@@ -227,56 +276,103 @@ export class AirtableService {
   convertToNotionSchema(airtableSchema: any): any {
     const notionSchema: any = {};
     
+    // First, find a good title field candidate
+    let titleFieldName = '';
+    const titleCandidates = ['Name', 'Title', 'CardName', 'CollectionName', 'Text'];
+    for (const candidate of titleCandidates) {
+      if (airtableSchema.fields.some((f: any) => f.name === candidate)) {
+        titleFieldName = candidate;
+        break;
+      }
+    }
+    
+    // If no candidates found, use the first string field
+    if (!titleFieldName) {
+      const stringField = airtableSchema.fields.find((f: any) => 
+        f.type === 'string' || f.type === 'text'
+      );
+      if (stringField) {
+        titleFieldName = stringField.name;
+      }
+    }
+    
+    // Now map all fields to Notion properties
     airtableSchema.fields.forEach((field: any) => {
+      // Check if this is our title field
+      if (field.name === titleFieldName) {
+        notionSchema[field.name] = { title: {} };
+        return;
+      }
+      
+      // Otherwise, map according to type
       switch (field.type) {
         case 'string':
-          notionSchema[field.name] = {
-            rich_text: {}
-          };
+          notionSchema[field.name] = { rich_text: {} };
           break;
+          
+        case 'longtext':
+          notionSchema[field.name] = { rich_text: {} };
+          break;
+          
         case 'number':
-          notionSchema[field.name] = {
-            number: {}
-          };
+          notionSchema[field.name] = { number: {} };
           break;
+          
         case 'boolean':
-          notionSchema[field.name] = {
-            checkbox: {}
-          };
+          notionSchema[field.name] = { checkbox: {} };
           break;
+          
         case 'date':
-          notionSchema[field.name] = {
-            date: {}
+          notionSchema[field.name] = { date: {} };
+          break;
+          
+        case 'select':
+          notionSchema[field.name] = { 
+            select: { 
+              options: [] 
+            } 
           };
           break;
+          
+        case 'multiselect':
+          notionSchema[field.name] = { 
+            multi_select: { 
+              options: [] 
+            } 
+          };
+          break;
+          
         case 'array':
           notionSchema[field.name] = {
-            multi_select: {
-              options: []
-            }
+            multi_select: { options: [] }
           };
           break;
-        default:
+          
+        case 'url':
+          notionSchema[field.name] = { url: {} };
+          break;
+          
+        case 'url_array':
+        case 'reference_array':
           notionSchema[field.name] = {
-            rich_text: {}
+            rich_text: {} // Complex arrays become rich text in Notion
           };
+          break;
+          
+        case 'attachment':
+          notionSchema[field.name] = {
+            files: {} // Files property for attachments
+          };
+          break;
+          
+        default:
+          notionSchema[field.name] = { rich_text: {} };
       }
     });
     
-    // Ensure there's a title property
-    if (!notionSchema['Name'] && !notionSchema['Title']) {
-      // Find the first string field to use as title
-      const stringField = airtableSchema.fields.find((f: any) => f.type === 'string');
-      if (stringField) {
-        notionSchema[stringField.name] = {
-          title: {}
-        };
-      } else {
-        // Create a default title field
-        notionSchema['Title'] = {
-          title: {}
-        };
-      }
+    // Make sure we have at least one title property
+    if (!titleFieldName) {
+      notionSchema['Title'] = { title: {} };
     }
     
     return notionSchema;
@@ -288,13 +384,27 @@ export class AirtableService {
   private determineFieldType(value: any): string {
     if (value === null || value === undefined) return 'string';
     
-    if (Array.isArray(value)) return 'array';
+    if (Array.isArray(value)) {
+      // Check if it's an array of objects (like links or attachments)
+      if (value.length > 0 && typeof value[0] === 'object') {
+        if (value[0].url) return 'url_array';
+        if (value[0].id) return 'reference_array';
+        return 'object_array';
+      }
+      return 'array';
+    }
+    
     if (typeof value === 'number') return 'number';
     if (typeof value === 'boolean') return 'boolean';
     if (value instanceof Date) return 'date';
+    
     if (typeof value === 'object') {
       // Check if it might be a date string
       if (value.date || value.dateTime) return 'date';
+      // Check if it's an attachment
+      if (value.url && value.filename) return 'attachment';
+      // Check if it's a reference to another record
+      if (value.id && value.recordId) return 'reference';
       return 'object';
     }
     
@@ -303,7 +413,70 @@ export class AirtableService {
       return 'date';
     }
     
+    // Check if it's a URL
+    if (typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'))) {
+      return 'url';
+    }
+    
     return 'string';
+  }
+  
+  /**
+   * Get known field types for specific tables in the Midnight Magnolia schema
+   */
+  private getKnownFieldTypes(baseId: string, tableId: string): Record<string, string> | null {
+    // Handle Tarot Content Cards schema
+    if (baseId === 'appTarotCards' && tableId === 'tblTarotCards') {
+      return {
+        'CardName': 'string',
+        'ArcanaType': 'select',
+        'CardNumber': 'string',
+        'AssignedPersona': 'string',
+        'Quote': 'longtext',
+        'Astrology': 'string',
+        'Element': 'select',
+        'UprightMeaning': 'longtext',
+        'ReversedMeaning': 'longtext',
+        'Affirmation': 'longtext',
+        'JournalPrompt': 'longtext',
+        'Symbolism': 'longtext',
+        'ColorNotes': 'longtext',
+        'DevelopmentStage': 'select',
+        'Inspiration': 'longtext',
+        'DesignLink': 'url',
+        'RelatedProducts': 'reference_array'
+      };
+    }
+    
+    // Handle Curated Collections schema
+    if (baseId === 'appPrintables' && tableId === 'tblCollections') {
+      return {
+        'CollectionName': 'string',
+        'CollectionType': 'select',
+        'Description': 'longtext',
+        'IncludedItems': 'reference_array',
+        'PricingTier': 'select',
+        'TargetAudience': 'multiselect',
+        'Keywords': 'array',
+        'CoverImage': 'attachment',
+        'LaunchDate': 'date',
+        'SalesPlatforms': 'multiselect'
+      };
+    }
+    
+    // Handle Affirmation Library schema
+    if (baseId === 'appAffirmations') {
+      return {
+        'Text': 'longtext',
+        'Theme': 'select',
+        'MoonPhase': 'select',
+        'Mood': 'select',
+        'Category': 'select',
+        'Tags': 'array'
+      };
+    }
+    
+    return null;
   }
 
   /**
@@ -403,10 +576,14 @@ export class AirtableService {
       return null;
     }
     
+    // First check if it's a title field by name
+    const titleFieldNames = ['title', 'name', 'cardname', 'collectionname', 'text'];
+    const isLikelyTitleField = titleFieldNames.includes(notionFieldName.toLowerCase());
+    
     // Handle different field types
     if (typeof value === 'string') {
       // Check if it's a title field
-      if (notionFieldName.toLowerCase() === 'title' || notionFieldName.toLowerCase() === 'name') {
+      if (isLikelyTitleField) {
         return {
           title: [
             {
@@ -414,6 +591,25 @@ export class AirtableService {
             }
           ]
         };
+      }
+      
+      // Check if it's a URL
+      if (value.startsWith('http://') || value.startsWith('https://')) {
+        return { url: value };
+      }
+      
+      // Check if it's a date in string format
+      if (!isNaN(Date.parse(value))) {
+        return {
+          date: { 
+            start: new Date(value).toISOString().split('T')[0]
+          }
+        };
+      }
+      
+      // Regular text field - limit to max 2000 characters for Notion
+      if (value.length > 2000) {
+        value = value.substring(0, 1997) + '...';
       }
       
       return {
@@ -433,29 +629,129 @@ export class AirtableService {
       return { checkbox: value };
     }
     
-    if (value instanceof Date || (typeof value === 'string' && !isNaN(Date.parse(value)))) {
-      const dateStr = typeof value === 'string' ? value : value.toISOString().split('T')[0];
+    if (value instanceof Date) {
       return {
-        date: { start: dateStr }
-      };
-    }
-    
-    if (Array.isArray(value)) {
-      return {
-        multi_select: value.map(item => ({
-          name: String(item)
-        }))
-      };
-    }
-    
-    // Default: convert to string
-    return {
-      rich_text: [
-        {
-          text: { content: JSON.stringify(value) }
+        date: { 
+          start: value.toISOString().split('T')[0]
         }
-      ]
-    };
+      };
+    }
+    
+    // Handle different array types
+    if (Array.isArray(value)) {
+      // Handle empty arrays
+      if (value.length === 0) {
+        return { multi_select: [] };
+      }
+      
+      // Check if it's an array of simple values (strings, numbers)
+      const allPrimitives = value.every(item => 
+        typeof item === 'string' || typeof item === 'number'
+      );
+      
+      if (allPrimitives) {
+        // Convert to multi-select
+        return {
+          multi_select: value.map(item => ({
+            name: String(item).substring(0, 100) // Notion limits name length
+          }))
+        };
+      }
+      
+      // Handle array of objects (attachments, references, etc.)
+      if (typeof value[0] === 'object') {
+        // Check if these are attachments with URLs
+        if (value[0].url) {
+          return {
+            files: value.slice(0, 10).map((item: any) => ({
+              name: item.filename || 'File',
+              external: { url: item.url }
+            }))
+          };
+        }
+        
+        // Handle references - convert to rich text with links
+        if (value[0].id || value[0].recordId) {
+          return {
+            rich_text: [
+              {
+                text: { 
+                  content: `Referenced items: ${value.length}` 
+                }
+              }
+            ]
+          };
+        }
+      }
+      
+      // Default array handling - convert to string
+      return {
+        rich_text: [
+          {
+            text: { 
+              content: `[${value.map(item => 
+                typeof item === 'object' ? 'Object' : String(item)
+              ).join(', ')}]`.substring(0, 2000) 
+            }
+          }
+        ]
+      };
+    }
+    
+    // Handle object values
+    if (typeof value === 'object') {
+      // Handle attachment
+      if (value.url && value.filename) {
+        return {
+          files: [
+            {
+              name: value.filename,
+              external: { url: value.url }
+            }
+          ]
+        };
+      }
+      
+      // Handle references
+      if (value.id && value.recordId) {
+        return {
+          rich_text: [
+            {
+              text: { content: `Reference: ${value.id}` }
+            }
+          ]
+        };
+      }
+      
+      // Handle date objects
+      if (value.date || value.dateTime) {
+        const dateStr = value.date || value.dateTime;
+        return {
+          date: { start: dateStr }
+        };
+      }
+    }
+    
+    // Default: convert to string representation
+    try {
+      const stringValue = JSON.stringify(value).substring(0, 2000);
+      return {
+        rich_text: [
+          {
+            text: { content: stringValue }
+          }
+        ]
+      };
+    } catch (e) {
+      // If JSON conversion fails
+      return {
+        rich_text: [
+          {
+            text: { content: "Complex value (cannot display)" }
+          }
+        ]
+      };
+    }
   }
 
   /**
