@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TierData } from '@/components/MidnightMagnoliaTiers';
 import {
@@ -9,6 +9,13 @@ import {
   FaGem,
   FaCheck
 } from 'react-icons/fa';
+import {
+  MagnoliaSeedIcon,
+  CrescentBloomIcon,
+  GoldenGroveIcon,
+  MoonlitSanctuaryIcon,
+  HouseOfMidnightIcon
+} from '@/components/ui/animated-tier-icons';
 
 interface TierCardProps {
   tier: TierData;
@@ -16,17 +23,32 @@ interface TierCardProps {
 }
 
 export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
+  const [isHovered, setIsHovered] = useState(false);
   const isGolden = tier.name === "Golden Grove" || tier.name === "House of Midnight";
-  const iconMap = {
+  
+  // Backup static icons (will be used only if animated ones fail)
+  const staticIconMap = {
     seedling: <FaSeedling className="text-2xl text-[#FAF3E0]" />,
     moon: <FaMoon className="text-2xl text-[#FAF3E0]" />,
     tree: <FaTree className="text-2xl text-[#FAF3E0]" />,
     spa: <FaSpa className="text-2xl text-[#FAF3E0]" />,
     gem: <FaGem className="text-2xl text-[#FAF3E0]" />
   };
+  
+  // Animated icon map
+  const animatedIconMap = {
+    seedling: <MagnoliaSeedIcon />,
+    moon: <CrescentBloomIcon />,
+    tree: <GoldenGroveIcon />,
+    spa: <MoonlitSanctuaryIcon />,
+    gem: <HouseOfMidnightIcon />
+  };
 
   const getIcon = (iconName: string) => {
-    return iconMap[iconName as keyof typeof iconMap];
+    // Return animated icon if the card is hovered, otherwise fallback to static icon
+    return isHovered 
+      ? animatedIconMap[iconName as keyof typeof animatedIconMap] 
+      : staticIconMap[iconName as keyof typeof staticIconMap];
   };
 
   const cardVariants = {
@@ -50,6 +72,8 @@ export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
         boxShadow: "0 15px 30px rgba(0, 0, 0, 0.3)",
         transition: { duration: 0.3 }
       }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
       {tier.popular && (
         <div className="absolute top-0 right-0 bg-[#D4AF37] text-[#0A192F] text-xs font-bold px-3 py-1 rounded-bl-lg z-10">
@@ -62,15 +86,24 @@ export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
           isGolden 
             ? 'bg-gradient-to-br from-[#D4AF37]/30 to-[#D4AF37]/5' 
             : 'bg-gradient-to-br from-[#A3B18A]/30 to-[#A3B18A]/10'
-        } p-6 text-center`}
+        } p-6 text-center relative`}
       >
+        {/* Create spotlight effect when hovered */}
+        {isHovered && (
+          <div 
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at center, ${isGolden ? '#D4AF37' : '#A3B18A'} 0%, transparent 70%)`,
+            }}
+          />
+        )}
+        
         <motion.div 
-          className={`tier-icon ${isGolden ? 'bg-[#FAF3E0]/20' : 'bg-[#FAF3E0]/10'} h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4`}
-          whileHover={{ rotate: 360 }}
-          transition={{ duration: 0.5 }}
+          className={`tier-icon ${isGolden ? 'bg-[#0A192F] border-2 border-[#D4AF37]/40' : 'bg-[#0A192F] border-2 border-[#A3B18A]/40'} h-20 w-20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden`}
         >
           {getIcon(tier.icon)}
         </motion.div>
+        
         <h3 className="font-playfair text-2xl text-[#D4AF37] mb-1">{tier.name}</h3>
         <p className="text-[#FAF3E0] text-sm italic mb-3">{tier.tagline}</p>
         <div className="text-2xl font-bold text-[#FAF3E0] mb-2">{tier.price}</div>
