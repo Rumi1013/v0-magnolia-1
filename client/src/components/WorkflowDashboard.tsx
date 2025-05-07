@@ -13,19 +13,42 @@ import {
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Moon, 
   FileText, 
   Share2, 
   Code, 
   BarChart2,
-  Plus
+  Plus,
+  Calendar,
+  Clock,
+  Layout,
+  Database,
+  Download,
+  Upload,
+  Edit,
+  Trash2,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  ArrowUpRight,
+  Users
 } from "lucide-react";
 
 type WorkflowStep = {
   name: string;
   status: "Complete" | "In Progress" | "Not Started";
   date: string;
+  dueDate?: string;
+  assignee?: string;
+  notes?: string;
+  priority?: "High" | "Medium" | "Low";
 };
 
 type Workflow = {
@@ -140,8 +163,83 @@ export default function WorkflowDashboard() {
     }
   };
 
+  // Workflow templates
+  const workflowTemplates = [
+    {
+      name: "Product Launch",
+      description: "Step-by-step process for launching a new digital product",
+      steps: [
+        { name: "Market Research", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Product Design", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Content Creation", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Website Update", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Email Campaign", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Social Media Promotion", status: "Not Started" as const, date: new Date().toLocaleDateString() }
+      ],
+      category: "Product Development"
+    },
+    {
+      name: "Content Calendar",
+      description: "Monthly content planning and production workflow",
+      steps: [
+        { name: "Theme Selection", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Content Outline", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Draft Creation", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Image Production", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Editing & Review", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Scheduling", status: "Not Started" as const, date: new Date().toLocaleDateString() }
+      ],
+      category: "Marketing"
+    },
+    {
+      name: "Moon Phase Campaign",
+      description: "Create content aligned with moon phase energy",
+      steps: [
+        { name: "Phase Research", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Theme Development", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Content Creation", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Graphics Design", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Scheduling", status: "Not Started" as const, date: new Date().toLocaleDateString() }
+      ],
+      category: "Marketing"
+    },
+    {
+      name: "Notion Integration",
+      description: "Connect new Notion database to the Midnight Magnolia ecosystem",
+      steps: [
+        { name: "API Setup", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Database Schema", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Integration Testing", status: "Not Started" as const, date: new Date().toLocaleDateString() },
+        { name: "Documentation", status: "Not Started" as const, date: new Date().toLocaleDateString() }
+      ],
+      category: "Technical"
+    }
+  ];
+
+  // State for template selection modal
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  
   // Function to create a new workflow
   const handleCreateWorkflow = () => {
+    setIsTemplateModalOpen(true);
+  };
+  
+  // Function to create from template
+  const createFromTemplate = (template: any) => {
+    const newWorkflow = {
+      name: template.name,
+      description: template.description,
+      steps: template.steps,
+      owner: "Latisha Waters",
+      category: template.category
+    };
+    
+    createWorkflowMutation.mutate(newWorkflow);
+    setIsTemplateModalOpen(false);
+  };
+  
+  // Function to create a blank workflow
+  const createBlankWorkflow = () => {
     const newWorkflow = {
       name: "New Workflow",
       description: "Description of the new workflow",
@@ -153,8 +251,13 @@ export default function WorkflowDashboard() {
     };
     
     createWorkflowMutation.mutate(newWorkflow);
+    setIsTemplateModalOpen(false);
   };
 
+  // State for export modal
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exportFormat, setExportFormat] = useState<"json" | "csv" | "pdf">("json");
+  
   // Function to update a workflow step's status
   const updateStepStatus = (stepIndex: number, newStatus: "Complete" | "In Progress" | "Not Started") => {
     if (!selectedWorkflow) return;
@@ -163,6 +266,75 @@ export default function WorkflowDashboard() {
     updatedWorkflow.steps[stepIndex].status = newStatus;
     
     updateWorkflowMutation.mutate(updatedWorkflow);
+  };
+  
+  // Function to handle workflow export
+  const handleExport = () => {
+    if (!selectedWorkflow) return;
+    
+    // Format data based on the selected export format
+    let exportData: string;
+    let fileName: string;
+    let mimeType: string;
+    
+    switch (exportFormat) {
+      case "json":
+        exportData = JSON.stringify(selectedWorkflow, null, 2);
+        fileName = `${selectedWorkflow.name.replace(/\s+/g, '_').toLowerCase()}_workflow.json`;
+        mimeType = "application/json";
+        break;
+        
+      case "csv":
+        // Create CSV header
+        const csvHeader = "Step Name,Status,Date\n";
+        // Create CSV rows
+        const csvRows = selectedWorkflow.steps.map(step => 
+          `"${step.name}","${step.status}","${step.date}"`
+        ).join('\n');
+        
+        exportData = csvHeader + csvRows;
+        fileName = `${selectedWorkflow.name.replace(/\s+/g, '_').toLowerCase()}_workflow.csv`;
+        mimeType = "text/csv";
+        break;
+        
+      case "pdf":
+        // For PDF, we'll just create a text representation
+        // In a real app, you'd use a library like jsPDF
+        exportData = `Workflow: ${selectedWorkflow.name}\n`;
+        exportData += `Description: ${selectedWorkflow.description}\n`;
+        exportData += `Owner: ${selectedWorkflow.owner}\n`;
+        exportData += `Category: ${selectedWorkflow.category}\n\n`;
+        exportData += `Steps:\n`;
+        selectedWorkflow.steps.forEach((step, index) => {
+          exportData += `${index + 1}. ${step.name} - ${step.status} (${step.date})\n`;
+        });
+        
+        fileName = `${selectedWorkflow.name.replace(/\s+/g, '_').toLowerCase()}_workflow.txt`;
+        mimeType = "text/plain";
+        break;
+        
+      default:
+        exportData = JSON.stringify(selectedWorkflow, null, 2);
+        fileName = `${selectedWorkflow.name.replace(/\s+/g, '_').toLowerCase()}_workflow.json`;
+        mimeType = "application/json";
+    }
+    
+    // Create a blob and download link
+    const blob = new Blob([exportData], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Close modal and show success message
+    setIsExportModalOpen(false);
+    toast({
+      title: "Workflow Exported",
+      description: `The workflow has been exported as ${exportFormat.toUpperCase()}.`,
+    });
   };
 
   return (
@@ -545,6 +717,133 @@ export default function WorkflowDashboard() {
           </div>
         </TabsContent>
       </Tabs>
+      
+      {/* Template Selection Modal */}
+      <Dialog open={isTemplateModalOpen} onOpenChange={setIsTemplateModalOpen}>
+        <DialogContent className="sm:max-w-[800px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-playfair text-[#0A192F]">Create New Workflow</DialogTitle>
+            <DialogDescription>
+              Choose a template or start from scratch to create your workflow.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <Card 
+              className="cursor-pointer hover:border-[#D4AF37] transition-colors"
+              onClick={createBlankWorkflow}
+            >
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center">
+                  <Layout className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                  Blank Workflow
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">
+                  Start with a clean slate and create a custom workflow from scratch.
+                </p>
+              </CardContent>
+            </Card>
+            
+            {workflowTemplates.map((template, index) => (
+              <Card 
+                key={index}
+                className="cursor-pointer hover:border-[#D4AF37] transition-colors"
+                onClick={() => createFromTemplate(template)}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center">
+                    {template.category === "Product Development" ? (
+                      <FileText className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                    ) : template.category === "Marketing" ? (
+                      <Share2 className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                    ) : template.category === "Technical" ? (
+                      <Database className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                    ) : (
+                      <Calendar className="w-5 h-5 mr-2 text-[#D4AF37]" />
+                    )}
+                    {template.name}
+                  </CardTitle>
+                  <Badge variant="outline" className="ml-7">{template.category}</Badge>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-2">
+                    {template.description}
+                  </p>
+                  <div className="text-xs text-gray-500">
+                    {template.steps.length} steps
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Export Workflow Dialog */}
+      <Dialog open={isExportModalOpen} onOpenChange={setIsExportModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-playfair text-[#0A192F]">Export Workflow</DialogTitle>
+            <DialogDescription>
+              Choose a format to export {selectedWorkflow?.name}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-6">
+            <RadioGroup 
+              value={exportFormat} 
+              onValueChange={(value) => setExportFormat(value as "json" | "csv" | "pdf")}
+              className="flex flex-col space-y-4"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="json" id="json" />
+                <Label htmlFor="json" className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-blue-500" />
+                  JSON Format
+                  <span className="ml-2 text-xs text-gray-500">(Recommended for developers)</span>
+                </Label>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="csv" id="csv" />
+                <Label htmlFor="csv" className="flex items-center">
+                  <Database className="w-5 h-5 mr-2 text-green-500" />
+                  CSV Format
+                  <span className="ml-2 text-xs text-gray-500">(For spreadsheet software)</span>
+                </Label>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="pdf" id="pdf" />
+                <Label htmlFor="pdf" className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-red-500" />
+                  Text Format
+                  <span className="ml-2 text-xs text-gray-500">(Simple text format)</span>
+                </Label>
+              </div>
+            </RadioGroup>
+          </div>
+          
+          <div className="flex justify-end">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsExportModalOpen(false)}
+              className="mr-2"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleExport}
+              className="bg-[#0A192F] hover:bg-[#142a48] text-white"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
