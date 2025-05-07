@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { notionService } from "./notion";
 import { airtableService } from "./airtable";
 import { openaiService } from "./openai";
+import { workflowService, WorkflowSchema, CreateWorkflowSchema, UpdateWorkflowSchema } from "./workflow";
 import { setupAuth } from "./auth";
 import { z } from "zod";
 
@@ -509,6 +510,102 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, content });
     } catch (error: any) {
       handleApiError(res, error, "Failed to generate moon phase content");
+    }
+  });
+
+  // ===== WORKFLOW API ROUTES =====
+  
+  // Get all workflows
+  app.get("/api/workflows", isAuthenticated, async (_req: Request, res: Response) => {
+    try {
+      const workflows = workflowService.getWorkflows();
+      res.json({ success: true, workflows });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get workflows");
+    }
+  });
+
+  // Get a workflow by ID
+  app.get("/api/workflows/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ success: false, error: "Invalid workflow ID" });
+      }
+      
+      const workflow = workflowService.getWorkflowById(id);
+      if (!workflow) {
+        return res.status(404).json({ success: false, error: "Workflow not found" });
+      }
+      
+      res.json({ success: true, workflow });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get workflow");
+    }
+  });
+
+  // Get workflows by category
+  app.get("/api/workflows/category/:category", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { category } = req.params;
+      const workflows = workflowService.getWorkflowsByCategory(category);
+      res.json({ success: true, workflows });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get workflows by category");
+    }
+  });
+
+  // Create a new workflow
+  app.post("/api/workflows", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const workflowData = CreateWorkflowSchema.parse(req.body);
+      const workflow = workflowService.createWorkflow(workflowData);
+      res.status(201).json({ success: true, workflow });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create workflow");
+    }
+  });
+
+  // Update a workflow
+  app.patch("/api/workflows/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ success: false, error: "Invalid workflow ID" });
+      }
+      
+      const workflowData = UpdateWorkflowSchema.parse({
+        ...req.body,
+        id
+      });
+      
+      const workflow = workflowService.updateWorkflow(workflowData);
+      if (!workflow) {
+        return res.status(404).json({ success: false, error: "Workflow not found" });
+      }
+      
+      res.json({ success: true, workflow });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to update workflow");
+    }
+  });
+
+  // Delete a workflow
+  app.delete("/api/workflows/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ success: false, error: "Invalid workflow ID" });
+      }
+      
+      const success = workflowService.deleteWorkflow(id);
+      if (!success) {
+        return res.status(404).json({ success: false, error: "Workflow not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to delete workflow");
     }
   });
 

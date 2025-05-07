@@ -1,0 +1,681 @@
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, FileText, Share2, Database, Code, CheckSquare, BarChart2, Moon } from 'lucide-react';
+
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState('colors');
+  const [workflows, setWorkflows] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedWorkflow, setSelectedWorkflow] = useState(null);
+
+  useEffect(() => {
+    // Simulate fetching workflows data
+    setTimeout(() => {
+      setWorkflows([
+        {
+          id: 1,
+          name: "Content Creation Workflow",
+          description: "Structured process for creating on-brand digital products",
+          steps: [
+            { name: "Research Phase", status: "Complete", date: "May 1, 2025" },
+            { name: "Content Outline", status: "Complete", date: "May 3, 2025" },
+            { name: "Visual Design", status: "In Progress", date: "May 7, 2025" },
+            { name: "Editorial Review", status: "Not Started", date: "May 12, 2025" },
+            { name: "Final Production", status: "Not Started", date: "May 15, 2025" }
+          ],
+          owner: "Latisha Waters",
+          category: "Product Development"
+        },
+        {
+          id: 2,
+          name: "Tarot Deck Production",
+          description: "Process for designing and producing Southern Oracle Tarot deck",
+          steps: [
+            { name: "Persona Research", status: "Complete", date: "Apr 15, 2025" },
+            { name: "Card Meanings", status: "Complete", date: "Apr 22, 2025" },
+            { name: "Card Design Concepts", status: "In Progress", date: "May 10, 2025" },
+            { name: "Design Refinement", status: "Not Started", date: "May 20, 2025" },
+            { name: "Production Preparation", status: "Not Started", date: "June 1, 2025" }
+          ],
+          owner: "Latisha Waters",
+          category: "Product Development"
+        },
+        {
+          id: 3,
+          name: "Marketing Automation",
+          description: "Structured campaign execution for product launches",
+          steps: [
+            { name: "Content Planning", status: "In Progress", date: "May 5, 2025" },
+            { name: "Asset Creation", status: "In Progress", date: "May 8, 2025" },
+            { name: "Email Sequence Setup", status: "Not Started", date: "May 12, 2025" },
+            { name: "Social Media Scheduling", status: "Not Started", date: "May 14, 2025" },
+            { name: "Analytics Configuration", status: "Not Started", date: "May 16, 2025" }
+          ],
+          owner: "Latisha Waters",
+          category: "Marketing"
+        },
+        {
+          id: 4,
+          name: "Website Deployment",
+          description: "Technical implementation of Midnight Magnolia brand on web platforms",
+          steps: [
+            { name: "Wireframing", status: "Complete", date: "Apr 10, 2025" },
+            { name: "Brand Element Implementation", status: "Complete", date: "Apr 20, 2025" },
+            { name: "Responsive Testing", status: "In Progress", date: "May 5, 2025" },
+            { name: "Content Migration", status: "In Progress", date: "May 8, 2025" },
+            { name: "Launch & Verification", status: "Not Started", date: "May 15, 2025" }
+          ],
+          owner: "Latisha Waters",
+          category: "Technical"
+        }
+      ]);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  const openTab = (tabName) => {
+    setActiveTab(tabName);
+  };
+
+  const getStatusStyle = (status) => {
+    switch(status) {
+      case 'Complete':
+        return { 
+          backgroundColor: '#e6f4ea', 
+          color: '#137333', 
+          padding: '4px 8px', 
+          borderRadius: '4px', 
+          fontSize: '0.9em' 
+        };
+      case 'In Progress':
+        return { 
+          backgroundColor: '#e8f0fe', 
+          color: '#1a73e8', 
+          padding: '4px 8px', 
+          borderRadius: '4px', 
+          fontSize: '0.9em' 
+        };
+      default:
+        return { 
+          backgroundColor: '#f1f3f4', 
+          color: '#5f6368', 
+          padding: '4px 8px', 
+          borderRadius: '4px', 
+          fontSize: '0.9em' 
+        };
+    }
+  };
+
+  const workflowCategories = [
+    { name: "All Workflows", icon: <Moon className="w-4 h-4 mr-2" /> },
+    { name: "Product Development", icon: <FileText className="w-4 h-4 mr-2" /> },
+    { name: "Marketing", icon: <Share2 className="w-4 h-4 mr-2" /> },
+    { name: "Technical", icon: <Code className="w-4 h-4 mr-2" /> },
+    { name: "Analytics", icon: <BarChart2 className="w-4 h-4 mr-2" /> },
+  ];
+
+  const [selectedCategory, setSelectedCategory] = useState("All Workflows");
+
+  const filteredWorkflows = selectedCategory === "All Workflows" 
+    ? workflows 
+    : workflows.filter(workflow => workflow.category === selectedCategory);
+
+  return (
+    <div>
+      <header style={{
+        backgroundColor: '#0A192F',
+        color: '#FAF3E0',
+        padding: '2rem',
+        textAlign: 'center',
+        borderBottom: '3px solid #D4AF37'
+      }}>
+        <h1 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '2.5rem',
+          color: '#D4AF37',
+          marginBottom: '0.5rem'
+        }}>MIDNIGHT MAGNOLIA</h1>
+        <p style={{
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: '1.2rem',
+          fontWeight: 400
+        }}>Visual Brand Dashboard</p>
+      </header>
+      
+      <div style={{
+        backgroundColor: '#051224',
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        marginBottom: '2rem',
+        borderBottom: '2px solid #D4AF37'
+      }}>
+        <div style={{ display: 'flex' }}>
+          <div 
+            onClick={() => openTab('colors')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'colors' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'colors' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'colors' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Color Palette
+          </div>
+          <div 
+            onClick={() => openTab('typography')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'typography' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'typography' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'typography' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Typography
+          </div>
+          <div 
+            onClick={() => openTab('products')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'products' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'products' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'products' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Products
+          </div>
+          <div 
+            onClick={() => openTab('audience')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'audience' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'audience' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'audience' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Audience
+          </div>
+          <div 
+            onClick={() => openTab('voice')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'voice' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'voice' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'voice' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Brand Voice
+          </div>
+          <div 
+            onClick={() => openTab('architecture')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'architecture' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'architecture' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'architecture' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Tech Architecture
+          </div>
+          <div 
+            onClick={() => openTab('workflow')} 
+            style={{
+              padding: '1rem 1.5rem',
+              color: '#FAF3E0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              borderBottom: activeTab === 'workflow' ? '2px solid #D4AF37' : '2px solid transparent',
+              marginRight: '1px',
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundColor: activeTab === 'workflow' ? 'rgba(212, 175, 55, 0.1)' : 'transparent',
+              color: activeTab === 'workflow' ? '#D4AF37' : '#FAF3E0'
+            }}
+          >
+            Workflows
+          </div>
+        </div>
+      </div>
+      
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+        {activeTab === 'workflow' && (
+          <div>
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              padding: '2rem',
+              marginBottom: '2rem',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
+              <h2 style={{
+                color: '#0A192F',
+                fontSize: '1.8rem',
+                marginBottom: '1rem',
+                paddingBottom: '0.5rem',
+                borderBottom: '2px solid #D4AF37',
+                fontFamily: "'Playfair Display', serif"
+              }}>Implementation Workflows</h2>
+              <p style={{
+                marginBottom: '2rem',
+                fontFamily: "'Lora', serif"
+              }}>Structured processes to ensure consistent application of the Midnight Magnolia brand across all touchpoints.</p>
+              
+              {isLoading ? (
+                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                  <div style={{ 
+                    display: 'inline-block', 
+                    width: '40px', 
+                    height: '40px', 
+                    border: '4px solid rgba(212, 175, 55, 0.3)', 
+                    borderRadius: '50%', 
+                    borderTopColor: '#D4AF37', 
+                    animation: 'spin 1s linear infinite' 
+                  }}></div>
+                  <style>{`
+                    @keyframes spin {
+                      to { transform: rotate(360deg); }
+                    }
+                  `}</style>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', gap: '2rem' }}>
+                  <div style={{ width: '250px' }}>
+                    <div style={{ 
+                      backgroundColor: '#0A192F', 
+                      color: '#FAF3E0', 
+                      padding: '1rem', 
+                      borderRadius: '8px 8px 0 0', 
+                      fontFamily: "'Playfair Display', serif" 
+                    }}>
+                      <h3>Categories</h3>
+                    </div>
+                    <div style={{ 
+                      border: '1px solid #eee', 
+                      borderTop: 'none', 
+                      borderRadius: '0 0 8px 8px', 
+                      overflow: 'hidden' 
+                    }}>
+                      {workflowCategories.map((category, index) => (
+                        <div 
+                          key={index}
+                          onClick={() => setSelectedCategory(category.name)}
+                          style={{ 
+                            padding: '0.75rem 1rem',
+                            backgroundColor: selectedCategory === category.name ? '#f8f9fa' : 'white',
+                            borderLeft: selectedCategory === category.name ? '3px solid #D4AF37' : '3px solid transparent',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            borderBottom: index !== workflowCategories.length - 1 ? '1px solid #eee' : 'none'
+                          }}
+                        >
+                          {category.icon}
+                          <span>{category.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div style={{ 
+                      marginTop: '2rem', 
+                      backgroundColor: '#0A192F', 
+                      color: '#FAF3E0', 
+                      padding: '1rem', 
+                      borderRadius: '8px 8px 0 0', 
+                      fontFamily: "'Playfair Display', serif" 
+                    }}>
+                      <h3>Quick Stats</h3>
+                    </div>
+                    <div style={{ 
+                      border: '1px solid #eee', 
+                      borderTop: 'none', 
+                      borderRadius: '0 0 8px 8px', 
+                      padding: '1rem' 
+                    }}>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ fontSize: '0.9rem', color: '#666' }}>Active Workflows</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#0A192F' }}>{workflows.length}</div>
+                      </div>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <div style={{ fontSize: '0.9rem', color: '#666' }}>Completed Steps</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#0A192F' }}>
+                          {workflows.reduce((acc, workflow) => acc + workflow.steps.filter(step => step.status === 'Complete').length, 0)}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.9rem', color: '#666' }}>In Progress Steps</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '600', color: '#0A192F' }}>
+                          {workflows.reduce((acc, workflow) => acc + workflow.steps.filter(step => step.status === 'In Progress').length, 0)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    {selectedWorkflow ? (
+                      <div>
+                        <div style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'center', 
+                          marginBottom: '1rem' 
+                        }}>
+                          <button
+                            onClick={() => setSelectedWorkflow(null)}
+                            style={{
+                              backgroundColor: 'transparent',
+                              border: 'none',
+                              color: '#0A192F',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem',
+                              fontSize: '0.9rem'
+                            }}
+                          >
+                            ← Back to all workflows
+                          </button>
+                        </div>
+                        
+                        <div style={{ 
+                          backgroundColor: '#0A192F', 
+                          padding: '1.5rem', 
+                          borderRadius: '8px', 
+                          marginBottom: '1rem',
+                          color: '#FAF3E0'
+                        }}>
+                          <h3 style={{ 
+                            fontSize: '1.5rem', 
+                            fontFamily: "'Playfair Display', serif",
+                            color: '#D4AF37',
+                            marginBottom: '0.5rem'
+                          }}>{selectedWorkflow.name}</h3>
+                          <p style={{ 
+                            fontSize: '1rem', 
+                            opacity: 0.9,
+                            fontFamily: "'Lora', serif",
+                          }}>{selectedWorkflow.description}</p>
+                          <div style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            marginTop: '1rem',
+                            fontSize: '0.9rem',
+                            opacity: 0.8
+                          }}>
+                            <span style={{ marginRight: '1rem' }}>
+                              <span style={{ marginRight: '0.5rem' }}>Owner:</span>
+                              <span>{selectedWorkflow.owner}</span>
+                            </span>
+                            <span>
+                              <span style={{ marginRight: '0.5rem' }}>Category:</span>
+                              <span>{selectedWorkflow.category}</span>
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div style={{ 
+                          border: '1px solid #eee', 
+                          borderRadius: '8px', 
+                          overflow: 'hidden' 
+                        }}>
+                          <div style={{ 
+                            backgroundColor: '#f8f9fa', 
+                            padding: '1rem', 
+                            borderBottom: '1px solid #eee',
+                            fontFamily: "'Montserrat', sans-serif",
+                            fontWeight: 600,
+                            display: 'grid',
+                            gridTemplateColumns: '3fr 1fr 1fr',
+                            gap: '1rem'
+                          }}>
+                            <div>Step</div>
+                            <div>Status</div>
+                            <div>Date</div>
+                          </div>
+                          
+                          {selectedWorkflow.steps.map((step, index) => (
+                            <div 
+                              key={index}
+                              style={{
+                                padding: '1rem',
+                                borderBottom: index !== selectedWorkflow.steps.length - 1 ? '1px solid #eee' : 'none',
+                                display: 'grid',
+                                gridTemplateColumns: '3fr 1fr 1fr',
+                                gap: '1rem',
+                                alignItems: 'center'
+                              }}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div 
+                                  style={{ 
+                                    width: '24px', 
+                                    height: '24px', 
+                                    borderRadius: '50%', 
+                                    backgroundColor: step.status === 'Complete' ? '#e6f4ea' : step.status === 'In Progress' ? '#e8f0fe' : '#f1f3f4',
+                                    color: step.status === 'Complete' ? '#137333' : step.status === 'In Progress' ? '#1a73e8' : '#5f6368',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '0.8rem',
+                                    marginRight: '1rem'
+                                  }}
+                                >
+                                  {index + 1}
+                                </div>
+                                <span>{step.name}</span>
+                              </div>
+                              <div>
+                                <span style={getStatusStyle(step.status)}>{step.status}</span>
+                              </div>
+                              <div style={{ fontSize: '0.9rem', color: '#666' }}>{step.date}</div>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div style={{ 
+                          marginTop: '2rem',
+                          display: 'flex',
+                          justifyContent: 'flex-end',
+                          gap: '1rem'
+                        }}>
+                          <button style={{
+                            backgroundColor: 'transparent',
+                            border: '1px solid #0A192F',
+                            color: '#0A192F',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '4px',
+                            fontFamily: "'Montserrat', sans-serif",
+                            fontWeight: 500,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}>
+                            Export Workflow
+                          </button>
+                          <button style={{
+                            backgroundColor: '#D4AF37',
+                            border: 'none',
+                            color: '#0A192F',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '4px',
+                            fontFamily: "'Montserrat', sans-serif",
+                            fontWeight: 500,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}>
+                            Update Progress
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div style={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          alignItems: 'center', 
+                          marginBottom: '1rem' 
+                        }}>
+                          <h3 style={{ 
+                            fontFamily: "'Playfair Display', serif",
+                            fontSize: '1.5rem',
+                            color: '#0A192F'
+                          }}>
+                            {selectedCategory} ({filteredWorkflows.length})
+                          </h3>
+                          <button style={{
+                            backgroundColor: '#D4AF37',
+                            border: 'none',
+                            color: '#0A192F',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '4px',
+                            fontFamily: "'Montserrat', sans-serif",
+                            fontWeight: 500,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            cursor: 'pointer'
+                          }}>
+                            <span style={{ fontSize: '1.2rem' }}>+</span> New Workflow
+                          </button>
+                        </div>
+                        
+                        <div style={{ 
+                          display: 'grid', 
+                          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                          gap: '1rem'
+                        }}>
+                          {filteredWorkflows.map((workflow) => (
+                            <div 
+                              key={workflow.id}
+                              style={{ 
+                                border: '1px solid #eee', 
+                                borderRadius: '8px', 
+                                overflow: 'hidden',
+                                transition: 'all 0.2s ease',
+                                cursor: 'pointer',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                              }}
+                              onClick={() => setSelectedWorkflow(workflow)}
+                            >
+                              <div style={{ 
+                                backgroundColor: '#0A192F', 
+                                padding: '1rem', 
+                                borderBottom: '1px solid rgba(212, 175, 55, 0.3)' 
+                              }}>
+                                <h3 style={{ 
+                                  fontFamily: "'Playfair Display', serif",
+                                  fontSize: '1.2rem',
+                                  color: '#FAF3E0'
+                                }}>{workflow.name}</h3>
+                                <div style={{ 
+                                  fontSize: '0.8rem', 
+                                  color: '#A3B18A', 
+                                  marginTop: '0.5rem',
+                                  display: 'flex',
+                                  alignItems: 'center'
+                                }}>
+                                  <span style={{ 
+                                    backgroundColor: 'rgba(163, 177, 138, 0.2)', 
+                                    padding: '2px 8px', 
+                                    borderRadius: '12px',
+                                    fontSize: '0.7rem'
+                                  }}>
+                                    {workflow.category}
+                                  </span>
+                                </div>
+                              </div>
+                              <div style={{ padding: '1rem' }}>
+                                <p style={{ 
+                                  fontSize: '0.9rem', 
+                                  color: '#666', 
+                                  marginBottom: '1rem',
+                                  fontFamily: "'Lora', serif",
+                                }}>{workflow.description}</p>
+                                
+                                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}>
+                                    <CheckSquare className="w-3 h-3" />
+                                    <span>
+                                      {workflow.steps.filter(step => step.status === 'Complete').length} / {workflow.steps.length}
+                                    </span>
+                                  </div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem' }}>
+                                    <Clock className="w-3 h-3" />
+                                    <span>
+                                      Updated {Math.floor(Math.random() * 24) + 1}h ago
+                                    </span>
+                                  </div>
+                                </div>
+                                
+                                <div style={{ 
+                                  height: '4px', 
+                                  backgroundColor: '#f1f3f4', 
+                                  borderRadius: '2px', 
+                                  overflow: 'hidden' 
+                                }}>
+                                  <div style={{ 
+                                    height: '100%', 
+                                    width: `${(workflow.steps.filter(step => step.status === 'Complete').length / workflow.steps.length) * 100}%`, 
+                                    backgroundColor: '#D4AF37', 
+                                    borderRadius: '2px' 
+                                  }}></div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+        
+      <div style={{
+        backgroundColor: '#0A192F',
+        color: '#FAF3E0',
+        padding: '2rem',
+        textAlign: 'center',
+        borderTop: '3px solid #D4AF37',
+        marginTop: '2rem'
+      }}>
+        <p>Midnight Magnolia | Rumi-Nations LLC</p>
+        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+          10070 Dorchester Rd, #51599, Summerville, SC 29485 | <a href="tel:8033872552" style={{ color: '#D4AF37', textDecoration: 'none' }}>803-387-2552</a>
+        </p>
+        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>
+          <a href="https://www.rumi-nations.shop" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', textDecoration: 'none' }}>www.rumi-nations.shop</a>
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -13,6 +13,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Notion from "@/pages/Notion";
 import AuthPage from "@/pages/auth-page";
+import WorkflowPage from "@/pages/workflow-page";
 
 function AppNavigation() {
   const { user, logoutMutation } = useAuth();
