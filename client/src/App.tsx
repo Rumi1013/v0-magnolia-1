@@ -14,6 +14,7 @@ import Home from "@/pages/Home";
 import Notion from "@/pages/Notion";
 import AuthPage from "@/pages/auth-page";
 import WorkflowPage from "@/pages/workflow-page";
+import AIToolsPage from "@/pages/ai-tools-page";
 
 function AppNavigation() {
   const { user, logoutMutation } = useAuth();
@@ -55,6 +56,9 @@ function AppNavigation() {
           <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`}>
             Workflows
           </Link>
+          <Link to="/ai-tools" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/ai-tools' ? 'text-[#D4AF37]' : ''}`}>
+            AI Tools
+          </Link>
           
           {user ? (
             <div className="flex items-center space-x-4">
@@ -92,6 +96,9 @@ function AppNavigation() {
             </Link>
             <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Workflows
+            </Link>
+            <Link to="/ai-tools" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/ai-tools' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              AI Tools
             </Link>
             
             {user ? (
@@ -135,6 +142,7 @@ function Router() {
           <Route path="/" component={Home} />
           <ProtectedRoute path="/notion" component={() => <Notion />} />
           <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
+          <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
           <Route component={NotFound} />
         </Switch>
       </main>
