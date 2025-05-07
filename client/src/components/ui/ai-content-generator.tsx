@@ -56,13 +56,16 @@ export const AIContentGenerator: React.FC = () => {
   // Check OpenAI connection status
   const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
     queryKey: ['/api/openai/health'],
-    queryFn: getQueryFn(),
-    onSettled: (data: any, error) => {
-      if (error || !data?.success) {
-        setConnectionStatus('error');
-      } else {
+    queryFn: getQueryFn({ on401: "throw" }),
+    onSuccess: (data: any) => {
+      if (data?.success) {
         setConnectionStatus('connected');
+      } else {
+        setConnectionStatus('error');
       }
+    },
+    onError: () => {
+      setConnectionStatus('error');
     }
   });
 
@@ -74,7 +77,8 @@ export const AIContentGenerator: React.FC = () => {
         queryType: queryType
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedContent(data.reading);
       toast({
         title: "Reading Generated",
@@ -99,7 +103,8 @@ export const AIContentGenerator: React.FC = () => {
         mood: affirmationMood
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedContent(data.affirmations.join('\n\n'));
       toast({
         title: "Affirmations Generated",
@@ -124,7 +129,8 @@ export const AIContentGenerator: React.FC = () => {
         additionalContext
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedJSON(data.brief);
       toast({
         title: "Content Brief Generated",
@@ -152,7 +158,8 @@ export const AIContentGenerator: React.FC = () => {
         targetAudience
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedContent(data.description);
       toast({
         title: "Description Generated",
@@ -177,7 +184,8 @@ export const AIContentGenerator: React.FC = () => {
         count: 3
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedContent(data.prompts.join('\n\n'));
       toast({
         title: "Image Prompts Generated",
@@ -201,7 +209,8 @@ export const AIContentGenerator: React.FC = () => {
         purpose: worksheetPurpose
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedJSON(data.worksheet);
       toast({
         title: "Worksheet Generated",
@@ -225,7 +234,8 @@ export const AIContentGenerator: React.FC = () => {
         contentType: 'general'
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async (response: Response) => {
+      const data = await response.json();
       setGeneratedJSON(data.content);
       toast({
         title: "Moon Phase Content Generated",
