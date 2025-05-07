@@ -1,6 +1,9 @@
 import React from 'react';
 import { MidnightMagnoliaTiers } from '@/components/MidnightMagnoliaTiers';
 import { motion } from 'framer-motion';
+import { Link } from 'wouter';
+import { Button } from '@/components/ui/button';
+import { Moon, Star, Sparkles, CreditCard, Instagram, Twitter, BookOpen } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
@@ -73,6 +76,72 @@ const Home: React.FC = () => {
         </motion.div>
       </section>
       
+      {/* Featured Services Section */}
+      <section className="py-24 px-4 bg-gradient-to-b from-[#0A192F] to-[#0F233E]">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="font-playfair text-[#D4AF37] text-4xl mb-6">Mystical Tools & Services</h2>
+          <p className="text-[#FAF3E0] max-w-2xl mx-auto mb-16">
+            Explore our collection of spiritual and mystical tools designed to enhance your personal journey and creative practice.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Birth Chart Generator Card */}
+            <motion.div 
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-[#0A192F]/60 border border-[#A3B18A]/20 rounded-lg p-8 flex flex-col items-center text-center relative overflow-hidden shadow-xl"
+            >
+              <div className="absolute top-0 left-0 w-full h-full bg-[#D4AF37]/5 z-0"></div>
+              <Moon className="text-[#D4AF37] h-16 w-16 mb-6 z-10 relative" />
+              <h3 className="font-playfair text-[#D4AF37] text-2xl mb-4 z-10 relative">Birth Chart Generator</h3>
+              <p className="text-[#FAF3E0] mb-8 z-10 relative">
+                Unlock the celestial blueprint of your being with our personalized astrological birth chart analysis.
+              </p>
+              <Link to="/birth-chart">
+                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black z-10 relative">
+                  Generate Your Chart
+                </Button>
+              </Link>
+            </motion.div>
+            
+            {/* Digital Grimoire Card */}
+            <motion.div 
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-[#0A192F]/60 border border-[#A3B18A]/20 rounded-lg p-8 flex flex-col items-center text-center relative overflow-hidden shadow-xl"
+            >
+              <div className="absolute top-0 left-0 w-full h-full bg-[#D4AF37]/5 z-0"></div>
+              <Star className="text-[#D4AF37] h-16 w-16 mb-6 z-10 relative" />
+              <h3 className="font-playfair text-[#D4AF37] text-2xl mb-4 z-10 relative">Digital Grimoire</h3>
+              <p className="text-[#FAF3E0] mb-8 z-10 relative">
+                Access your sacred digital workspace with powerful tools for content creators and mystic entrepreneurs.
+              </p>
+              <Link to="/notion">
+                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black z-10 relative">
+                  Enter The Grimoire
+                </Button>
+              </Link>
+            </motion.div>
+            
+            {/* Membership Tiers Card */}
+            <motion.div 
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-[#0A192F]/60 border border-[#A3B18A]/20 rounded-lg p-8 flex flex-col items-center text-center relative overflow-hidden shadow-xl"
+            >
+              <div className="absolute top-0 left-0 w-full h-full bg-[#D4AF37]/5 z-0"></div>
+              <Sparkles className="text-[#D4AF37] h-16 w-16 mb-6 z-10 relative" />
+              <h3 className="font-playfair text-[#D4AF37] text-2xl mb-4 z-10 relative">Membership Tiers</h3>
+              <p className="text-[#FAF3E0] mb-8 z-10 relative">
+                Choose the perfect membership tier to support your mystical journey and access premium features.
+              </p>
+              <Link to="/pricing">
+                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black z-10 relative">
+                  View Pricing Plans
+                </Button>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+      
       {/* Membership Tiers Section */}
       <MidnightMagnoliaTiers />
       
@@ -87,13 +156,13 @@ const Home: React.FC = () => {
             
             <div className="flex space-x-4">
               <a href="#" className="h-10 w-10 rounded-full bg-[#A3B18A]/20 flex items-center justify-center hover:bg-[#A3B18A]/40 transition-colors">
-                <i className="fab fa-instagram text-[#FAF3E0]"></i>
+                <Instagram className="h-5 w-5 text-[#FAF3E0]" />
               </a>
               <a href="#" className="h-10 w-10 rounded-full bg-[#A3B18A]/20 flex items-center justify-center hover:bg-[#A3B18A]/40 transition-colors">
-                <i className="fab fa-twitter text-[#FAF3E0]"></i>
+                <Twitter className="h-5 w-5 text-[#FAF3E0]" />
               </a>
               <a href="#" className="h-10 w-10 rounded-full bg-[#A3B18A]/20 flex items-center justify-center hover:bg-[#A3B18A]/40 transition-colors">
-                <i className="fab fa-patreon text-[#FAF3E0]"></i>
+                <BookOpen className="h-5 w-5 text-[#FAF3E0]" />
               </a>
             </div>
           </div>

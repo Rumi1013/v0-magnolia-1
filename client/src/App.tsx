@@ -62,6 +62,12 @@ function AppNavigation() {
           <Link to="/ai-tools" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/ai-tools' ? 'text-[#D4AF37]' : ''}`}>
             AI Tools
           </Link>
+          <Link to="/birth-chart" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/birth-chart' ? 'text-[#D4AF37]' : ''}`}>
+            Birth Chart
+          </Link>
+          <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`}>
+            Pricing
+          </Link>
           
           {user ? (
             <div className="flex items-center space-x-4">
@@ -102,6 +108,12 @@ function AppNavigation() {
             </Link>
             <Link to="/ai-tools" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/ai-tools' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               AI Tools
+            </Link>
+            <Link to="/birth-chart" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/birth-chart' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Birth Chart
+            </Link>
+            <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Pricing
             </Link>
             
             {user ? (
@@ -146,6 +158,17 @@ function Router() {
           <ProtectedRoute path="/notion" component={() => <Notion />} />
           <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
           <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
+          <Route path="/birth-chart" component={() => (
+            <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
+              <BirthChartGenerator />
+            </div>
+          )} />
+          <Route path="/pricing" component={() => (
+            <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
+              <TieredProductPricing />
+            </div>
+          )} />
+          <ProtectedRoute path="/checkout" component={() => <CheckoutPage />} />
           <Route component={NotFound} />
         </Switch>
       </main>
