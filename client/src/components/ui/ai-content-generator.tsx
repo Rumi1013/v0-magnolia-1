@@ -57,17 +57,18 @@ export const AIContentGenerator: React.FC = () => {
   const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
     queryKey: ['/api/openai/health'],
     queryFn: getQueryFn({ on401: "throw" }),
-    onSuccess: (data: any) => {
-      if (data?.success) {
-        setConnectionStatus('connected');
-      } else {
-        setConnectionStatus('error');
-      }
-    },
-    onError: () => {
+  });
+
+  // Set connection status based on API health
+  useEffect(() => {
+    if (isCheckingConnection) {
+      setConnectionStatus('checking');
+    } else if (apiHealth?.success) {
+      setConnectionStatus('connected');
+    } else {
       setConnectionStatus('error');
     }
-  });
+  }, [apiHealth, isCheckingConnection]);
 
   // Tarot reading mutation
   const tarotReadingMutation = useMutation({
