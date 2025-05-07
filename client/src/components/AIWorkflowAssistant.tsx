@@ -1,7 +1,27 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
-import { Workflow, WorkflowStep } from '@shared/schema';
+// Define interfaces matching the server-side workflow types
+interface Workflow {
+  id: number;
+  name: string;
+  description: string;
+  steps: WorkflowStep[];
+  owner: string;
+  category: string;
+}
+
+interface WorkflowStep {
+  name: string;
+  status: "Complete" | "In Progress" | "Not Started";
+  date: string;
+  title?: string;
+  description?: string;
+  priority?: string;
+  notes?: string;
+  assignee?: string;
+  dueDate?: string;
+}
 import { Wand2, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -65,7 +85,7 @@ export function AIWorkflowAssistant({ workflow, onApplySteps }: AIWorkflowAssist
     }
 
     generateStepsMutation.mutate({
-      title: workflow?.title,
+      title: workflow?.name,
       description: workflow?.description,
       category: workflow?.category,
       prompt,
