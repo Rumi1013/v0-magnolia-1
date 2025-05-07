@@ -284,10 +284,19 @@ export const MoonlitSanctuaryIcon: React.FC = () => {
   const controls = useAnimation();
   const [key, setKey] = useState(0);
   
+  // Reset and play animation sequence on component mount or key change
   useEffect(() => {
-    controls.start({ opacity: 1 });
-    setKey(prev => prev + 1);
-  }, [controls]);
+    // Start with opacity 0
+    controls.set({ opacity: 0 });
+    
+    // Then animate to full opacity
+    controls.start({ 
+      opacity: 1,
+      transition: { duration: 0.5 }
+    });
+    
+    // We use the key to force a complete re-render and restart animations
+  }, [controls, key]);
   
   return (
     <motion.svg 
@@ -372,10 +381,19 @@ export const HouseOfMidnightIcon: React.FC = () => {
   const controls = useAnimation();
   const [key, setKey] = useState(0);
   
+  // Reset and play animation sequence on component mount or key change
   useEffect(() => {
-    controls.start({ opacity: 1 });
-    setKey(prev => prev + 1);
-  }, [controls]);
+    // Start with opacity 0
+    controls.set({ opacity: 0 });
+    
+    // Then animate to full opacity
+    controls.start({ 
+      opacity: 1,
+      transition: { duration: 0.5 }
+    });
+    
+    // We use the key to force a complete re-render and restart animations
+  }, [controls, key]);
   
   return (
     <motion.svg 
