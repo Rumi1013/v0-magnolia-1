@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Card, 
   CardContent, 
   CardHeader, 
-  CardTitle 
+  CardTitle, 
+  CardDescription 
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AIContentGenerator } from "@/components/AIContentGenerator";
 import { 
   Wand2,
   Bot,
@@ -13,10 +16,13 @@ import {
   Sparkles,
   BookCopy,
   FileText,
-  Check
+  Check,
+  ScrollText
 } from "lucide-react";
 
 export function AIToolsSection() {
+  const [activeTab, setActiveTab] = useState("overview");
+
   return (
     <div className="space-y-10">
       <Card className="border-[#D4AF37]/20">
@@ -293,6 +299,169 @@ export function AIToolsSection() {
               </div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-[#D4AF37]/20">
+        <CardHeader>
+          <CardTitle className="text-2xl font-playfair text-[#0A192F] border-b-2 border-[#D4AF37] pb-2">
+            Digital Grimoire Tools
+          </CardTitle>
+          <CardDescription className="mt-2">
+            Create content, generate workflow steps, and enhance your digital grimoire with AI assistance
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+            <TabsList className="grid grid-cols-3 w-full mb-6">
+              <TabsTrigger value="overview" className="text-sm">Overview</TabsTrigger>
+              <TabsTrigger value="content-generator" className="text-sm">Content Generator</TabsTrigger>
+              <TabsTrigger value="workflow-integration" className="text-sm">Workflow Integration</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="overview" className="border-none p-0">
+              <div className="space-y-6">
+                <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                  <h3 className="text-xl font-playfair text-[#0A192F] mb-4">The Digital Grimoire</h3>
+                  <p className="text-gray-600 mb-4">
+                    Your Digital Grimoire integrates AI tools to streamline content creation and workflow management, 
+                    merging your Southern Gothic aesthetic with advanced technologies.
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 gap-6 mt-8">
+                    <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                      <div className="flex items-center mb-3">
+                        <ScrollText className="w-5 h-5 text-[#D4AF37] mr-2" />
+                        <h4 className="font-playfair text-[#0A192F]">Content Generation</h4>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        Create tarot interpretations, affirmations, worksheets, and other content with your unique Southern Gothic voice.
+                      </p>
+                    </div>
+                    
+                    <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                      <div className="flex items-center mb-3">
+                        <Layers className="w-5 h-5 text-[#D4AF37] mr-2" />
+                        <h4 className="font-playfair text-[#0A192F]">Workflow Enhancement</h4>
+                      </div>
+                      <p className="text-sm text-gray-600">
+                        Automatically generate workflow steps and streamline your creation process with AI assistance.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 text-center">
+                    <p className="text-sm text-gray-500 italic">
+                      Select one of the tabs above to access the AI tools
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="content-generator" className="border-none p-0">
+              <AIContentGenerator />
+            </TabsContent>
+            
+            <TabsContent value="workflow-integration" className="border-none p-0">
+              <Card className="border-[#D4AF37]/20">
+                <CardHeader>
+                  <CardTitle className="text-xl font-playfair text-[#0A192F]">
+                    Workflow Integration
+                  </CardTitle>
+                  <CardDescription>
+                    Connect your Digital Grimoire workflow with AI assistance
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                      <h3 className="text-lg font-playfair text-[#0A192F] mb-3">How to Use AI with Your Workflows</h3>
+                      
+                      <ol className="space-y-4 mt-4">
+                        <li className="flex">
+                          <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">1</span>
+                          <div>
+                            <p className="font-medium text-[#0A192F]">Open a workflow</p>
+                            <p className="text-sm text-gray-600">Navigate to the Workflows tab and select any existing workflow</p>
+                          </div>
+                        </li>
+                        
+                        <li className="flex">
+                          <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">2</span>
+                          <div>
+                            <p className="font-medium text-[#0A192F]">Locate the AI Workflow Assistant</p>
+                            <p className="text-sm text-gray-600">The AI Workflow Assistant appears below your workflow steps</p>
+                          </div>
+                        </li>
+                        
+                        <li className="flex">
+                          <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">3</span>
+                          <div>
+                            <p className="font-medium text-[#0A192F]">Generate workflow steps</p>
+                            <p className="text-sm text-gray-600">Enter your workflow description and the AI will generate detailed steps</p>
+                          </div>
+                        </li>
+                        
+                        <li className="flex">
+                          <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">4</span>
+                          <div>
+                            <p className="font-medium text-[#0A192F]">Apply to your workflow</p>
+                            <p className="text-sm text-gray-600">Review the generated steps and click "Apply to Workflow" to add them</p>
+                          </div>
+                        </li>
+                      </ol>
+                    </div>
+                    
+                    <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                      <h3 className="text-lg font-playfair text-[#0A192F] mb-3">Digital Grimoire Workflow Templates</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        These templates are designed specifically for your Midnight Magnolia brand and can be enhanced with AI-generated steps:
+                      </p>
+                      
+                      <div className="grid md:grid-cols-2 gap-4 mt-6">
+                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                          <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Content Creation</h4>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            <li>• Digital Product Development</li>
+                            <li>• Tarot Content Creation</li>
+                            <li>• eBook Production</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                          <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Marketing</h4>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            <li>• Social Media Campaign</li>
+                            <li>• Product Launch</li>
+                            <li>• Email Sequence</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                          <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Patreon</h4>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            <li>• Tier Content Planning</li>
+                            <li>• Membership Benefits</li>
+                            <li>• Monthly Delivery</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                          <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Technical</h4>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            <li>• Airtable Integration</li>
+                            <li>• Notion Database Setup</li>
+                            <li>• API Connection</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
