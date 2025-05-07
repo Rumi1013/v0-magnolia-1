@@ -50,7 +50,7 @@ export default function WorkflowDashboard() {
   });
 
   // Use proper type handling for data
-  const workflows = Array.isArray(workflowData) ? workflowData : [];
+  const workflows = workflowData?.workflows || [];
 
   // Mutation for updating workflow
   const updateWorkflowMutation = useMutation({
