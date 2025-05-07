@@ -16,6 +16,7 @@ import AuthPage from "@/pages/auth-page";
 import WorkflowPage from "@/pages/workflow-page";
 import AIToolsPage from "@/pages/ai-tools-page";
 import CheckoutPage from "@/pages/checkout-page";
+import DashboardPage from "@/pages/dashboard-page";
 import { BirthChartGenerator } from "@/components/BirthChartGenerator";
 import { TieredProductPricing } from "@/components/TieredProductPricing";
 
@@ -71,7 +72,9 @@ function AppNavigation() {
           
           {user ? (
             <div className="flex items-center space-x-4">
-              <span className="text-[#FAF3E0]">Welcome, {user.username}</span>
+              <Link to="/dashboard" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/dashboard' ? 'text-[#D4AF37]' : ''}`}>
+                <span className="text-[#FAF3E0] hover:text-[#D4AF37]">My Dashboard</span>
+              </Link>
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -119,6 +122,15 @@ function AppNavigation() {
             {user ? (
               <>
                 <div className="text-[#FAF3E0] pt-2 border-t border-[#A3B18A]/20">Welcome, {user.username}</div>
+                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black w-full mb-2"
+                  >
+                    My Dashboard
+                  </Button>
+                </Link>
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -158,6 +170,7 @@ function Router() {
           <ProtectedRoute path="/notion" component={() => <Notion />} />
           <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
           <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
+          <ProtectedRoute path="/dashboard" component={() => <DashboardPage />} />
           <Route path="/birth-chart" component={() => (
             <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
               <BirthChartGenerator />
