@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { AIWorkflowAssistant } from "@/components/AIWorkflowAssistant";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -762,6 +763,31 @@ export default function WorkflowDashboard() {
                               ))}
                             </CardContent>
                           </Card>
+
+                          <div className="mt-8 mb-8">
+                            <AIWorkflowAssistant 
+                              workflow={selectedWorkflow}
+                              onApplySteps={(generatedSteps) => {
+                                if (!selectedWorkflow) return;
+                                
+                                // Convert the AI-generated steps to the expected format
+                                const formattedSteps: WorkflowStep[] = generatedSteps.map(step => ({
+                                  name: step.title || step.name,
+                                  status: "Not Started" as const,
+                                  date: new Date().toLocaleDateString(),
+                                  priority: step.priority as "High" | "Medium" | "Low" || "Medium",
+                                  notes: step.notes || step.description || "",
+                                  assignee: step.assignee || "",
+                                  dueDate: step.dueDate || ""
+                                }));
+                                
+                                // Update the workflow with the new steps
+                                const updatedWorkflow = { ...selectedWorkflow };
+                                updatedWorkflow.steps = [...updatedWorkflow.steps, ...formattedSteps];
+                                updateWorkflowMutation.mutate(updatedWorkflow);
+                              }}
+                            />
+                          </div>
                           
                           <div className="mt-8 flex justify-end gap-4">
                             <Button 
