@@ -1,9 +1,10 @@
-import type { Express, Request, Response } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { notionService } from "./notion";
 import { airtableService } from "./airtable";
 import { openaiService } from "./openai";
+import { setupAuth } from "./auth";
 import { z } from "zod";
 
 // Create schemas for request validation
@@ -84,6 +85,8 @@ function handleApiError(res: Response, error: any, defaultMessage: string) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup authentication - returns auth middleware functions
+  const { isAuthenticated, isAdmin } = setupAuth(app);
   // Check Notion integration health
   app.get("/api/notion/health", async (_req: Request, res: Response) => {
     try {
