@@ -17,6 +17,8 @@ import WorkflowPage from "@/pages/workflow-page";
 import AIToolsPage from "@/pages/ai-tools-page";
 import CheckoutPage from "@/pages/checkout-page";
 import DashboardPage from "@/pages/dashboard-page";
+import ContentCreatorPage from "@/pages/content-creator-page";
+import ClientViewPage from "@/pages/client-view-page";
 import { BirthChartGenerator } from "@/components/BirthChartGenerator";
 import { TieredProductPricing } from "@/components/TieredProductPricing";
 
@@ -54,8 +56,8 @@ function AppNavigation() {
           <Link to="/" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/' ? 'text-[#D4AF37]' : ''}`}>
             Home
           </Link>
-          <Link to="/notion" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/notion' ? 'text-[#D4AF37]' : ''}`}>
-            Creator Hub
+          <Link to="/content-creator" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/content-creator' ? 'text-[#D4AF37]' : ''}`}>
+            Digital Grimoire
           </Link>
           <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`}>
             Workflows
@@ -65,6 +67,9 @@ function AppNavigation() {
           </Link>
           <Link to="/birth-chart" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/birth-chart' ? 'text-[#D4AF37]' : ''}`}>
             Birth Chart
+          </Link>
+          <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`}>
+            Content Library
           </Link>
           <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`}>
             Pricing
@@ -103,8 +108,8 @@ function AppNavigation() {
             <Link to="/" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Home
             </Link>
-            <Link to="/notion" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/notion' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
-              Creator Hub
+            <Link to="/content-creator" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/content-creator' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Digital Grimoire
             </Link>
             <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Workflows
@@ -114,6 +119,9 @@ function AppNavigation() {
             </Link>
             <Link to="/birth-chart" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/birth-chart' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Birth Chart
+            </Link>
+            <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Content Library
             </Link>
             <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Pricing
@@ -171,6 +179,8 @@ function Router() {
           <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
           <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
           <ProtectedRoute path="/dashboard" component={() => <DashboardPage />} />
+          <ProtectedRoute path="/content-creator" component={() => <ContentCreatorPage />} />
+          <Route path="/library" component={() => <ClientViewPage />} />
           <Route path="/birth-chart" component={() => (
             <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
               <BirthChartGenerator />
