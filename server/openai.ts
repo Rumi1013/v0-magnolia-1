@@ -18,6 +18,79 @@ export class OpenAIApiError extends Error {
 
 export class OpenAIService {
   /**
+   * Generate workflow steps based on a description
+   */
+  async generateWorkflowSteps(
+    prompt: string,
+    workflowType: string,
+    title?: string,
+    description?: string,
+    category?: string
+  ): Promise<any> {
+    try {
+      // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: `You are an expert workflow designer specializing in ${workflowType} workflows for content creators in the Southern Gothic aesthetics niche. 
+            Your task is to create a detailed step-by-step workflow based on the user's description.
+            The steps should include a title, description, and optional assignee, due date, priority, and notes fields.
+            For each step, provide:
+            1. A clear, actionable title
+            2. A brief but specific description of what needs to be done
+            3. A recommended priority (low, medium, or high)
+            
+            Output the steps as a valid JSON array of step objects with the structure:
+            {
+              "title": "Step Title",
+              "description": "Step description",
+              "assignee": null,
+              "dueDate": null,
+              "priority": "medium",
+              "status": "not-started",
+              "notes": "Optional notes about the step"
+            }
+            
+            Ensure each workflow has a minimum of 5 steps and a maximum of 15 steps.`
+          },
+          {
+            role: "user",
+            content: `Create a detailed workflow for: ${prompt}\n\n${
+              title ? `The workflow title is: ${title}\n` : ''
+            }${description ? `Additional context: ${description}\n` : ''}${
+              category ? `This falls under the category: ${category}\n` : ''
+            }
+            
+            Structure it as a step-by-step process that follows best practices for ${workflowType}.`
+          }
+        ],
+        response_format: { type: "json_object" }
+      });
+
+      // Parse the response
+      const responseContent = response.choices[0].message.content;
+      const parsedResponse = JSON.parse(responseContent);
+      
+      // Check for the expected structure
+      if (!parsedResponse.steps || !Array.isArray(parsedResponse.steps)) {
+        throw new OpenAIApiError('Invalid response format from OpenAI', 500);
+      }
+      
+      return parsedResponse;
+    } catch (error: any) {
+      if (error instanceof OpenAIApiError) {
+        throw error;
+      }
+      
+      const message = error.response?.data?.error?.message || error.message || 'Unknown error';
+      const status = error.response?.status || 500;
+      throw new OpenAIApiError(`Error generating workflow steps: ${message}`, status);
+    }
+  }
+
+  /**
    * Generate a tarot reading prompt based on a query
    */
   async generateTarotReading(
