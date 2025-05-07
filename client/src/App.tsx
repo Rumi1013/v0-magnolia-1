@@ -52,6 +52,9 @@ function AppNavigation() {
           <Link to="/notion" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/notion' ? 'text-[#D4AF37]' : ''}`}>
             Creator Hub
           </Link>
+          <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`}>
+            Workflows
+          </Link>
           
           {user ? (
             <div className="flex items-center space-x-4">
@@ -86,6 +89,9 @@ function AppNavigation() {
             </Link>
             <Link to="/notion" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/notion' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Creator Hub
+            </Link>
+            <Link to="/workflows" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/workflows' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Workflows
             </Link>
             
             {user ? (
@@ -128,6 +134,7 @@ function Router() {
           <Route path="/auth" component={AuthPage} />
           <Route path="/" component={Home} />
           <ProtectedRoute path="/notion" component={() => <Notion />} />
+          <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
           <Route component={NotFound} />
         </Switch>
       </main>

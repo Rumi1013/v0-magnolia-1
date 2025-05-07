@@ -41,7 +41,7 @@ export default function WorkflowDashboard() {
   // Fetch all workflows
   const { data: workflowData, isLoading } = useQuery({
     queryKey: ['/api/workflows'],
-    queryFn: getQueryFn(),
+    queryFn: getQueryFn({ on401: "throw" }),
   });
 
   const workflows: Workflow[] = workflowData?.workflows || [];
