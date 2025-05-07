@@ -163,17 +163,11 @@ export const AirtableIntegration: React.FC = () => {
       
       console.log('Sending import request with mappings:', validMappings);
       
-      const response = await apiRequest('/api/airtable/import-to-notion', {
-        method: 'POST',
-        body: JSON.stringify({
-          baseId: selectedBase,
-          tableId: selectedTable,
-          notionDatabaseId: selectedNotionDb,
-          fieldMappings: validMappings
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const response = await apiRequest('POST', '/api/airtable/import-to-notion', {
+        baseId: selectedBase,
+        tableId: selectedTable,
+        notionDatabaseId: selectedNotionDb,
+        fieldMappings: validMappings
       });
       
       const result = await response.json();
@@ -203,26 +197,16 @@ export const AirtableIntegration: React.FC = () => {
   const createDbFromSchemaMutation = useMutation({
     mutationFn: async (data: { parentPageId: string; title: string; schema: any }) => {
       // First convert schema to Notion format
-      const convertResponse = await apiRequest('/api/airtable/convert-schema', {
-        method: 'POST',
-        body: JSON.stringify({ schema: data.schema }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const convertResponse = await apiRequest('POST', '/api/airtable/convert-schema', { 
+        schema: data.schema 
       });
       const convertData = await convertResponse.json();
 
       // Then create database with converted schema
-      const dbResponse = await apiRequest('/api/notion/databases', {
-        method: 'POST',
-        body: JSON.stringify({
-          parentPageId: data.parentPageId,
-          title: data.title,
-          properties: convertData.notionSchema
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const dbResponse = await apiRequest('POST', '/api/notion/databases', {
+        parentPageId: data.parentPageId,
+        title: data.title,
+        properties: convertData.notionSchema
       });
       return dbResponse.json();
     },

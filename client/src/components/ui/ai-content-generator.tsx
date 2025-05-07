@@ -71,15 +71,9 @@ export const AIContentGenerator: React.FC = () => {
   // Tarot reading mutation
   const tarotReadingMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/tarot-reading', {
-        method: 'POST',
-        body: JSON.stringify({
-          cardName: tarotCard,
-          queryType: queryType
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/tarot-reading', {
+        cardName: tarotCard,
+        queryType: queryType
       });
     },
     onSuccess: (data) => {
@@ -101,16 +95,10 @@ export const AIContentGenerator: React.FC = () => {
   // Affirmations mutation
   const affirmationsMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/affirmations', {
-        method: 'POST',
-        body: JSON.stringify({
-          theme: affirmationTheme,
-          count: parseInt(affirmationCount),
-          mood: affirmationMood
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/affirmations', {
+        theme: affirmationTheme,
+        count: parseInt(affirmationCount),
+        mood: affirmationMood
       });
     },
     onSuccess: (data) => {
