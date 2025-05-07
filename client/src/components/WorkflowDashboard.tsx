@@ -169,12 +169,57 @@ export default function WorkflowDashboard() {
       name: "Product Launch",
       description: "Step-by-step process for launching a new digital product",
       steps: [
-        { name: "Market Research", status: "Not Started" as const, date: new Date().toLocaleDateString() },
-        { name: "Product Design", status: "Not Started" as const, date: new Date().toLocaleDateString() },
-        { name: "Content Creation", status: "Not Started" as const, date: new Date().toLocaleDateString() },
-        { name: "Website Update", status: "Not Started" as const, date: new Date().toLocaleDateString() },
-        { name: "Email Campaign", status: "Not Started" as const, date: new Date().toLocaleDateString() },
-        { name: "Social Media Promotion", status: "Not Started" as const, date: new Date().toLocaleDateString() }
+        { 
+          name: "Market Research", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Latisha Waters",
+          priority: "High",
+          notes: "Identify target audience, competitor analysis, and pricing strategy."
+        },
+        { 
+          name: "Product Design", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Design Team",
+          priority: "High"
+        },
+        { 
+          name: "Content Creation", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Content Team",
+          priority: "Medium",
+          notes: "Create product descriptions, features list, and benefits."
+        },
+        { 
+          name: "Website Update", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 25 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Web Development",
+          priority: "Medium"
+        },
+        { 
+          name: "Email Campaign", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Marketing Team",
+          priority: "Medium"
+        },
+        { 
+          name: "Social Media Promotion", 
+          status: "Not Started" as const, 
+          date: new Date().toLocaleDateString(),
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+          assignee: "Social Media Manager",
+          priority: "High",
+          notes: "Prepare graphics, captions, and posting schedule."
+        }
       ],
       category: "Product Development"
     },
@@ -558,50 +603,161 @@ export default function WorkflowDashboard() {
                           </Card>
                           
                           <Card>
-                            <CardHeader className="bg-gray-50 py-4 px-6">
-                              <div className="grid grid-cols-[3fr_1fr_1fr] gap-4 font-medium">
-                                <div>Step</div>
-                                <div>Status</div>
-                                <div>Date</div>
-                              </div>
+                            <CardHeader className="bg-gray-50 py-4 px-6 flex flex-row justify-between items-center">
+                              <div className="font-medium text-lg">Workflow Steps</div>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="text-xs"
+                                onClick={() => {
+                                  if (selectedWorkflow) {
+                                    const updatedWorkflow = { ...selectedWorkflow };
+                                    updatedWorkflow.steps = [...updatedWorkflow.steps, {
+                                      name: "New Step",
+                                      status: "Not Started",
+                                      date: new Date().toLocaleDateString(),
+                                      priority: "Medium"
+                                    }];
+                                    updateWorkflowMutation.mutate(updatedWorkflow);
+                                  }
+                                }}
+                              >
+                                <Plus className="h-3 w-3 mr-1" />
+                                Add Step
+                              </Button>
                             </CardHeader>
                             <CardContent className="p-0">
                               {selectedWorkflow.steps.map((step, index) => (
                                 <div 
                                   key={index}
                                   className={`
-                                    grid grid-cols-[3fr_1fr_1fr] gap-4 p-4 items-center
+                                    p-4 
                                     ${index !== selectedWorkflow.steps.length - 1 ? 'border-b' : ''}
+                                    ${step.status === 'Complete' ? 'bg-green-50/30' : 
+                                      step.status === 'In Progress' ? 'bg-blue-50/30' : 
+                                      'bg-white'}
                                   `}
                                 >
-                                  <div className="flex items-center">
-                                    <div 
-                                      className={`
-                                        w-6 h-6 rounded-full flex items-center justify-center text-xs mr-3
-                                        ${step.status === 'Complete' ? 'bg-green-100 text-green-700' : 
-                                          step.status === 'In Progress' ? 'bg-blue-100 text-blue-700' : 
-                                          'bg-gray-100 text-gray-700'}
-                                      `}
-                                    >
-                                      {index + 1}
+                                  <div className="flex flex-col md:flex-row">
+                                    <div className="flex-grow">
+                                      <div className="flex items-center mb-3">
+                                        <div 
+                                          className={`
+                                            w-6 h-6 rounded-full flex items-center justify-center text-xs mr-3
+                                            ${step.status === 'Complete' ? 'bg-green-100 text-green-700' : 
+                                              step.status === 'In Progress' ? 'bg-blue-100 text-blue-700' : 
+                                              'bg-gray-100 text-gray-700'}
+                                          `}
+                                        >
+                                          {index + 1}
+                                        </div>
+                                        <div className="flex-grow">
+                                          <span className="font-medium">{step.name}</span>
+                                        </div>
+                                        <Badge variant="outline" className={getStatusStyle(step.status)}>
+                                          {step.status}
+                                        </Badge>
+                                      </div>
+                                      
+                                      <div className="ml-9 space-y-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                          <div className="flex items-center">
+                                            <Calendar className="w-4 h-4 mr-1 text-gray-500" />
+                                            <span className="text-gray-700">Created: {step.date}</span>
+                                          </div>
+                                          
+                                          <div className="flex items-center">
+                                            <Clock className="w-4 h-4 mr-1 text-gray-500" />
+                                            <span className="text-gray-700">
+                                              Due: {step.dueDate || 'Not set'}
+                                            </span>
+                                          </div>
+                                          
+                                          <div className="flex items-center">
+                                            <Users className="w-4 h-4 mr-1 text-gray-500" />
+                                            <span className="text-gray-700">
+                                              Assigned to: {step.assignee || 'Unassigned'}
+                                            </span>
+                                          </div>
+                                          
+                                          <div className="flex items-center">
+                                            <AlertCircle className="w-4 h-4 mr-1 text-gray-500" />
+                                            <span className="text-gray-700">
+                                              Priority: 
+                                              <span className={
+                                                step.priority === "High" 
+                                                  ? "text-red-500 font-medium ml-1" 
+                                                  : step.priority === "Medium" 
+                                                    ? "text-yellow-500 font-medium ml-1" 
+                                                    : step.priority === "Low"
+                                                      ? "text-green-500 font-medium ml-1"
+                                                      : "text-gray-500 ml-1"
+                                              }>
+                                                {step.priority || 'Not set'}
+                                              </span>
+                                            </span>
+                                          </div>
+                                        </div>
+                                        
+                                        {step.notes && (
+                                          <div className="text-sm bg-gray-50 p-2 rounded-md border-l-2 border-gray-300">
+                                            <div className="font-medium mb-1">Notes:</div>
+                                            {step.notes}
+                                          </div>
+                                        )}
+                                      </div>
                                     </div>
-                                    <span>{step.name}</span>
+                                    
+                                    <div className="mt-4 md:mt-0 md:ml-4 flex md:flex-col justify-end space-x-2 md:space-x-0 md:space-y-2">
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button 
+                                            size="sm" 
+                                            variant="outline"
+                                            onClick={() => updateStepStatus(index, "Not Started")}
+                                            className={step.status === "Not Started" ? "bg-gray-100" : ""}
+                                          >
+                                            <XCircle className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p>Mark as Not Started</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                      
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button 
+                                            size="sm" 
+                                            variant="outline"
+                                            onClick={() => updateStepStatus(index, "In Progress")}
+                                            className={step.status === "In Progress" ? "bg-blue-100" : ""}
+                                          >
+                                            <AlertCircle className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p>Mark as In Progress</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                      
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button 
+                                            size="sm" 
+                                            variant="outline"
+                                            onClick={() => updateStepStatus(index, "Complete")}
+                                            className={step.status === "Complete" ? "bg-green-100" : ""}
+                                          >
+                                            <CheckCircle className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p>Mark as Complete</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <select 
-                                      value={step.status}
-                                      onChange={(e) => updateStepStatus(
-                                        index, 
-                                        e.target.value as "Complete" | "In Progress" | "Not Started"
-                                      )}
-                                      className="block w-full bg-transparent focus:ring-[#D4AF37] focus:border-[#D4AF37] rounded-md border-gray-300 text-sm"
-                                    >
-                                      <option value="Complete">Complete</option>
-                                      <option value="In Progress">In Progress</option>
-                                      <option value="Not Started">Not Started</option>
-                                    </select>
-                                  </div>
-                                  <div className="text-sm text-gray-600">{step.date}</div>
                                 </div>
                               ))}
                             </CardContent>
@@ -611,7 +767,9 @@ export default function WorkflowDashboard() {
                             <Button 
                               variant="outline"
                               className="border-[#0A192F] text-[#0A192F]"
+                              onClick={() => setIsExportModalOpen(true)}
                             >
+                              <Download className="w-4 h-4 mr-2" />
                               Export Workflow
                             </Button>
                             <Button 
@@ -619,11 +777,20 @@ export default function WorkflowDashboard() {
                               variant="destructive"
                               className="bg-red-600 hover:bg-red-700"
                             >
+                              <Trash2 className="w-4 h-4 mr-2" />
                               Delete Workflow
                             </Button>
                             <Button 
                               className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80"
+                              onClick={() => {
+                                toast({
+                                  title: "Workflow Changes Saved",
+                                  description: "All modifications have been saved successfully.",
+                                });
+                                setSelectedWorkflow(null);
+                              }}
                             >
+                              <ArrowUpRight className="w-4 h-4 mr-2" />
                               Save Changes
                             </Button>
                           </div>
