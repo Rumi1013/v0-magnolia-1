@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
+import { apiRequest, getQueryFn, queryClient } from '@/lib/queryClient';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -56,15 +56,13 @@ export const AIContentGenerator: React.FC = () => {
   // Check OpenAI connection status
   const { data: apiHealth, isLoading: isCheckingConnection } = useQuery({
     queryKey: ['/api/openai/health'],
-    onSuccess: (data: any) => {
-      if (data?.success) {
-        setConnectionStatus('connected');
-      } else {
+    queryFn: getQueryFn(),
+    onSettled: (data: any, error) => {
+      if (error || !data?.success) {
         setConnectionStatus('error');
+      } else {
+        setConnectionStatus('connected');
       }
-    },
-    onError: () => {
-      setConnectionStatus('error');
     }
   });
 
@@ -120,16 +118,10 @@ export const AIContentGenerator: React.FC = () => {
   // Content brief mutation
   const contentBriefMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/content-brief', {
-        method: 'POST',
-        body: JSON.stringify({
-          contentType,
-          theme: contentTheme,
-          additionalContext
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/content-brief', {
+        contentType,
+        theme: contentTheme,
+        additionalContext
       });
     },
     onSuccess: (data) => {
@@ -153,17 +145,11 @@ export const AIContentGenerator: React.FC = () => {
     mutationFn: async () => {
       const features = productFeatures.split(',').map(f => f.trim());
       
-      return apiRequest('/api/openai/product-description', {
-        method: 'POST',
-        body: JSON.stringify({
-          productType,
-          title: productTitle,
-          features,
-          targetAudience
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/product-description', {
+        productType,
+        title: productTitle,
+        features,
+        targetAudience
       });
     },
     onSuccess: (data) => {
@@ -185,16 +171,10 @@ export const AIContentGenerator: React.FC = () => {
   // Image prompts mutation
   const imagePromptsMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/image-prompts', {
-        method: 'POST',
-        body: JSON.stringify({
-          subject: imageSubject,
-          style: imageStyle,
-          count: 3
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/image-prompts', {
+        subject: imageSubject,
+        style: imageStyle,
+        count: 3
       });
     },
     onSuccess: (data) => {
@@ -216,15 +196,9 @@ export const AIContentGenerator: React.FC = () => {
   // Worksheet structure mutation
   const worksheetMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/worksheet', {
-        method: 'POST',
-        body: JSON.stringify({
-          topic: worksheetTopic,
-          purpose: worksheetPurpose
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/worksheet', {
+        topic: worksheetTopic,
+        purpose: worksheetPurpose
       });
     },
     onSuccess: (data) => {
@@ -246,15 +220,9 @@ export const AIContentGenerator: React.FC = () => {
   // Moon phase content mutation
   const moonPhaseContentMutation = useMutation({
     mutationFn: async () => {
-      return apiRequest('/api/openai/moon-phase-content', {
-        method: 'POST',
-        body: JSON.stringify({
-          phase: moonPhase,
-          contentType: 'general'
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', '/api/openai/moon-phase-content', {
+        phase: moonPhase,
+        contentType: 'general'
       });
     },
     onSuccess: (data) => {
