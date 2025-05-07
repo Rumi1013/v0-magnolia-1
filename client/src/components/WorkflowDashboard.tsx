@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { Calendar, Clock, FileText, Share2, Database, Code, CheckSquare, BarChart2, Moon } from 'lucide-react';
-import { queryClient, getQueryFn, apiRequest } from '@/lib/queryClient';
+import { useState } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, getQueryFn, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent 
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+  Moon, 
+  FileText, 
+  Share2, 
+  Code, 
+  BarChart2,
+  Plus
+} from "lucide-react";
 
-// Define workflow step structure
 type WorkflowStep = {
   name: string;
   status: "Complete" | "In Progress" | "Not Started";
   date: string;
 };
 
-// Define the workflow type
 type Workflow = {
   id: number;
   name: string;
@@ -33,7 +38,7 @@ type Workflow = {
 };
 
 export default function WorkflowDashboard() {
-  const [activeTab, setActiveTab] = useState('workflow');
+  const [activeTab, setActiveTab] = useState("workflow");
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("All Workflows");
   const { toast } = useToast();
@@ -44,7 +49,8 @@ export default function WorkflowDashboard() {
     queryFn: getQueryFn({ on401: "throw" }),
   });
 
-  const workflows: Workflow[] = workflowData?.workflows || [];
+  // Use proper type handling for data
+  const workflows = Array.isArray(workflowData) ? workflowData : [];
 
   // Mutation for updating workflow
   const updateWorkflowMutation = useMutation({
@@ -166,8 +172,8 @@ export default function WorkflowDashboard() {
         <p className="text-xl font-normal">Visual Brand Dashboard</p>
       </header>
       
-      <div className="bg-[#051224] overflow-x-auto whitespace-nowrap mb-8 border-b-2 border-[#D4AF37]">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <div className="bg-[#051224] overflow-x-auto whitespace-nowrap mb-8 border-b-2 border-[#D4AF37]">
           <TabsList className="bg-transparent border-b-0">
             <TabsTrigger 
               value="colors" 
@@ -212,11 +218,81 @@ export default function WorkflowDashboard() {
               Workflows
             </TabsTrigger>
           </TabsList>
-        </Tabs>
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <TabsContent value="workflow" className="mt-0">
+        </div>
+        
+        <TabsContent value="colors">
+          <Card>
+            <CardHeader>
+              <CardTitle>Color Palette</CardTitle>
+              <CardDescription>Color scheme for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Color palette content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="typography">
+          <Card>
+            <CardHeader>
+              <CardTitle>Typography</CardTitle>
+              <CardDescription>Typography guidelines for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Typography content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="products">
+          <Card>
+            <CardHeader>
+              <CardTitle>Products</CardTitle>
+              <CardDescription>Product catalog for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Products content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="audience">
+          <Card>
+            <CardHeader>
+              <CardTitle>Audience</CardTitle>
+              <CardDescription>Target audience personas for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Audience content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="voice">
+          <Card>
+            <CardHeader>
+              <CardTitle>Brand Voice</CardTitle>
+              <CardDescription>Voice and tone guidelines for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Brand voice content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="architecture">
+          <Card>
+            <CardHeader>
+              <CardTitle>Tech Architecture</CardTitle>
+              <CardDescription>Technical infrastructure for Midnight Magnolia</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Tech architecture content will go here.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="workflow">
           <div>
             <Card className="bg-white shadow-sm mb-8">
               <CardHeader>
@@ -383,65 +459,82 @@ export default function WorkflowDashboard() {
                       ) : (
                         <>
                           <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-2xl font-playfair text-[#0A192F]">
-                              {selectedCategory} ({filteredWorkflows.length})
-                            </h3>
-                            <Button 
+                            <h3 className="text-lg font-medium text-[#0A192F]">{selectedCategory} ({filteredWorkflows.length})</h3>
+                            <Button
                               onClick={handleCreateWorkflow}
                               className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80"
                             >
-                              <span className="text-lg mr-1">+</span> New Workflow
+                              <Plus className="h-4 w-4 mr-2" />
+                              Create Workflow
                             </Button>
                           </div>
                           
-                          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {filteredWorkflows.map((workflow) => (
                               <Card 
-                                key={workflow.id}
+                                key={workflow.id} 
+                                className="cursor-pointer hover:shadow-md transition-shadow duration-300"
                                 onClick={() => setSelectedWorkflow(workflow)}
-                                className="cursor-pointer hover:shadow-md transition-shadow"
                               >
-                                <CardHeader className="bg-[#0A192F] border-b border-[rgba(212,175,55,0.3)]">
-                                  <CardTitle className="text-xl text-[#FAF3E0] font-playfair">
+                                <CardHeader className="pb-2">
+                                  <CardTitle className="text-lg">
                                     {workflow.name}
                                   </CardTitle>
-                                  <Badge 
-                                    variant="outline" 
-                                    className="bg-[rgba(163,177,138,0.2)] text-[#A3B18A] mt-2 w-fit"
-                                  >
-                                    {workflow.category}
-                                  </Badge>
+                                  <Badge className="text-xs">{workflow.category}</Badge>
                                 </CardHeader>
-                                <CardContent className="pt-4">
-                                  <p className="text-gray-600 text-sm mb-4 font-serif line-clamp-2">{workflow.description}</p>
-                                  
-                                  <div className="flex gap-2 mb-4 text-xs">
-                                    <div className="flex items-center gap-1">
-                                      <CheckSquare className="w-3 h-3" />
-                                      <span>
-                                        {workflow.steps.filter(step => step.status === 'Complete').length} / {workflow.steps.length}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                      <Clock className="w-3 h-3" />
-                                      <span>
-                                        Updated recently
-                                      </span>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="h-1 bg-gray-100 rounded">
-                                    <div 
-                                      className="h-1 bg-[#D4AF37] rounded"
-                                      style={{ 
-                                        width: `${(workflow.steps.filter(step => step.status === 'Complete').length / workflow.steps.length) * 100}%` 
-                                      }}
-                                    />
+                                <CardContent className="pb-3 pt-1">
+                                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">{workflow.description}</p>
+                                  <div className="mt-4 text-xs text-gray-500">
+                                    <span className="mr-4">
+                                      <span className="mr-2">Owner:</span>
+                                      <span className="font-medium">{workflow.owner}</span>
+                                    </span>
+                                    <span>
+                                      <span className="mr-2">Steps:</span>
+                                      <span className="font-medium">{workflow.steps.length}</span>
+                                    </span>
                                   </div>
                                 </CardContent>
+                                <CardFooter className="pt-1">
+                                  <div className="flex justify-between items-center w-full">
+                                    <div className="text-xs text-gray-500">
+                                      <span className="mr-2">Status:</span>
+                                    </div>
+                                    <div className="space-x-1 flex">
+                                      {workflow.steps.slice(0, 3).map((step, index) => (
+                                        <Badge 
+                                          key={index}
+                                          variant="outline" 
+                                          className={`${getStatusStyle(step.status)} text-xs`}
+                                        >
+                                          {step.status}
+                                        </Badge>
+                                      ))}
+                                      {workflow.steps.length > 3 && (
+                                        <Badge variant="outline" className="bg-gray-100 text-gray-700 text-xs">
+                                          +{workflow.steps.length - 3}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </div>
+                                </CardFooter>
                               </Card>
                             ))}
                           </div>
+                          
+                          {filteredWorkflows.length === 0 && (
+                            <div className="border border-dashed rounded-lg p-10 text-center">
+                              <h3 className="text-lg font-medium text-gray-600 mb-2">No workflows found</h3>
+                              <p className="text-gray-500 mb-6">There are no workflows in this category yet.</p>
+                              <Button
+                                onClick={handleCreateWorkflow}
+                                className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80"
+                              >
+                                <Plus className="h-4 w-4 mr-2" />
+                                Create First Workflow
+                              </Button>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -451,32 +544,7 @@ export default function WorkflowDashboard() {
             </Card>
           </div>
         </TabsContent>
-        
-        {/* Other tabs would go here - we're only implementing the workflow tab for now */}
-        <TabsContent value="colors" className="mt-0">
-          <Card>
-            <CardHeader>
-              <CardTitle>Color Palette</CardTitle>
-              <CardDescription>Midnight Magnolia's brand colors</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Color palette content will go here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="typography" className="mt-0">
-          <Card>
-            <CardHeader>
-              <CardTitle>Typography</CardTitle>
-              <CardDescription>Typography guidelines for Midnight Magnolia</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Typography content will go here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </div>
+      </Tabs>
     </div>
   );
 }
