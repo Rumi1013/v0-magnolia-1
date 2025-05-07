@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { notionService } from "./notion";
 import { airtableService } from "./airtable";
 import { openaiService } from "./openai";
+import { astrologyService } from "./astrology";
 import { workflowService, WorkflowSchema, CreateWorkflowSchema, UpdateWorkflowSchema } from "./workflow";
 import { setupAuth } from "./auth";
 import { z } from "zod";

@@ -9,6 +9,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AIContentGenerator } from "@/components/AIContentGenerator";
+import { BirthChartGenerator } from "@/components/BirthChartGenerator";
+import { TieredProductPricing } from "@/components/TieredProductPricing";
 import { 
   Wand2,
   Bot,
@@ -17,7 +19,8 @@ import {
   BookCopy,
   FileText,
   Check,
-  ScrollText
+  ScrollText,
+  Stars
 } from "lucide-react";
 
 export function AIToolsSection() {
@@ -313,10 +316,12 @@ export function AIToolsSection() {
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
-            <TabsList className="grid grid-cols-3 w-full mb-6">
+            <TabsList className="grid grid-cols-5 w-full mb-6">
               <TabsTrigger value="overview" className="text-sm">Overview</TabsTrigger>
               <TabsTrigger value="content-generator" className="text-sm">Content Generator</TabsTrigger>
               <TabsTrigger value="workflow-integration" className="text-sm">Workflow Integration</TabsTrigger>
+              <TabsTrigger value="birth-chart" className="text-sm">Birth Chart</TabsTrigger>
+              <TabsTrigger value="pricing" className="text-sm">Pricing</TabsTrigger>
             </TabsList>
             
             <TabsContent value="overview" className="border-none p-0">
@@ -461,9 +466,47 @@ export function AIToolsSection() {
                 </CardContent>
               </Card>
             </TabsContent>
+            
+            <TabsContent value="birth-chart" className="border-none p-0">
+              <BirthChartGenerator />
+            </TabsContent>
+            
+            <TabsContent value="pricing" className="border-none p-0">
+              <TieredProductPricing />
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
+      
+      <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30 mt-10">
+        <div className="flex items-start">
+          <Stars className="w-6 h-6 text-[#D4AF37] mr-4 mt-1 flex-shrink-0" />
+          <div>
+            <h3 className="text-lg font-playfair text-[#0A192F] mb-2">Specialized Backend AI Access for Content Creators</h3>
+            <p className="text-gray-600 mb-4">
+              As requested, we've built robust backend capabilities for your content creation process. The AI tools are specifically designed for your Midnight Magnolia brand and are not intended for general public use without tiered access.
+            </p>
+            <ul className="space-y-2">
+              <li className="flex items-start">
+                <Check className="w-4 h-4 text-[#D4AF37] mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-600">Advanced AI workflow generation with OpenAI integration for professional content creators</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="w-4 h-4 text-[#D4AF37] mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-600">Tiered product offerings with sliding scale pricing to offset operational costs</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="w-4 h-4 text-[#D4AF37] mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-600">Birth chart generator for premium content available through subscription tiers</span>
+              </li>
+              <li className="flex items-start">
+                <Check className="w-4 h-4 text-[#D4AF37] mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-gray-600">Consistent Southern Gothic branding and aesthetics across all components</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
