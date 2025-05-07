@@ -641,13 +641,7 @@ const Notion: React.FC = () => {
   // Mutation to create a database
   const createDatabaseMutation = useMutation({
     mutationFn: async (data: { parentPageId: string; title: string; properties: any }) => {
-      return apiRequest('/api/notion/databases', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      return apiRequest('POST', '/api/notion/databases', data);
     },
     onSuccess: () => {
       toast({
@@ -669,12 +663,8 @@ const Notion: React.FC = () => {
   // Mutation to add a page to a database
   const addPageMutation = useMutation({
     mutationFn: async (data: { databaseId: string; properties: any }) => {
-      return apiRequest(`/api/notion/databases/${data.databaseId}/pages`, {
-        method: 'POST',
-        body: JSON.stringify({ properties: data.properties }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      return apiRequest('POST', `/api/notion/databases/${data.databaseId}/pages`, { 
+        properties: data.properties 
       });
     },
     onSuccess: () => {
