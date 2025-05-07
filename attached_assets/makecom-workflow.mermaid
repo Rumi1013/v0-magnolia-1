@@ -1,0 +1,154 @@
+flowchart TD
+    %% Main Workflow Structure
+    Start([Start Workflow]) --> CheckSchedule{Check Schedule Type}
+    CheckSchedule -->|Daily| DailyRoutine
+    CheckSchedule -->|Weekly| WeeklyRoutine
+    CheckSchedule -->|Monthly| MonthlyRoutine
+    CheckSchedule -->|On Demand| ManualTrigger
+    
+    %% Daily Routine Branch
+    subgraph DailyRoutine[Daily Routine]
+        DailyStart([Start Daily Tasks]) --> FetchCalendar[Fetch Google Calendar Events]
+        FetchCalendar --> UpdateNotion[Update Notion Dashboard]
+        UpdateNotion --> FetchAirtable[Fetch Airtable Tasks]
+        FetchAirtable --> GenerateDailyTasks[Generate Daily Task List]
+        GenerateDailyTasks --> UpdateHomePage[Update Home Page Tasks]
+        UpdateHomePage --> DailyAffirmation[Update Daily Affirmation]
+        DailyAffirmation --> CheckDeadlines[Check Upcoming Deadlines]
+        CheckDeadlines --> SendNotifications{Any Notifications?}
+        SendNotifications -->|Yes| DeliverReminders[Send Nurturing Reminders]
+        SendNotifications -->|No| EndDaily
+        DeliverReminders --> EndDaily([End Daily Process])
+    end
+    
+    %% Weekly Routine Branch
+    subgraph WeeklyRoutine[Weekly Routine]
+        WeeklyStart([Start Weekly Tasks]) --> FetchShopify[Fetch Shopify Analytics]
+        FetchShopify --> UpdateAnalytics[Update Analytics Dashboard]
+        UpdateAnalytics --> GenerateReport[Generate Weekly Report]
+        GenerateReport --> PlanningPrompt[Create Monday Planning Prompt]
+        PlanningPrompt --> ContentCalendar[Update Content Calendar]
+        ContentCalendar --> VerifyTemplate[Verify Template Integrity]
+        VerifyTemplate --> FixIssues{Any Issues?}
+        FixIssues -->|Yes| RepairTemplate[Repair Template]
+        FixIssues -->|No| EndWeekly
+        RepairTemplate --> EndWeekly([End Weekly Process])
+    end
+    
+    %% Monthly Routine Branch
+    subgraph MonthlyRoutine[Monthly Routine]
+        MonthlyStart([Start Monthly Tasks]) --> AirtableSync[Full Airtable Sync]
+        AirtableSync --> UpdateProducts[Update Product Catalog]
+        UpdateProducts --> UpdateTarot[Update Tarot Card Database]
+        UpdateTarot --> UpdatePatreon[Update Patreon Content Plan]
+        UpdatePatreon --> MonthlyBackup[Create Template Backup]
+        MonthlyBackup --> PerformanceReview[Generate Performance Analytics]
+        PerformanceReview --> UpdateGoals[Update Monthly Goals]
+        UpdateGoals --> EndMonthly([End Monthly Process])
+    end
+    
+    %% Manual Trigger Branch
+    subgraph ManualTrigger[Manual Trigger]
+        ManualStart([Start Manual Process]) --> CheckTriggerType{Trigger Type?}
+        CheckTriggerType -->|New Product| ProductProcess[Product Integration Process]
+        CheckTriggerType -->|New Card| CardProcess[Tarot Card Integration]
+        CheckTriggerType -->|Emergency Fix| EmergencyProcess[Emergency Template Repair]
+        CheckTriggerType -->|Custom Update| CustomProcess[Custom Template Update]
+        
+        ProductProcess --> ProcessProduct[Process Product Data]
+        ProcessProduct --> UpdateProductCatalog[Update Product Catalog]
+        UpdateProductCatalog --> LinkToCards[Link to Related Cards]
+        LinkToCards --> EndProductProcess([End Product Process])
+        
+        CardProcess --> ProcessCardData[Process Card Data]
+        ProcessCardData --> UpdateCardDatabase[Update Card Database]
+        UpdateCardDatabase --> GeneratePrompts[Generate Affirmations & Prompts]
+        GeneratePrompts --> LinkToProducts[Link to Products]
+        LinkToProducts --> EndCardProcess([End Card Process])
+        
+        EmergencyProcess --> CheckErrorType[Check Error Type]
+        CheckErrorType --> ApplyFix[Apply Template Fix]
+        ApplyFix --> VerifyRepair[Verify Repair]
+        VerifyRepair --> NotifyUser[Notify User of Fix]
+        NotifyUser --> EndEmergencyProcess([End Emergency Process])
+        
+        CustomProcess --> ParseCustomRequest[Parse Custom Request]
+        ParseCustomRequest --> ExecuteCustomLogic[Execute Custom Logic]
+        ExecuteCustomLogic --> VerifyCustomUpdate[Verify Custom Update]
+        VerifyCustomUpdate --> EndCustomProcess([End Custom Process])
+    end
+    
+    %% Integration Points
+    subgraph IntegrationPoints[External Tools]
+        Notion[(Notion API)]
+        Airtable[(Airtable API)]
+        Shopify[(Shopify API)]
+        GoogleCalendar[(Google Calendar)]
+        GoogleDrive[(Google Drive)]
+        Gmail[(Gmail)]
+        MakeStorage[(Make.com Storage)]
+    end
+    
+    %% Connect Integration Points
+    UpdateNotion --> Notion
+    FetchAirtable --> Airtable
+    FetchShopify --> Shopify
+    FetchCalendar --> GoogleCalendar
+    MonthlyBackup --> GoogleDrive
+    DeliverReminders --> Gmail
+    VerifyTemplate --> MakeStorage
+    
+    %% Error Handling Process
+    subgraph ErrorHandling[Error Handling]
+        ErrorDetection{Error Detected?} --> |Yes| LogError[Log Error Details]
+        LogError --> ClassifyError[Classify Error Type]
+        ClassifyError --> AttemptFix{Can Fix Automatically?}
+        AttemptFix -->|Yes| ApplyAutoFix[Apply Automatic Fix]
+        AttemptFix -->|No| NotifyAdmin[Notify Administrator]
+        ApplyAutoFix --> VerifyFix{Fix Successful?}
+        VerifyFix -->|Yes| ResumeProcess[Resume Normal Process]
+        VerifyFix -->|No| NotifyAdmin
+        NotifyAdmin --> EndErrorHandling([End Error Handling])
+        ResumeProcess --> EndErrorHandling
+    end
+    
+    %% Connect Error Handling
+    UpdateNotion --> ErrorDetection
+    FetchAirtable --> ErrorDetection
+    UpdateAnalytics --> ErrorDetection
+    UpdateCardDatabase --> ErrorDetection
+    
+    %% End of Main Workflow
+    EndDaily --> End([End Workflow])
+    EndWeekly --> End
+    EndMonthly --> End
+    EndProductProcess --> End
+    EndCardProcess --> End
+    EndEmergencyProcess --> End
+    EndCustomProcess --> End
+    EndErrorHandling --> End
+
+    %% Styling
+    classDef primary fill:#0A192F,stroke:#D4AF37,color:#FAF3E0,stroke-width:2px
+    classDef secondary fill:#0A3B4D,stroke:#D4AF37,color:#FAF3E0,stroke-width:1px
+    classDef accent fill:#D4AF37,stroke:#0A192F,color:#0A192F,stroke-width:2px
+    classDef process fill:#051224,stroke:#A3B18A,color:#FAF3E0,stroke-width:1px
+    classDef condition fill:#D4AF37,stroke:#0A192F,color:#0A192F,stroke-width:1px
+    classDef endpoint fill:#A3B18A,stroke:#0A192F,color:#0A192F,stroke-width:2px
+    classDef storage fill:#0A3B4D,stroke:#D4AF37,color:#FAF3E0,stroke-dasharray: 5 5,stroke-width:1px
+    
+    class Start,End endpoint
+    class CheckSchedule,SendNotifications,FixIssues,CheckTriggerType,ErrorDetection,AttemptFix,VerifyFix condition
+    class DailyStart,WeeklyStart,MonthlyStart,ManualStart,EndDaily,EndWeekly,EndMonthly,EndProductProcess,EndCardProcess,EndEmergencyProcess,EndCustomProcess,EndErrorHandling endpoint
+    class FetchCalendar,UpdateNotion,FetchAirtable,GenerateDailyTasks,UpdateHomePage,DailyAffirmation,CheckDeadlines,DeliverReminders process
+    class FetchShopify,UpdateAnalytics,GenerateReport,PlanningPrompt,ContentCalendar,VerifyTemplate,RepairTemplate process
+    class AirtableSync,UpdateProducts,UpdateTarot,UpdatePatreon,MonthlyBackup,PerformanceReview,UpdateGoals process
+    class ProductProcess,CardProcess,EmergencyProcess,CustomProcess,ProcessProduct,UpdateProductCatalog,LinkToCards process
+    class ProcessCardData,UpdateCardDatabase,GeneratePrompts,LinkToProducts process
+    class CheckErrorType,ApplyFix,VerifyRepair,NotifyUser process
+    class ParseCustomRequest,ExecuteCustomLogic,VerifyCustomUpdate process
+    class LogError,ClassifyError,ApplyAutoFix,NotifyAdmin,ResumeProcess process
+    class Notion,Airtable,Shopify,GoogleCalendar,GoogleDrive,Gmail,MakeStorage storage
+    class DailyRoutine,WeeklyRoutine,MonthlyRoutine primary
+    class ManualTrigger,ErrorHandling secondary
+    class IntegrationPoints accent

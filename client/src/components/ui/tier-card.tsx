@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { TierData } from '@/components/MidnightMagnoliaTiers';
 import {
   FaSeedling,
@@ -35,13 +35,23 @@ export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
     gem: <FaGem className="text-2xl text-[#FAF3E0]" />
   };
   
-  // Animated icon map
+  // Animation controls
+  const [animationKey, setAnimationKey] = useState(0);
+  
+  // Reset animations when card is hovered
+  useEffect(() => {
+    if (isHovered) {
+      setAnimationKey(prevKey => prevKey + 1);
+    }
+  }, [isHovered]);
+  
+  // Animated icon map with key to force animation restart on hover
   const animatedIconMap = {
-    seedling: <MagnoliaSeedIcon />,
-    moon: <CrescentBloomIcon />,
-    tree: <GoldenGroveIcon />,
-    spa: <MoonlitSanctuaryIcon />,
-    gem: <HouseOfMidnightIcon />
+    seedling: <MagnoliaSeedIcon key={`seed-${animationKey}`} />,
+    moon: <CrescentBloomIcon key={`moon-${animationKey}`} />,
+    tree: <GoldenGroveIcon key={`tree-${animationKey}`} />,
+    spa: <MoonlitSanctuaryIcon key={`spa-${animationKey}`} />,
+    gem: <HouseOfMidnightIcon key={`gem-${animationKey}`} />
   };
 
   const getIcon = (iconName: string) => {
@@ -100,6 +110,11 @@ export const TierCard: React.FC<TierCardProps> = ({ tier, index }) => {
         
         <motion.div 
           className={`tier-icon ${isGolden ? 'bg-[#0A192F] border-2 border-[#D4AF37]/40' : 'bg-[#0A192F] border-2 border-[#A3B18A]/40'} h-20 w-20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden`}
+          animate={{ 
+            scale: isHovered ? 1.05 : 1,
+            boxShadow: isHovered ? `0 0 15px 2px ${isGolden ? 'rgba(212, 175, 55, 0.3)' : 'rgba(163, 177, 138, 0.3)'}` : 'none'
+          }}
+          transition={{ duration: 0.3 }}
         >
           {getIcon(tier.icon)}
         </motion.div>
