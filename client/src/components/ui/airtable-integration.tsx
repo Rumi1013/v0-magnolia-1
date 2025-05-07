@@ -23,7 +23,7 @@ export const AirtableIntegration: React.FC = () => {
     queryFn: async () => {
       console.log('Checking Airtable health...');
       try {
-        const response = await apiRequest('/api/airtable/health');
+        const response = await apiRequest('GET', '/api/airtable/health');
         const data = await response.json();
         console.log('Airtable health data:', data);
         
@@ -57,7 +57,7 @@ export const AirtableIntegration: React.FC = () => {
     queryFn: async () => {
       console.log('Fetching Airtable bases...');
       try {
-        const response = await apiRequest('/api/airtable/bases');
+        const response = await apiRequest('GET', '/api/airtable/bases');
         const data = await response.json();
         console.log('Airtable bases API response:', data);
         return data;
@@ -85,7 +85,7 @@ export const AirtableIntegration: React.FC = () => {
     enabled: !!selectedBase && connectionStatus === 'connected',
     queryFn: async () => {
       if (!selectedBase) return null;
-      const response = await apiRequest(`/api/airtable/bases/${selectedBase}/tables`);
+      const response = await apiRequest('GET', `/api/airtable/bases/${selectedBase}/tables`);
       return response.json();
     }
   });
@@ -103,7 +103,7 @@ export const AirtableIntegration: React.FC = () => {
       if (!selectedBase || !selectedTable) return null;
       try {
         console.log(`Fetching schema for ${selectedBase}/${selectedTable}...`);
-        const response = await apiRequest(`/api/airtable/bases/${selectedBase}/tables/${selectedTable}/schema`);
+        const response = await apiRequest('GET', `/api/airtable/bases/${selectedBase}/tables/${selectedTable}/schema`);
         const data = await response.json();
         console.log('Schema data:', data);
         return data;
@@ -140,7 +140,7 @@ export const AirtableIntegration: React.FC = () => {
     queryKey: ['/api/notion/databases'],
     enabled: connectionStatus === 'connected',
     queryFn: async () => {
-      const response = await apiRequest('/api/notion/databases');
+      const response = await apiRequest('GET', '/api/notion/databases');
       return response.json();
     }
   });
