@@ -70,7 +70,7 @@ export class OpenAIService {
       });
 
       // Parse the response
-      const responseContent = response.choices[0].message.content;
+      const responseContent = response.choices[0].message.content || "{}";
       const parsedResponse = JSON.parse(responseContent);
       
       // Check for the expected structure

@@ -512,6 +512,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to generate moon phase content");
     }
   });
+  
+  // Generate workflow steps
+  app.post("/api/openai/generate-workflow-steps", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { prompt, workflowType, title, description, category } = req.body;
+      
+      if (!prompt || !workflowType) {
+        return res.status(400).json({ 
+          success: false, 
+          error: "Prompt and workflow type are required" 
+        });
+      }
+      
+      const result = await openaiService.generateWorkflowSteps(
+        prompt,
+        workflowType,
+        title,
+        description,
+        category
+      );
+      
+      res.json({ success: true, steps: result.steps });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate workflow steps");
+    }
+  });
 
   // ===== WORKFLOW API ROUTES =====
   
