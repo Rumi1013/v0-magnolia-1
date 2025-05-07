@@ -125,7 +125,7 @@ function Router() {
       <main className="flex-grow">
         <Switch>
           <Route path="/auth" component={AuthPage} />
-          <ProtectedRoute path="/" component={() => <Home />} />
+          <Route path="/" component={Home} />
           <ProtectedRoute path="/notion" component={() => <Notion />} />
           <Route component={NotFound} />
         </Switch>
