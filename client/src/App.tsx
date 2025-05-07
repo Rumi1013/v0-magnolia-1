@@ -15,6 +15,9 @@ import Notion from "@/pages/Notion";
 import AuthPage from "@/pages/auth-page";
 import WorkflowPage from "@/pages/workflow-page";
 import AIToolsPage from "@/pages/ai-tools-page";
+import CheckoutPage from "@/pages/checkout-page";
+import { BirthChartGenerator } from "@/components/BirthChartGenerator";
+import { TieredProductPricing } from "@/components/TieredProductPricing";
 
 function AppNavigation() {
   const { user, logoutMutation } = useAuth();
