@@ -3,7 +3,7 @@ import { MidnightMagnoliaTiers } from '@/components/MidnightMagnoliaTiers';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
-import { Moon, Star, Sparkles, CreditCard, Instagram, Twitter, BookOpen } from 'lucide-react';
+import { Moon, Star, Sparkles, CreditCard, Instagram, Twitter, BookOpen, Library, Book } from 'lucide-react';
 
 const Home: React.FC = () => {
   return (
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
             Explore our collection of spiritual and mystical tools designed to enhance your personal journey and creative practice.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Birth Chart Generator Card */}
             <motion.div 
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
@@ -114,9 +114,27 @@ const Home: React.FC = () => {
               <p className="text-[#FAF3E0] mb-8 z-10 relative">
                 Access your sacred digital workspace with powerful tools for content creators and mystic entrepreneurs.
               </p>
-              <Link to="/notion">
+              <Link to="/content-creator">
                 <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black z-10 relative">
                   Enter The Grimoire
+                </Button>
+              </Link>
+            </motion.div>
+            
+            {/* Content Library Card */}
+            <motion.div 
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="bg-[#0A192F]/60 border border-[#A3B18A]/20 rounded-lg p-8 flex flex-col items-center text-center relative overflow-hidden shadow-xl"
+            >
+              <div className="absolute top-0 left-0 w-full h-full bg-[#D4AF37]/5 z-0"></div>
+              <Library className="text-[#D4AF37] h-16 w-16 mb-6 z-10 relative" />
+              <h3 className="font-playfair text-[#D4AF37] text-2xl mb-4 z-10 relative">Content Library</h3>
+              <p className="text-[#FAF3E0] mb-8 z-10 relative">
+                Browse our curated collection of mystical content, from moon phase rituals to spiritual guidance.
+              </p>
+              <Link to="/library">
+                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black z-10 relative">
+                  Explore Library
                 </Button>
               </Link>
             </motion.div>
