@@ -1,27 +1,12 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
-import { 
-  Card,
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription,
-  CardFooter
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  Check, 
-  X,
-  Sparkles,
-  Moon,
-  Book,
-  Star,
-  Gem
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/hooks/use-auth';
+import { useState } from "react";
+import { Check, Moon, Book, Star, Gem, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
 
 interface PricingTier {
   id: string;
@@ -40,264 +25,251 @@ interface PricingTier {
   access: string[];
 }
 
+const tiers: PricingTier[] = [
+  {
+    id: "magnolia-seed",
+    name: "Magnolia Seed",
+    price: 0,
+    monthlyPrice: 0,
+    description: "Explore the surface of the mystical realm with basic tools and limited access.",
+    features: [
+      "Free Birth Chart (Limited)",
+      "1 Basic Workflow Template",
+      "Community Access",
+      "Digital Grimoire Basics",
+    ],
+    highlighted: false,
+    icon: 'moon',
+    aiCredits: 3,
+    maxOutputs: 10,
+    maxWorkflows: 1,
+    products: ["Basic Birth Chart"],
+    access: ["Community Forum", "Grimoire Basics"]
+  },
+  {
+    id: "crescent-bloom",
+    name: "Crescent Bloom",
+    price: 97,
+    monthlyPrice: 9.97,
+    description: "Begin your journey with essential tools for content and brand enchantment.",
+    features: [
+      "Full Birth Chart Analysis",
+      "3 Workflow Templates",
+      "Basic AI Content Generation",
+      "Digital Grimoire Standard",
+      "Email Support",
+    ],
+    highlighted: false,
+    icon: 'book',
+    aiCredits: 25,
+    maxOutputs: 50,
+    maxWorkflows: 3,
+    products: ["Full Birth Chart", "Content Briefs", "Tarot Reading Generator"],
+    access: ["Community Forum", "Grimoire Standard", "Email Support"]
+  },
+  {
+    id: "golden-grove",
+    name: "Golden Grove",
+    price: 197,
+    monthlyPrice: 19.97,
+    description: "Amplify your practice with enhanced tools and expanded access to mystical resources.",
+    features: [
+      "Advanced Birth Chart Analysis",
+      "5 Workflow Templates",
+      "Advanced AI Content Tools",
+      "Digital Grimoire Professional",
+      "Priority Support",
+      "Monthly Group Coaching",
+    ],
+    highlighted: true,
+    badge: "Most Popular",
+    icon: 'star',
+    aiCredits: 100,
+    maxOutputs: 250,
+    maxWorkflows: 5,
+    products: ["Advanced Birth Chart", "Content Briefs", "Tarot Reading Generator", "Affirmation Generator", "Worksheet Creator"],
+    access: ["Community Forum", "Grimoire Professional", "Priority Support", "Monthly Group Coaching"]
+  },
+  {
+    id: "moonlit-sanctuary",
+    name: "Moonlit Sanctuary",
+    price: 497,
+    monthlyPrice: 49.97,
+    description: "Immerse yourself in premium resources and personalized guidance for your content journey.",
+    features: [
+      "Premium Birth Chart & Compatibility",
+      "10 Workflow Templates",
+      "Complete AI Content Suite",
+      "Digital Grimoire Elite",
+      "VIP Support",
+      "Bi-Weekly Group Coaching",
+      "Quarterly 1:1 Strategy Session",
+    ],
+    highlighted: false,
+    icon: 'gem',
+    aiCredits: 300,
+    maxOutputs: 1000,
+    maxWorkflows: 10,
+    products: ["Premium Birth Chart", "Content Briefs", "Tarot Reading Generator", "Affirmation Generator", "Worksheet Creator", "Product Descriptions", "Moon Phase Content", "Brand Voice Generator"],
+    access: ["Community Forum", "Grimoire Elite", "VIP Support", "Bi-Weekly Group Coaching", "Quarterly 1:1 Strategy"]
+  },
+  {
+    id: "house-of-midnight",
+    name: "House of Midnight",
+    price: 997,
+    monthlyPrice: 99.97,
+    description: "The ultimate mystical content experience with exclusive access and personalized strategy.",
+    features: [
+      "Bespoke Astrological Profile",
+      "Unlimited Workflow Templates",
+      "Unlimited AI Content Generation",
+      "Digital Grimoire Ultimate",
+      "Dedicated Support Manager",
+      "Weekly Group Coaching",
+      "Monthly 1:1 Strategy Sessions",
+      "Early Access to New Features",
+    ],
+    highlighted: false,
+    icon: 'sparkles',
+    aiCredits: 999,
+    maxOutputs: 0, // Unlimited
+    maxWorkflows: 0, // Unlimited
+    products: ["Bespoke Astrological Profile", "All AI Content Tools", "Custom Workflow Designer", "API Access", "White-labeled PDFs"],
+    access: ["All Community Access", "Grimoire Ultimate", "Dedicated Support", "Weekly Group Coaching", "Monthly 1:1 Strategy", "Beta Feature Access"]
+  },
+];
+
+const iconMap = {
+  'moon': Moon,
+  'book': Book,
+  'star': Star,
+  'gem': Gem,
+  'sparkles': Sparkles,
+};
+
 export function TieredProductPricing() {
-  const { toast } = useToast();
-  const { user } = useAuth();
-  
-  // This would normally fetch from an API endpoint
-  const pricingTiers: PricingTier[] = [
-    {
-      id: 'magnolia-seed',
-      name: 'Magnolia Seed',
-      price: 9,
-      monthlyPrice: 9,
-      description: 'Essential tools for digital content creators just getting started',
-      features: [
-        'Basic AI-generated content',
-        'Up to 10 workflow steps per month',
-        'Natal birth chart generation',
-        'Standard priority support',
-        'Public Digital Grimoire templates'
-      ],
-      highlighted: false,
-      icon: 'moon',
-      aiCredits: 10,
-      maxOutputs: 5,
-      maxWorkflows: 3,
-      products: ['Natal Chart PDF', 'Basic Affirmations'],
-      access: ['Public Workflows']
-    },
-    {
-      id: 'crescent-bloom',
-      name: 'Crescent Bloom',
-      price: 29,
-      monthlyPrice: 29,
-      description: 'Expanded tools for consistent content creators and digital entrepreneurs',
-      features: [
-        'Advanced AI-generated content',
-        'Up to 50 workflow steps per month',
-        'All birth chart types',
-        'Priority support',
-        'Premium Digital Grimoire templates',
-        'Content calendar integration'
-      ],
-      highlighted: true,
-      badge: 'Popular',
-      icon: 'book',
-      aiCredits: 50,
-      maxOutputs: 20,
-      maxWorkflows: 10,
-      products: ['All Chart Types', 'Digital Planner', 'Tarot Interpretations'],
-      access: ['Premium Workflows', 'Notion Integration']
-    },
-    {
-      id: 'golden-grove',
-      name: 'Golden Grove',
-      price: 79,
-      monthlyPrice: 79,
-      description: 'Professional suite for established creators and digital businesses',
-      features: [
-        'Priority AI content generation',
-        'Unlimited workflow steps',
-        'API access to birth chart generation',
-        'Dedicated support',
-        'All Digital Grimoire templates',
-        'White-label content exports',
-        'Custom workflow templates'
-      ],
-      highlighted: false,
-      icon: 'star',
-      aiCredits: 200,
-      maxOutputs: 100,
-      maxWorkflows: 50,
-      products: ['API Access', 'White-label Export', 'All Digital Products'],
-      access: ['Enterprise Workflows', 'Airtable & Notion Integration']
-    },
-    {
-      id: 'house-of-midnight',
-      name: 'House of Midnight',
-      price: 199,
-      monthlyPrice: 199,
-      description: 'Enterprise solution for agencies and professional astrologers',
-      features: [
-        'Unlimited AI content generation',
-        'Multi-user workflow access',
-        'Full API access to all features',
-        '24/7 dedicated support',
-        'Custom Digital Grimoire development',
-        'Private AI model tuning',
-        'Custom integration development'
-      ],
-      highlighted: false,
-      badge: 'Enterprise',
-      icon: 'gem',
-      aiCredits: 999999, // Unlimited
-      maxOutputs: 999999, // Unlimited
-      maxWorkflows: 999999, // Unlimited
-      products: ['All Products', 'Custom Development', 'Private AI Models'],
-      access: ['Everything']
-    }
-  ];
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
+  const [_, setLocation] = useLocation();
+  const { user, loginMutation } = useAuth();
 
   const handleSelectTier = (tier: PricingTier) => {
     if (!user) {
-      toast({
-        title: 'Login Required',
-        description: 'Please log in to subscribe to a pricing tier',
-        variant: 'destructive',
-      });
+      setLocation("/auth");
       return;
     }
-
-    // Here you would typically redirect to a checkout page
-    // with Stripe or another payment processor
-    toast({
-      title: 'Redirecting to Checkout',
-      description: `Setting up your ${tier.name} subscription`,
-    });
     
-    // Redirect to a hypothetical checkout page
-    // In a real implementation, this would use the Stripe API
-    // window.location.href = `/checkout?tier=${tier.id}`;
-  };
-
-  const getIconComponent = (iconName: string) => {
-    switch (iconName) {
-      case 'moon':
-        return <Moon className="h-5 w-5" />;
-      case 'book':
-        return <Book className="h-5 w-5" />;
-      case 'star':
-        return <Star className="h-5 w-5" />;
-      case 'gem':
-        return <Gem className="h-5 w-5" />;
-      default:
-        return <Sparkles className="h-5 w-5" />;
-    }
+    // Redirect to checkout with selected tier
+    setLocation(`/checkout?plan=${tier.id}&cycle=${billingCycle}`);
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-center max-w-3xl mx-auto">
-        <h2 className="text-3xl font-playfair text-[#0A192F] mb-4">
-          Digital Grimoire Access Tiers
-        </h2>
-        <p className="text-gray-600 mb-8">
-          Choose the perfect tier for your content creation journey with our Southern Gothic digital tools.
-          All plans include access to our core Digital Grimoire features.
+    <div className="w-full max-w-7xl mx-auto px-4 py-16">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-serif font-medium mb-3 text-primary-900">Choose Your Mystical Path</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+          Select the perfect tier to illuminate your journey through the Digital Grimoire and access powerful creation tools.
         </p>
+        
+        <Tabs defaultValue="yearly" className="w-fit mx-auto">
+          <TabsList className="grid w-64 grid-cols-2">
+            <TabsTrigger 
+              value="monthly" 
+              onClick={() => setBillingCycle("monthly")}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Monthly
+            </TabsTrigger>
+            <TabsTrigger 
+              value="yearly" 
+              onClick={() => setBillingCycle("yearly")}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Yearly <Badge variant="outline" className="ml-1.5 bg-primary/10 text-xs">Save 20%</Badge>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {pricingTiers.map((tier) => (
-          <Card 
-            key={tier.id} 
-            className={`border ${
-              tier.highlighted 
-                ? 'border-[#D4AF37] shadow-lg' 
-                : 'border-[#A3B18A]/20'
-            } relative overflow-hidden transition-all hover:shadow-md`}
-          >
-            {tier.badge && (
-              <Badge className="absolute top-4 right-4 bg-[#D4AF37] text-[#0A192F]">
-                {tier.badge}
-              </Badge>
-            )}
-            
-            <CardHeader className={`pb-2 ${tier.highlighted ? 'bg-[#0A192F]/5' : ''}`}>
-              <div className="w-10 h-10 rounded-full bg-[#D4AF37]/20 flex items-center justify-center mb-4 text-[#D4AF37]">
-                {getIconComponent(tier.icon)}
-              </div>
-              <CardTitle className="text-xl font-playfair text-[#0A192F]">
-                {tier.name}
-              </CardTitle>
-              <div className="mt-2">
-                <span className="text-2xl font-bold text-[#0A192F]">${tier.price}</span>
-                <span className="text-gray-500 text-sm ml-1">/month</span>
-              </div>
-              <CardDescription className="mt-3">
-                {tier.description}
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent className="pt-4">
-              <ul className="space-y-3">
-                {tier.features.map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <Check className="h-4 w-4 text-[#D4AF37] mr-2 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {tiers.map((tier) => {
+          const IconComponent = iconMap[tier.icon];
+          return (
+            <Card 
+              key={tier.id} 
+              className={`border ${tier.highlighted ? 'border-primary shadow-lg relative border-2' : 'border-border shadow-md'} 
+              transition-all duration-300 hover:border-primary hover:shadow-lg flex flex-col bg-white/60 backdrop-blur-sm overflow-hidden`}
+            >
+              {tier.badge && (
+                <div className="absolute -right-12 top-4 rotate-45 bg-primary text-primary-foreground text-sm font-medium py-1 px-12 text-center">
+                  {tier.badge}
+                </div>
+              )}
+              <CardHeader className="pb-0">
+                <div className="flex justify-center mb-4">
+                  <div className={`p-3 rounded-full ${tier.highlighted ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                    <IconComponent className="h-7 w-7" />
+                  </div>
+                </div>
+                <CardTitle className="text-center text-2xl font-serif">{tier.name}</CardTitle>
+                <div className="text-center mt-3">
+                  <span className="text-3xl font-semibold">
+                    ${billingCycle === "yearly" ? tier.price : tier.monthlyPrice}
+                  </span>
+                  {billingCycle === "monthly" && tier.monthlyPrice > 0 && <span className="text-muted-foreground">/month</span>}
+                  {billingCycle === "yearly" && tier.price > 0 && <span className="text-muted-foreground">/year</span>}
+                </div>
+                <CardDescription className="text-center mt-2 pb-0">
+                  {tier.description}
+                </CardDescription>
+              </CardHeader>
               
-              <div className="mt-6 space-y-4">
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-[#0A192F]">AI Content Generation</h4>
-                  <div className="bg-[#0A192F]/5 rounded-lg p-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Monthly Credits</span>
-                      <span className="font-medium text-[#0A192F]">
-                        {tier.aiCredits === 999999 ? 'Unlimited' : tier.aiCredits}
-                      </span>
+              <CardContent className="flex-grow mt-6">
+                <Separator className="mb-4" />
+                <div className="space-y-3 text-sm">
+                  {tier.features.map((feature, i) => (
+                    <div key={i} className="flex items-start">
+                      <Check className="h-4 w-4 text-primary mt-0.5 mr-2 flex-shrink-0" />
+                      <span>{feature}</span>
                     </div>
-                    <div className="flex justify-between text-sm mt-2">
-                      <span className="text-gray-600">Max Outputs</span>
-                      <span className="font-medium text-[#0A192F]">
-                        {tier.maxOutputs === 999999 ? 'Unlimited' : tier.maxOutputs}
-                      </span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
                 
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-[#0A192F]">Workflow Management</h4>
-                  <div className="bg-[#0A192F]/5 rounded-lg p-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Workflows</span>
-                      <span className="font-medium text-[#0A192F]">
-                        {tier.maxWorkflows === 999999 ? 'Unlimited' : tier.maxWorkflows}
-                      </span>
-                    </div>
+                <div className="mt-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">AI Credits:</span>
+                    <span className="font-medium">{tier.aiCredits === 999 ? "Unlimited" : tier.aiCredits}</span>
+                  </div>
+                  <div className="flex justify-between text-sm mt-1">
+                    <span className="text-muted-foreground">Max Outputs:</span>
+                    <span className="font-medium">{tier.maxOutputs === 0 ? "Unlimited" : tier.maxOutputs}/month</span>
+                  </div>
+                  <div className="flex justify-between text-sm mt-1">
+                    <span className="text-muted-foreground">Workflows:</span>
+                    <span className="font-medium">{tier.maxWorkflows === 0 ? "Unlimited" : tier.maxWorkflows}</span>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium text-[#0A192F]">Digital Products</h4>
-                  <div className="bg-[#0A192F]/5 rounded-lg p-3">
-                    <ul className="space-y-1">
-                      {tier.products.map((product, idx) => (
-                        <li key={idx} className="text-xs text-gray-600">• {product}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            
-            <CardFooter className="pt-0">
-              <Button 
-                onClick={() => handleSelectTier(tier)}
-                className={`w-full ${
-                  tier.highlighted
-                    ? 'bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#0A192F]'
-                    : 'bg-[#0A192F] hover:bg-[#0A192F]/90 text-white'
-                }`}
-              >
-                Select {tier.name}
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+              </CardContent>
+              
+              <CardFooter>
+                <Button 
+                  onClick={() => handleSelectTier(tier)} 
+                  className={`w-full ${tier.highlighted ? 'bg-primary hover:bg-primary/90' : 'bg-primary/80 hover:bg-primary'}`}
+                >
+                  {tier.price === 0 ? "Start Free" : "Select Plan"}
+                </Button>
+              </CardFooter>
+            </Card>
+          );
+        })}
       </div>
       
-      <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30 mt-10">
-        <h3 className="text-lg font-playfair text-[#0A192F] mb-4">Custom Enterprise Solutions</h3>
-        <p className="text-gray-600 mb-4">
-          Need a tailored solution for your business? Contact us for custom pricing and feature options.
+      <div className="mt-16 text-center max-w-2xl mx-auto">
+        <h3 className="text-xl font-serif mb-4">Not Sure Which Path to Choose?</h3>
+        <p className="text-muted-foreground mb-6">
+          Begin with the Magnolia Seed plan to explore the basics, or book a complimentary consultation 
+          to find the perfect tier for your mystical content journey.
         </p>
-        <Button variant="outline" className="border-[#D4AF37] text-[#0A192F]">
-          Contact Sales
-        </Button>
+        <Button variant="outline">Book a Consultation</Button>
       </div>
     </div>
   );
