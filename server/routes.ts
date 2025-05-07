@@ -5,6 +5,7 @@ import { notionService } from "./notion";
 import { airtableService } from "./airtable";
 import { openaiService } from "./openai";
 import { astrologyService } from "./astrology";
+import { stripeService } from "./stripe";
 import { workflowService, WorkflowSchema, CreateWorkflowSchema, UpdateWorkflowSchema } from "./workflow";
 import { setupAuth } from "./auth";
 import { z } from "zod";
@@ -633,6 +634,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete workflow");
+    }
+  });
+  
+  // ===== ASTROLOGY API ROUTES =====
+  
+  // Birth chart generation schema
+  const generateChartSchema = z.object({
+    name: z.string(),
+    birthDate: z.string(),
+    birthTime: z.string(),
+    birthLocation: z.string(),
+    chartType: z.string().default("natal")
+  });
+  
+  // Generate a birth chart
+  app.post("/api/astrology/generate-chart", async (req: Request, res: Response) => {
+    try {
+      const validatedData = generateChartSchema.parse(req.body);
+      
+      const chartData = await astrologyService.generateBirthChart(
+        validatedData.name,
+        validatedData.birthDate,
+        validatedData.birthTime,
+        validatedData.birthLocation,
+        validatedData.chartType
+      );
+      
+      res.json({ 
+        success: true, 
+        chartImage: chartData.chartImage,
+        interpretation: chartData.interpretation,
+        chartData: chartData.chartData
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to generate birth chart");
+    }
+  });
+  
+  // ===== STRIPE PAYMENT ROUTES =====
+  
+  // Create payment intent schema
+  const createPaymentIntentSchema = z.object({
+    amount: z.number(),
+    currency: z.string().default("usd"),
+    metadata: z.record(z.string()).optional()
+  });
+  
+  // Create a payment intent
+  app.post("/api/payments/create-intent", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const validatedData = createPaymentIntentSchema.parse(req.body);
+      
+      const paymentIntent = await stripeService.createPaymentIntent(
+        validatedData.amount,
+        validatedData.currency,
+        validatedData.metadata
+      );
+      
+      res.json({
+        success: true,
+        clientSecret: paymentIntent.clientSecret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create payment intent");
+    }
+  });
+  
+  // Create subscription schema
+  const createSubscriptionSchema = z.object({
+    priceId: z.string(),
+    customerId: z.string().optional(),
+    metadata: z.record(z.string()).optional()
+  });
+  
+  // Create a subscription
+  app.post("/api/payments/create-subscription", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const validatedData = createSubscriptionSchema.parse(req.body);
+      
+      // If no customerId is provided, create a new customer
+      let customerId = validatedData.customerId;
+      if (!customerId && req.user) {
+        const customer = await stripeService.createCustomer(
+          req.user.email || `user_${req.user.id}@example.com`,
+          req.user.username,
+          { userId: req.user.id.toString() }
+        );
+        customerId = customer.id;
+        
+        // Here you would typically update the user in your database
+        // to store the Stripe customer ID for future use
+        // await storage.updateUserStripeCustomerId(req.user.id, customerId);
+      }
+      
+      if (!customerId) {
+        return res.status(400).json({
+          success: false,
+          error: "Customer ID is required"
+        });
+      }
+      
+      const subscription = await stripeService.createSubscription(
+        customerId,
+        validatedData.priceId,
+        validatedData.metadata
+      );
+      
+      res.json({
+        success: true,
+        subscriptionId: subscription.subscriptionId,
+        clientSecret: subscription.clientSecret,
+        status: subscription.status
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create subscription");
+    }
+  });
+  
+  // Get subscription schema
+  const getSubscriptionSchema = z.object({
+    subscriptionId: z.string()
+  });
+  
+  // Get subscription details
+  app.get("/api/payments/subscriptions/:subscriptionId", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { subscriptionId } = req.params;
+      const validatedData = getSubscriptionSchema.parse({ subscriptionId });
+      
+      const subscription = await stripeService.getSubscription(validatedData.subscriptionId);
+      
+      res.json({
+        success: true,
+        subscription
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to get subscription");
+    }
+  });
+  
+  // Cancel subscription
+  app.delete("/api/payments/subscriptions/:subscriptionId", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { subscriptionId } = req.params;
+      const validatedData = getSubscriptionSchema.parse({ subscriptionId });
+      
+      const subscription = await stripeService.cancelSubscription(validatedData.subscriptionId);
+      
+      res.json({
+        success: true,
+        subscription
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to cancel subscription");
     }
   });
 
