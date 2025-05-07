@@ -1,37 +1,62 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { insertUserSchema } from "@shared/schema";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
-import { useLocation } from "wouter";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
 
-// Define validation schemas
+// Form schemas
 const loginSchema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const registerSchema = loginSchema.extend({
-  email: z.string().email("Please enter a valid email address"),
-});
+const registerSchema = insertUserSchema
+  .pick({
+    username: true,
+    password: true,
+    email: true,
+    fullName: true,
+  })
+  .extend({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
-const AuthPage: React.FC = () => {
+type LoginFormValues = z.infer<typeof loginSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export default function AuthPage() {
+  const { user, loginMutation, registerMutation } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
-  const { toast } = useToast();
   const [_, navigate] = useLocation();
 
-  // Get auth context
-  const { user, isLoading, loginMutation, registerMutation } = useAuth();
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
-  // Setup form for login
-  const loginForm = useForm<z.infer<typeof loginSchema>>({
+  // Login form
+  const loginForm = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
@@ -39,217 +64,247 @@ const AuthPage: React.FC = () => {
     },
   });
 
-  // Setup form for registration
-  const registerForm = useForm<z.infer<typeof registerSchema>>({
+  // Register form
+  const registerForm = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",
+      fullName: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  // Handle login form submission
-  const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
-    try {
-      await loginMutation.mutateAsync(values);
-      toast({
-        title: "Login successful",
-        description: "Welcome to the Digital Grimoire",
-        variant: "default",
-      });
-      navigate("/");
-    } catch (error) {
-      console.error("Login error:", error);
-    }
+  // Submit handlers
+  const onLoginSubmit = (values: LoginFormValues) => {
+    loginMutation.mutate(values);
   };
 
-  // Handle registration form submission
-  const onRegisterSubmit = async (values: z.infer<typeof registerSchema>) => {
-    try {
-      await registerMutation.mutateAsync(values);
-      toast({
-        title: "Registration successful",
-        description: "Welcome to the Digital Grimoire",
-        variant: "default",
-      });
-      navigate("/");
-    } catch (error) {
-      console.error("Registration error:", error);
-    }
+  const onRegisterSubmit = (values: RegisterFormValues) => {
+    // Remove confirmPassword as it's not part of our API schema
+    const { confirmPassword, ...userData } = values;
+    registerMutation.mutate(userData);
   };
-
-  // Redirect to home if already logged in
-  if (user) {
-    navigate("/");
-    return null;
-  }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-[#0A192F] flex flex-col md:flex-row items-center justify-center p-4 md:p-8">
-      <div className="flex flex-col md:flex-row w-full max-w-6xl bg-card dark:bg-[#0F2942] rounded-lg overflow-hidden shadow-xl">
-        {/* Left side: Auth forms */}
-        <div className="w-full md:w-1/2 p-6 md:p-8">
-          <h1 className="text-2xl font-bold mb-2 text-[#D4AF37]">Midnight Magnolia</h1>
-          <h2 className="text-3xl font-bold mb-6">Digital Grimoire</h2>
-          
-          <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab}>
+    <div className="flex min-h-[calc(100vh-64px)]">
+      {/* Left side - Form */}
+      <div className="w-full md:w-1/2 p-8 flex flex-col justify-center">
+        <div className="max-w-md mx-auto">
+          <h1 className="text-3xl font-playfair font-bold text-[#D4AF37] mb-2">
+            Digital Grimoire
+          </h1>
+          <p className="text-[#A3B18A] mb-8">
+            Access your content hub for Midnight Magnolia
+          </p>
+
+          <Tabs
+            defaultValue="login"
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="login">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Login</CardTitle>
-                  <CardDescription>Enter your credentials to access your account</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="login-username">Username</Label>
-                      <Input 
-                        id="login-username" 
-                        placeholder="Your username" 
-                        {...loginForm.register("username")} 
-                      />
-                      {loginForm.formState.errors.username && (
-                        <p className="text-sm text-destructive">{loginForm.formState.errors.username.message}</p>
-                      )}
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="login-password">Password</Label>
-                      <Input 
-                        id="login-password" 
-                        type="password" 
-                        placeholder="Your password" 
-                        {...loginForm.register("password")} 
-                      />
-                      {loginForm.formState.errors.password && (
-                        <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
-                      )}
-                    </div>
-                    
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-[#D4AF37] hover:bg-[#B4951E] text-black"
-                      disabled={loginMutation.isPending}
-                    >
-                      {loginMutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Logging in...
-                        </>
-                      ) : (
-                        "Login"
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+              <Form {...loginForm}>
+                <form
+                  onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                  className="space-y-4"
+                >
+                  <FormField
+                    control={loginForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/80 text-black"
+                    disabled={loginMutation.isPending}
+                  >
+                    {loginMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Logging in...
+                      </>
+                    ) : (
+                      "Login"
+                    )}
+                  </Button>
+                </form>
+              </Form>
             </TabsContent>
-            
+
             <TabsContent value="register">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Create an account</CardTitle>
-                  <CardDescription>Enter your details to join the Digital Grimoire</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="register-username">Username</Label>
-                      <Input 
-                        id="register-username" 
-                        placeholder="Your username" 
-                        {...registerForm.register("username")} 
-                      />
-                      {registerForm.formState.errors.username && (
-                        <p className="text-sm text-destructive">{registerForm.formState.errors.username.message}</p>
-                      )}
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="register-email">Email</Label>
-                      <Input 
-                        id="register-email" 
-                        type="email" 
-                        placeholder="Your email" 
-                        {...registerForm.register("email")} 
-                      />
-                      {registerForm.formState.errors.email && (
-                        <p className="text-sm text-destructive">{registerForm.formState.errors.email.message}</p>
-                      )}
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password">Password</Label>
-                      <Input 
-                        id="register-password" 
-                        type="password" 
-                        placeholder="Your password" 
-                        {...registerForm.register("password")} 
-                      />
-                      {registerForm.formState.errors.password && (
-                        <p className="text-sm text-destructive">{registerForm.formState.errors.password.message}</p>
-                      )}
-                    </div>
-                    
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-[#D4AF37] hover:bg-[#B4951E] text-black"
-                      disabled={registerMutation.isPending}
-                    >
-                      {registerMutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Creating account...
-                        </>
-                      ) : (
-                        "Create account"
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+              <Form {...registerForm}>
+                <form
+                  onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
+                  className="space-y-4"
+                >
+                  <FormField
+                    control={registerForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input type="email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/80 text-black"
+                    disabled={registerMutation.isPending}
+                  >
+                    {registerMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Creating account...
+                      </>
+                    ) : (
+                      "Create Account"
+                    )}
+                  </Button>
+                </form>
+              </Form>
             </TabsContent>
           </Tabs>
         </div>
-        
-        {/* Right side: Brand / Hero section */}
-        <div className="w-full md:w-1/2 bg-[url('/herbs-bg.jpg')] bg-cover bg-center relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0F2942]/90 to-[#0A192F]/80 flex flex-col justify-center items-center text-center p-8">
-            <div className="max-w-md">
-              <h2 className="text-[#D4AF37] text-3xl font-bold mb-4">The Digital Grimoire</h2>
-              <p className="text-white/90 text-lg mb-6">
-                Your sacred space for magical content creation, tarot insights, and membership-based offerings.
+      </div>
+
+      {/* Right side - Hero Image */}
+      <div
+        className="hidden md:flex md:w-1/2 bg-cover bg-center p-12"
+        style={{
+          background:
+            "linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.95)), url('https://images.unsplash.com/photo-1518655048521-f130df041f66?ixlib=rb-4.0.3') no-repeat center center / cover",
+        }}
+      >
+        <div className="flex flex-col justify-center h-full">
+          <h2 className="text-4xl font-playfair font-bold text-[#D4AF37] mb-6">
+            The Digital Grimoire
+          </h2>
+          <div className="space-y-6 text-[#FAF3E0]">
+            <div className="bg-[#0A192F]/60 backdrop-blur-sm p-6 rounded-lg border border-[#A3B18A]/20">
+              <h3 className="text-xl font-medium text-[#D4AF37] mb-3">
+                Your Content Creator Hub
+              </h3>
+              <p className="mb-4">
+                The Digital Grimoire is your exclusive content management system
+                for Midnight Magnolia. Create, organize, and publish your digital
+                products seamlessly.
               </p>
-              <div className="grid grid-cols-2 gap-4 text-sm text-white/80">
-                <div className="flex flex-col items-center p-3 rounded-lg bg-white/5">
-                  <span className="text-[#D4AF37] text-xl mb-1">✧</span>
-                  <p>Content Management</p>
-                </div>
-                <div className="flex flex-col items-center p-3 rounded-lg bg-white/5">
-                  <span className="text-[#D4AF37] text-xl mb-1">❍</span>
-                  <p>Tarot Integration</p>
-                </div>
-                <div className="flex flex-col items-center p-3 rounded-lg bg-white/5">
-                  <span className="text-[#D4AF37] text-xl mb-1">✦</span>
-                  <p>Membership Tiers</p>
-                </div>
-                <div className="flex flex-col items-center p-3 rounded-lg bg-white/5">
-                  <span className="text-[#D4AF37] text-xl mb-1">✧</span>
-                  <p>AI-Powered Tools</p>
-                </div>
-              </div>
+              <ul className="space-y-2">
+                <li className="flex items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2"></div>
+                  <span>Organize and publish Patreon content tiers</span>
+                </li>
+                <li className="flex items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2"></div>
+                  <span>Manage digital products and tarot resources</span>
+                </li>
+                <li className="flex items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2"></div>
+                  <span>
+                    Integrate with Notion for efficient content workflows
+                  </span>
+                </li>
+                <li className="flex items-center">
+                  <div className="w-2 h-2 rounded-full bg-[#D4AF37] mr-2"></div>
+                  <span>Generate content with AI assistance</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default AuthPage;
+}
