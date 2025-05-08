@@ -3,12 +3,13 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
+import ContentWorkflowManager, { ContentDestination, ContentMetadata, ContentType } from './ContentWorkflowManager';
 
 import { 
   Wand2, MoonStar, BookOpen, ScrollText, FileText, 
   Calendar, Clock, Image, Instagram, MessageCircle, 
   Mail, Star, Sparkles, Loader2, ArrowRight,
-  Download, Clipboard, Save, Share2
+  Download, Clipboard, Save, Share2, X
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -465,7 +466,7 @@ const generateMockContent = async (generatorType: AIGeneratorType, formData: any
         
         'content-brief': `# Content Brief: ${formData.topic || 'Lunar Rituals for Beginners'}\n\n## Overview\nThis ${formData.contentType || 'blog post'} will serve as a comprehensive introduction to lunar rituals for readers who are new to moon-based spiritual practices. It will explain the significance of the moon in various spiritual traditions, outline basic rituals for each moon phase, and provide practical tips for getting started.\n\n## Target Audience\n${formData.audience === 'beginners' ? 'Complete beginners to spiritual practices who are curious about working with moon energy.' : formData.audience === 'intermediate' ? 'Readers with some spiritual practice experience who want to deepen their connection to lunar cycles.' : formData.audience === 'advanced' ? 'Experienced practitioners looking to refine their lunar practice with advanced techniques.' : 'Spiritual seekers of all levels who are interested in incorporating moon rituals into their practice.'}\n\n## Key Points to Cover\n1. **Introduction to Lunar Energy**\n   - Brief explanation of moon phases and their energetic qualities\n   - Historical significance of moon rituals across cultures\n   - How moon cycles affect us emotionally and spiritually\n\n2. **Basic Ritual Components**\n   - Creating sacred space\n   - Essential tools and materials\n   - Setting intentions aligned with lunar energy\n   - Cleansing and charging objects by moonlight\n\n3. **Rituals for Each Moon Phase**\n   - New Moon: Setting intentions and planting seeds\n   - Waxing Moon: Building energy and taking action\n   - Full Moon: Celebration, manifestation, and release\n   - Waning Moon: Letting go, banishing, and reflection\n\n4. **Simple Starter Ritual**\n   - Step-by-step guide for a basic full moon ritual\n   - Modifications for indoor/outdoor practice\n   - Journal prompts for reflection\n\n5. **Incorporating Lunar Awareness Daily**\n   - Moon tracking methods\n   - Quick daily practices\n   - Recommended resources for deepening practice\n\n## Tone & Style\n- Warm, inviting, and non-intimidating\n- Practical with a touch of mystery\n- Respectful of diverse spiritual paths\n- Emphasize personal connection over rigid rules\n\n## SEO Considerations\nPrimary Keyword: lunar rituals for beginners\nSecondary Keywords: moon phases, full moon ritual, new moon intentions, moon cycle spirituality\n\n## Call to Action\nEncourage readers to download your moon phase calendar, join your lunar newsletter, or share their first ritual experience in the comments.\n\n## Visuals to Include\n- Diagram of moon phases\n- Photos of simple altar setups\n- Infographic on correspondences between moon phases and intentions`,
         
-        'product-description': `# ${formData.productName || 'Crystal Moon Elixir'} - Product Description\n\n## Short Description\nHarness the transformative energy of selenite and moonstone with our ${formData.productName || 'Crystal Moon Elixir'}. This hand-crafted essence combines the clarifying power of selenite with the intuitive, feminine energy of moonstone, created during the full moon to maximize its energetic potential. Perfect for ritual cleansing, meditation enhancement, or adding divine feminine energy to your sacred space.\n\n## Full Description\nThe ${formData.productName || 'Crystal Moon Elixir'} is a potent energetic tool crafted with intention under the illuminating rays of the full moon. Each bottle contains the vibrational essence of ethically sourced selenite and moonstone crystals, known for their powerful connection to lunar energy and the divine feminine.\n\nSelenite works to clear energetic blockages and purify spaces, while moonstone enhances intuition and connects you to the cyclical wisdom of the moon. Together, they create a harmonious blend that supports emotional balance, psychic awareness, and spiritual growth.\n\n### Key Benefits:\n- Enhances intuitive abilities and psychic awareness\n- Creates a protective, purifying barrier around your aura\n- Deepens meditation experiences and dreamwork\n- Strengthens connection to lunar cycles and feminine wisdom\n- Supports emotional healing and hormonal balance\n\n### How to Use:\n**Sacred Space Cleansing**: Add 3-5 drops to a room spray bottle with purified water and spritz around your home or altar space before rituals.\n\n**Ritual Bath**: Add 7 drops to warm bathwater along with dried roses and lavender for a full moon renewal ritual.\n\n**Meditation Aid**: Place a single drop in the palm of your hand, rub hands together, and inhale deeply before entering meditation.\n\n**Chakra Balancing**: Apply a drop to your third eye or crown chakra to enhance spiritual connection during energy work.\n\n### Ingredients:\n100% alcohol-free preservation system, purified water, essence of selenite and moonstone, charged under the full moon in ${new Date().toLocaleDateString('en-US', {month: 'long', year: 'numeric'})}.\n\n### Product Details:\n- 1oz (30ml) glass bottle with dropper\n- Comes with a small selenite wand for amplification\n- Includes ritual guide card with suggested uses\n- Handcrafted in small batches during the full moon\n\n_Note: Crystal essences are created using an indirect method that does not involve crystal-infused water for consumption. This product is for external use only._`,
+        'product-description': `# ${formData.productName || 'Crystal Moon Elixir'} - Product Description\n\n## Short Description\nHarness the transformative energy of selenite and moonstone with our ${formData.productName || 'Crystal Moon Elixir'}. This hand-crafted essence combines the clarifying power of selenite with the intuitive, feminine energy of moonstone, created during the full moon to maximize its energetic potential. Perfect for ritual cleansing, meditation enhancement, or adding divine feminine energy to your sacred space.\n\n## Full Description\nThe ${formData.productName || 'Crystal Moon Elixir'} is a potent energetic tool crafted with intention under the illuminating rays of the full moon. Each bottle contains the vibrational essence of ethically sourced selenite and moonstone crystals, known for their powerful connection to lunar energy and the divine feminine.\n\nSelenite works to clear energetic blockages and purify spaces, while moonstone enhances intuition and connects you to the cyclical wisdom of the moon. Together, they create a harmonious blend that supports emotional balance, psychic awareness, and spiritual growth.\n\n### Key Benefits:\n- Enhances intuitive abilities and psychic awareness\n- Creates a protective, purifying barrier around your aura\n- Deepens meditation experiences and dreamwork\n- Strengthens connection to lunar cycles and feminine wisdom\n- Supports emotional healing and hormonal balance\n\n### How to Use:\n**Sacred Space Cleansing**: Add 3-5 drops to a room spray bottle with purified water and spritz around your home or altar space before rituals.\n\n**Ritual Bath**: Add 7 drops to warm bathwater along with dried roses and lavender for a full moon renewal ritual.\n\n**Meditation Aid**: Place a single drop in the palm of your hand, rub hands together, and inhale deeply before entering meditation.\n\n**Chakra Balancing**: Apply a drop to your third eye or crown chakra to enhance spiritual connection during energy work.\n\n### Ingredients:\n100% alcohol-free preservation system, purified water, essence of selenite and moonstone, charged under the full moon in ${new Date().toLocaleDateString('en-US', {month: 'long', year: 'numeric'})}.\n\n### Product Details:\n- 1oz (30ml) glass bottle with dropper\n- Comes with a small selenite wand for amplification\n- Includes ritual guide card with suggested uses\n- Handcrafted in small batches during the full moon`,
         
         'image-prompts': `# AI Image Generation Prompts - ${formData.subject || 'Mystical Garden'}\n\n## Primary Prompt for ${formData.imageModel || 'Midjourney'}\n\n\`\`\`\n${formData.subject || 'A mystical garden'} at twilight, ${formData.mood || 'ethereal'} atmosphere, glowing runes embedded in ancient stone pathways, rare magical plants with luminescent blooms, moonlight filtering through crystalline trees, wispy trails of colored light hovering above flower beds, small fairies tending to giant mushrooms, reflection in a still pond showing another dimension, ${formData.style || 'digital art'} style, highly detailed, fantasy concept art, artstation trending, cinematic lighting, vibrant colors, 8k resolution\n\`\`\`\n\n## Variations & Alternative Approaches\n\n### Dawn Version\n\`\`\`\n${formData.subject || 'A mystical garden'} at dawn, morning mist, golden light breaking through ancient trees, ${formData.mood || 'ethereal'} atmosphere, dew-covered magical plants awakening, small creatures of light emerging from flowers, spell book open on a moss-covered altar, ${formData.style || 'digital art'} style, highly detailed, volumetric lighting, depth of field, artstation trending\n\`\`\`\n\n### Night Version\n\`\`\`\n${formData.subject || 'A mystical garden'} under a full moon, deep night, stars that form constellations connecting to plants below, glowing runes, magical creatures hiding among shadows, floating orbs of colored light, ancient standing stones covered in luminescent moss, ${formData.style || 'digital art'} style, ${formData.mood || 'ethereal'} atmosphere, dramatic lighting, rich colors, 8k, highly detailed\n\`\`\`\n\n### Macro/Detail Version\n\`\`\`\nClose-up detail of a magical plant in ${formData.subject || 'a mystical garden'}, intricate patterns on leaves revealing hidden symbols, tiny elemental beings living within the bloom, dew drops containing galaxies, ${formData.mood || 'ethereal'} ${formData.style || 'digital art'} style, extreme detail, macro photography inspired, shallow depth of field, vibrant colors, fantasy illustration\n\`\`\`\n\n## Tips for Better Results\n\n1. **Aspect Ratio Modifiers**\n   - Add --ar 16:9 for landscape cinematic views\n   - Add --ar 1:1 for perfect square compositions\n   - Add --ar 9:16 for portrait phone wallpapers\n\n2. **Style Refinements**\n   - Add "matte painting" for a more artistic, painted look\n   - Add "photorealistic" if you want a more realistic approach\n   - Add "concept art by [artist name]" to emulate a specific artist's style (e.g., "concept art by James Gurney")\n\n3. **Element Emphasis**\n   - To emphasize certain elements, place them earlier in your prompt\n   - Add "intricate details," "highly detailed," or "8k" for more detail\n   - Use specific color palettes like "color palette: teal, purple, and gold" to control the mood\n\n4. **Specific to ${formData.imageModel || 'Midjourney'}**\n   - Use :: to separate and weight different parts of your prompt\n   - Add --stylize <number> to control stylization level\n   - Use --seed <number> to save a specific random seed for consistent results\n\nExperiment with these variations to find the perfect representation of your ${formData.subject || 'mystical garden'}!`,
         
@@ -491,6 +492,7 @@ const AIContentGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [generatedContent, setGeneratedContent] = useState<string>("");
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false); // Simulated subscription status
+  const [workflowOpen, setWorkflowOpen] = useState<boolean>(false);
   
   // Reset form values when switching generators
   const handleGeneratorChange = (generator: AIGeneratorOption) => {
@@ -538,7 +540,7 @@ const AIContentGenerator: React.FC = () => {
     if (missingFields.length > 0) {
       toast({
         title: "Missing Information",
-        description: `Please fill in the following fields: ${missingFields.join(", ")}`,
+        description: "Please fill in the following fields: " + missingFields.join(", "),
         variant: "destructive"
       });
       return;
@@ -548,8 +550,8 @@ const AIContentGenerator: React.FC = () => {
     
     try {
       // In a real application, this would be an API call
-      const generatedContent = await generateMockContent(activeGenerator.id, formValues);
-      setGeneratedContent(generatedContent);
+      const content = await generateMockContent(activeGenerator.id, formValues);
+      setGeneratedContent(content);
       
       toast({
         title: "Content Generated",
@@ -575,22 +577,50 @@ const AIContentGenerator: React.FC = () => {
     });
   };
   
-  // Function to save content to Notion (placeholder)
-  const handleSaveToNotion = () => {
-    toast({
-      title: "Saved to Notion",
-      description: "Your content has been saved to your Notion workspace.",
-    });
+  // Function to start content workflow
+  const handleStartWorkflow = () => {
+    setWorkflowOpen(true);
   };
   
-  // Function to save content as draft (placeholder)
-  const handleSaveAsDraft = () => {
+  // Handle workflow completion
+  const handleWorkflowComplete = (destination: ContentDestination, metadata: ContentMetadata) => {
     toast({
-      title: "Saved as Draft",
-      description: "Your content has been saved as a draft in your content library.",
+      title: "Content Workflow Complete",
+      description: "Your content has been successfully saved to " + destination,
     });
+    
+    // Reset workflow state
+    setWorkflowOpen(false);
+    setGeneratedContent("");
+    setActiveGenerator(null);
   };
-
+  
+  // Content type mapping from generator to workflow
+  const mapGeneratorToContentType = (generator: AIGeneratorOption | null): ContentType => {
+    if (!generator) return 'blog';
+    
+    switch (generator.id) {
+      case 'tarot-reading':
+        return 'ritual';
+      case 'affirmations':
+        return 'ritual';
+      case 'content-brief':
+        return 'blog';
+      case 'moon-phase-content':
+        return 'ritual';
+      case 'worksheet':
+        return 'resource';
+      case 'image-prompts':
+        return 'resource';
+      case 'product-description':
+        return 'product';
+      case 'workflow-steps':
+        return 'resource';
+      default:
+        return 'blog';
+    }
+  };
+  
   // Format markdown content to HTML for display
   const formatMarkdownToHtml = (markdown: string) => {
     if (!markdown) return '';
@@ -608,7 +638,7 @@ const AIContentGenerator: React.FC = () => {
     html = html.replace(/^([^<#\-\d\*\n].+)$/gm, '<p class="mb-4">$1</p>');
     
     // Parse code blocks
-    html = html.replace(/```([^`]+)```/gs, '<pre class="bg-gray-100 p-3 rounded-md my-4 overflow-x-auto text-sm">$1</pre>');
+    html = html.replace(/```([^`]+)```/, '<pre class="bg-gray-100 p-3 rounded-md my-4 overflow-x-auto text-sm">$1</pre>');
     
     // Parse emphasis
     html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
@@ -623,6 +653,35 @@ const AIContentGenerator: React.FC = () => {
   
   return (
     <div className="bg-[#FAF3E0] min-h-screen">
+      {/* Content Workflow Modal */}
+      {workflowOpen && generatedContent && activeGenerator && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#FAF3E0] rounded-lg w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-playfair text-[#0A192F]">Content Workflow</h2>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  className="text-[#0A192F]"
+                  onClick={() => setWorkflowOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              
+              <ContentWorkflowManager 
+                content={generatedContent}
+                contentTitle={activeGenerator ? activeGenerator.title : ''}
+                contentType={mapGeneratorToContentType(activeGenerator)}
+                onComplete={handleWorkflowComplete}
+                onCancel={() => setWorkflowOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="container mx-auto px-4 py-8">
         <header className="mb-8">
           <h1 className="text-3xl font-playfair text-[#0A192F] mb-2">AI Content Generator</h1>
@@ -759,7 +818,7 @@ const AIContentGenerator: React.FC = () => {
                           
                           {field.type === 'switch' && (
                             <div className="flex items-center justify-between">
-                              <div>{field.label}</div>
+                              <Label htmlFor={field.name} className="text-[#0A192F]">{field.label}</Label>
                               <Switch
                                 id={field.name}
                                 checked={formValues[field.name] ?? field.defaultValue ?? false}
@@ -830,29 +889,11 @@ const AIContentGenerator: React.FC = () => {
                       </Button>
                       
                       <Button
-                        onClick={handleSaveToNotion}
-                        variant="outline"
-                        className="border-[#0A192F]/20 text-[#0A192F] hover:bg-[#0A192F]/5"
+                        onClick={handleStartWorkflow}
+                        className="bg-[#0A192F] hover:bg-[#0A192F]/90 text-[#FAF3E0]"
                       >
-                        <BookOpen className="mr-2 h-4 w-4" />
-                        Save to Notion
-                      </Button>
-                      
-                      <Button
-                        onClick={handleSaveAsDraft}
-                        variant="outline"
-                        className="border-[#0A192F]/20 text-[#0A192F] hover:bg-[#0A192F]/5"
-                      >
-                        <Save className="mr-2 h-4 w-4" />
-                        Save as Draft
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        className="border-[#0A192F]/20 text-[#0A192F] hover:bg-[#0A192F]/5"
-                      >
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Share
+                        <ArrowRight className="mr-2 h-4 w-4" />
+                        Publish & Share
                       </Button>
                     </CardFooter>
                   </Card>
