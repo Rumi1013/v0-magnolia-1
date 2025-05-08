@@ -1,11 +1,12 @@
 import React from 'react';
-import { AIToolsSection } from '@/components/AIToolsSection';
+import AIContentGenerator from '@/components/AIContentGenerator';
 
-export default function AIToolsPage() {
+const AIToolsPage: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-playfair text-[#0A192F] mb-8">AI Tools & Integration</h1>
-      <AIToolsSection />
+    <div className="min-h-screen">
+      <AIContentGenerator />
     </div>
   );
-}
+};
+
+export default AIToolsPage;
