@@ -22,6 +22,7 @@ import {
   ScrollText,
   Stars
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function AIToolsSection() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -42,7 +43,11 @@ export function AIToolsSection() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]">
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#0A192F]/10 border border-[#D4AF37]/30 mx-auto mb-4">
                 <Wand2 className="w-8 h-8 text-[#D4AF37]" />
               </div>
@@ -50,9 +55,13 @@ export function AIToolsSection() {
               <p className="text-xs text-gray-600">
                 Advanced text generation with authentic Southern voice for ebooks, guides, and digital content.
               </p>
-            </div>
-              
-            <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]">
+            </motion.div>
+
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#0A192F]/10 border border-[#D4AF37]/30 mx-auto mb-4">
                 <Bot className="w-8 h-8 text-[#D4AF37]" />
               </div>
@@ -60,9 +69,13 @@ export function AIToolsSection() {
               <p className="text-xs text-gray-600">
                 Versatile content generation and data processing to power automation workflows.
               </p>
-            </div>
-              
-            <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]">
+            </motion.div>
+
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#0A192F]/10 border border-[#D4AF37]/30 mx-auto mb-4">
                 <Layers className="w-8 h-8 text-[#D4AF37]" />
               </div>
@@ -70,9 +83,13 @@ export function AIToolsSection() {
               <p className="text-xs text-gray-600">
                 Southern Gothic themed image generation for digital products and services.
               </p>
-            </div>
-              
-            <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]">
+            </motion.div>
+
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 text-center transition-all hover:border-[#D4AF37]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <div className="w-16 h-16 flex items-center justify-center rounded-full bg-[#0A192F]/10 border border-[#D4AF37]/30 mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-[#D4AF37]" />
               </div>
@@ -80,14 +97,18 @@ export function AIToolsSection() {
               <p className="text-xs text-gray-600">
                 Customizable image creation via Freepik with your unique Southern aesthetic.
               </p>
-            </div>
+            </motion.div>
           </div>
 
           <div className="mt-8">
             <h3 className="text-xl font-playfair text-[#0A192F] mb-6">Resources Integration</h3>
-              
+
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]">
+              <motion.div 
+                className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
                 <h4 className="text-lg font-playfair text-[#0A192F] mb-3">Public Domain Resources</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
@@ -112,9 +133,13 @@ export function AIToolsSection() {
                     </div>
                   </li>
                 </ul>
-              </div>
-                
-              <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]">
+              </motion.div>
+
+              <motion.div 
+                className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
                 <h4 className="text-lg font-playfair text-[#0A192F] mb-3">Template Automation</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
@@ -139,9 +164,13 @@ export function AIToolsSection() {
                     </div>
                   </li>
                 </ul>
-              </div>
-                
-              <div className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]">
+              </motion.div>
+
+              <motion.div 
+                className="bg-[#0A192F]/5 border border-[#A3B18A]/30 rounded-lg p-5 transition-all hover:border-[#D4AF37]"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
                 <h4 className="text-lg font-playfair text-[#0A192F] mb-3">Content Creation Suite</h4>
                 <ul className="space-y-3">
                   <li className="flex items-start">
@@ -166,7 +195,7 @@ export function AIToolsSection() {
                     </div>
                   </li>
                 </ul>
-              </div>
+              </motion.div>
             </div>
           </div>
         </CardContent>
@@ -186,9 +215,13 @@ export function AIToolsSection() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-[#0A192F]/5 border border-[#D4AF37]/20 rounded-lg p-6 transition-all">
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#D4AF37]/20 rounded-lg p-6 transition-all"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <h3 className="text-xl font-playfair text-[#0A192F] mb-4">Digital Content Creation Suite</h3>
-                
+
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#D4AF37]/10 text-[#D4AF37] mr-4 mt-1">
@@ -215,7 +248,7 @@ export function AIToolsSection() {
                     </ul>
                   </div>
                 </div>
-                  
+
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#D4AF37]/10 text-[#D4AF37] mr-4 mt-1">
                     <FileText className="w-5 h-5" />
@@ -242,11 +275,15 @@ export function AIToolsSection() {
                   </div>
                 </div>
               </div>
-            </div>
-            
-            <div className="bg-[#0A192F]/5 border border-[#D4AF37]/20 rounded-lg p-6 transition-all">
+            </motion.div>
+
+            <motion.div 
+              className="bg-[#0A192F]/5 border border-[#D4AF37]/20 rounded-lg p-6 transition-all"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <h3 className="text-xl font-playfair text-[#0A192F] mb-4">Southern Gothic Digital Art</h3>
-                
+
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#D4AF37]/10 text-[#D4AF37] mr-4 mt-1">
@@ -273,7 +310,7 @@ export function AIToolsSection() {
                     </ul>
                   </div>
                 </div>
-                  
+
                 <div className="flex items-start">
                   <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#D4AF37]/10 text-[#D4AF37] mr-4 mt-1">
                     <Layers className="w-5 h-5" />
@@ -300,7 +337,7 @@ export function AIToolsSection() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </CardContent>
       </Card>
@@ -323,18 +360,26 @@ export function AIToolsSection() {
               <TabsTrigger value="birth-chart" className="text-sm">Birth Chart</TabsTrigger>
               <TabsTrigger value="pricing" className="text-sm">Pricing</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="overview" className="border-none p-0">
               <div className="space-y-6">
-                <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                <motion.div 
+                  className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <h3 className="text-xl font-playfair text-[#0A192F] mb-4">The Digital Grimoire</h3>
                   <p className="text-gray-600 mb-4">
                     Your Digital Grimoire integrates AI tools to streamline content creation and workflow management, 
                     merging your Southern Gothic aesthetic with advanced technologies.
                   </p>
-                  
+
                   <div className="grid md:grid-cols-2 gap-6 mt-8">
-                    <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                    <motion.div 
+                      className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <div className="flex items-center mb-3">
                         <ScrollText className="w-5 h-5 text-[#D4AF37] mr-2" />
                         <h4 className="font-playfair text-[#0A192F]">Content Generation</h4>
@@ -342,9 +387,13 @@ export function AIToolsSection() {
                       <p className="text-sm text-gray-600">
                         Create tarot interpretations, affirmations, worksheets, and other content with your unique Southern Gothic voice.
                       </p>
-                    </div>
-                    
-                    <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                    </motion.div>
+
+                    <motion.div 
+                      className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <div className="flex items-center mb-3">
                         <Layers className="w-5 h-5 text-[#D4AF37] mr-2" />
                         <h4 className="font-playfair text-[#0A192F]">Workflow Enhancement</h4>
@@ -352,22 +401,22 @@ export function AIToolsSection() {
                       <p className="text-sm text-gray-600">
                         Automatically generate workflow steps and streamline your creation process with AI assistance.
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
-                  
+
                   <div className="mt-6 text-center">
                     <p className="text-sm text-gray-500 italic">
                       Select one of the tabs above to access the AI tools
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="content-generator" className="border-none p-0">
               <AIContentGenerator />
             </TabsContent>
-            
+
             <TabsContent value="workflow-integration" className="border-none p-0">
               <Card className="border-[#D4AF37]/20">
                 <CardHeader>
@@ -380,9 +429,13 @@ export function AIToolsSection() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                    <motion.div 
+                      className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <h3 className="text-lg font-playfair text-[#0A192F] mb-3">How to Use AI with Your Workflows</h3>
-                      
+
                       <ol className="space-y-4 mt-4">
                         <li className="flex">
                           <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">1</span>
@@ -391,7 +444,7 @@ export function AIToolsSection() {
                             <p className="text-sm text-gray-600">Navigate to the Workflows tab and select any existing workflow</p>
                           </div>
                         </li>
-                        
+
                         <li className="flex">
                           <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">2</span>
                           <div>
@@ -399,7 +452,7 @@ export function AIToolsSection() {
                             <p className="text-sm text-gray-600">The AI Workflow Assistant appears below your workflow steps</p>
                           </div>
                         </li>
-                        
+
                         <li className="flex">
                           <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">3</span>
                           <div>
@@ -407,7 +460,7 @@ export function AIToolsSection() {
                             <p className="text-sm text-gray-600">Enter your workflow description and the AI will generate detailed steps</p>
                           </div>
                         </li>
-                        
+
                         <li className="flex">
                           <span className="bg-[#D4AF37]/20 text-[#0A192F] rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">4</span>
                           <div>
@@ -416,69 +469,93 @@ export function AIToolsSection() {
                           </div>
                         </li>
                       </ol>
-                    </div>
-                    
-                    <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30">
+                    </motion.div>
+
+                    <motion.div 
+                      className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
                       <h3 className="text-lg font-playfair text-[#0A192F] mb-3">Digital Grimoire Workflow Templates</h3>
                       <p className="text-sm text-gray-600 mb-4">
                         These templates are designed specifically for your Midnight Magnolia brand and can be enhanced with AI-generated steps:
                       </p>
-                      
+
                       <div className="grid md:grid-cols-2 gap-4 mt-6">
-                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                        <motion.div 
+                          className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
                           <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Content Creation</h4>
                           <ul className="text-xs text-gray-600 space-y-1">
                             <li>• Digital Product Development</li>
                             <li>• Tarot Content Creation</li>
                             <li>• eBook Production</li>
                           </ul>
-                        </div>
-                        
-                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                        </motion.div>
+
+                        <motion.div 
+                          className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
                           <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Marketing</h4>
                           <ul className="text-xs text-gray-600 space-y-1">
                             <li>• Social Media Campaign</li>
                             <li>• Product Launch</li>
                             <li>• Email Sequence</li>
                           </ul>
-                        </div>
-                        
-                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                        </motion.div>
+
+                        <motion.div 
+                          className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
                           <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Patreon</h4>
                           <ul className="text-xs text-gray-600 space-y-1">
                             <li>• Tier Content Planning</li>
                             <li>• Membership Benefits</li>
                             <li>• Monthly Delivery</li>
                           </ul>
-                        </div>
-                        
-                        <div className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50">
+                        </motion.div>
+
+                        <motion.div 
+                          className="border border-[#D4AF37]/20 rounded-lg p-4 bg-white/50"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                        >
                           <h4 className="font-playfair text-[#0A192F] text-sm mb-2">Technical</h4>
                           <ul className="text-xs text-gray-600 space-y-1">
                             <li>• Airtable Integration</li>
                             <li>• Notion Database Setup</li>
                             <li>• API Connection</li>
                           </ul>
-                        </div>
+                        </motion.div>
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="birth-chart" className="border-none p-0">
               <BirthChartGenerator />
             </TabsContent>
-            
+
             <TabsContent value="pricing" className="border-none p-0">
               <TieredProductPricing />
             </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
-      
-      <div className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30 mt-10">
+
+      <motion.div 
+        className="bg-[#0A192F]/5 rounded-lg p-6 border border-[#A3B18A]/30 mt-10"
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300 }}
+      >
         <div className="flex items-start">
           <Stars className="w-6 h-6 text-[#D4AF37] mr-4 mt-1 flex-shrink-0" />
           <div>
@@ -506,7 +583,8 @@ export function AIToolsSection() {
             </ul>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
+```
