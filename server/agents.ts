@@ -1,12 +1,23 @@
 
 import OpenAI from "openai";
 import { OpenAIApiError } from "./openai";
+import { workflowService } from "./workflow";
+import { openaiService } from "./openai";
 
 export interface GPTAction {
   name: string;
   description: string;
   parameters: Record<string, any>;
   handler: (params: any) => Promise<any>;
+}
+
+interface ToolCall {
+  id: string;
+  type: string;
+  function: {
+    name: string;
+    arguments: string;
+  };
 }
 
 class AgentOrchestrator {
@@ -20,28 +31,34 @@ class AgentOrchestrator {
   }
 
   private registerDefaultActions() {
-    // Register workflow management actions
     this.registerAction({
       name: "create_workflow",
-      description: "Create a new workflow",
+      description: "Create a new workflow with given steps",
       parameters: {
-        name: "string",
-        description: "string",
-        steps: "array"
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          description: { type: "string" },
+          steps: { type: "array", items: { type: "string" } }
+        },
+        required: ["name", "description", "steps"]
       },
       handler: async (params) => {
         return workflowService.createWorkflow(params);
       }
     });
 
-    // Register content generation action
     this.registerAction({
       name: "generate_content",
-      description: "Generate content using OpenAI",
+      description: "Generate content using AI",
       parameters: {
-        type: "string",
-        topic: "string",
-        style: "string"
+        type: "object",
+        properties: {
+          type: { type: "string" },
+          topic: { type: "string" },
+          style: { type: "string", default: "mystical" }
+        },
+        required: ["type", "topic"]
       },
       handler: async (params) => {
         return openaiService.generateContentBrief(params.type, params.topic);
@@ -55,70 +72,52 @@ class AgentOrchestrator {
 
   async orchestrateWorkflow(task: string, context: any = {}) {
     try {
-      // Prepare available actions for the planning agent
-      const availableActions = Array.from(this.actions.entries()).map(([name, action]) => ({
-        name,
-        description: action.description,
-        parameters: action.parameters
+      const availableTools = Array.from(this.actions.entries()).map(([name, action]) => ({
+        type: "function",
+        function: {
+          name,
+          description: action.description,
+          parameters: action.parameters
+        }
       }));
 
-      // Planning agent determines steps with available actions
-      const plannerResponse = await this.openai.chat.completions.create({
+      const response = await this.openai.chat.completions.create({
         model: "gpt-4o",
         messages: [
           {
             role: "system",
-            content: "You are a workflow planning agent. Break down tasks into discrete steps."
+            content: "You are a workflow assistant that helps break down tasks and execute them using available tools."
           },
           {
             role: "user",
-            content: `Plan steps for: ${task}\nContext: ${JSON.stringify(context)}`
+            content: `Task: ${task}\nContext: ${JSON.stringify(context)}`
           }
         ],
-        response_format: { type: "json_object" }
+        tools: availableTools,
+        tool_choice: "auto"
       });
 
-      const plan = JSON.parse(plannerResponse.choices[0].message.content || "{}");
-
-      // Execution agent carries out steps
       const results = [];
-      for (const step of plan.steps) {
-        // Check if step requires an action
-        if (step.action && this.actions.has(step.action)) {
-          const action = this.actions.get(step.action)!;
-          const result = await action.handler(step.parameters);
-          results.push({
-            step: step.description,
-            result,
-            action: step.action
-          });
-          continue;
+      const message = response.choices[0].message;
+
+      if (message.tool_calls) {
+        for (const toolCall of message.tool_calls) {
+          const action = this.actions.get(toolCall.function.name);
+          if (action) {
+            const args = JSON.parse(toolCall.function.arguments);
+            const result = await action.handler(args);
+            results.push({
+              tool: toolCall.function.name,
+              args,
+              result
+            });
+          }
         }
-
-        // Default to GPT response if no action specified
-        const executorResponse = await this.openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system", 
-              content: "You are an execution agent. Complete the assigned task step."
-            },
-            {
-              role: "user",
-              content: `Complete step: ${step.description}\nContext: ${JSON.stringify(step.context)}`
-            }
-          ]
-        });
-
-        results.push({
-          step: step.description,
-          result: executorResponse.choices[0].message.content
-        });
       }
 
       return {
-        plan,
-        results
+        completion: message.content,
+        actions: results
       };
     } catch (error: any) {
       throw new OpenAIApiError(
@@ -128,3 +127,5 @@ class AgentOrchestrator {
     }
   }
 }
+
+export const agentOrchestrator = new AgentOrchestrator(new OpenAI());

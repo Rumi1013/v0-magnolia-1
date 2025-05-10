@@ -505,9 +505,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/agents/orchestrate", async (req: Request, res: Response) => {
     try {
       const { task, context } = req.body;
-      const orchestrator = new AgentOrchestrator(openai);
-      const result = await orchestrator.orchestrateWorkflow(task, context);
-      res.json({ success: true, ...result });
+      const result = await agentOrchestrator.orchestrateWorkflow(task, context);
+      res.json({ 
+        success: true, 
+        completion: result.completion,
+        actions: result.actions 
+      });
     } catch (error: any) {
       handleApiError(res, error, "Failed to orchestrate agents");
     }
