@@ -117,21 +117,42 @@ class AgentOrchestrator {
         }
       }));
 
-      const response = await this.openai.chat.completions.create({
+      // Step 1: Planning agent determines high-level steps
+      const plannerResponse = await this.openai.chat.completions.create({
         model: "gpt-4o",
         messages: [
           {
             role: "system",
-            content: "You are a workflow assistant that helps break down tasks and execute them using available tools."
+            content: "You are a strategic planner that breaks down complex tasks into structured steps. Output a JSON array of high-level steps needed to accomplish the task."
           },
           {
             role: "user",
             content: `Task: ${task}\nContext: ${JSON.stringify(context)}`
           }
         ],
-        tools: availableTools,
-        tool_choice: "auto"
+        response_format: { type: "json_object" }
       });
+
+      const plan = JSON.parse(plannerResponse.choices[0].message.content || "{}");
+
+      // Step 2: Task-specific agents execute each step
+      const results = [];
+      for (const step of plan.steps || []) {
+        const executorResponse = await this.openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: "You are a specialized agent that executes specific workflow steps using available tools."
+            },
+            {
+              role: "user",
+              content: `Execute this step: ${JSON.stringify(step)}\nContext: ${JSON.stringify(context)}`
+            }
+          ],
+          tools: availableTools,
+          tool_choice: "auto"
+        });
 
       const results = [];
       const message = response.choices[0].message;
@@ -151,9 +172,31 @@ class AgentOrchestrator {
         }
       }
 
+      const stepResults = [];
+      for (const toolCall of executorResponse.choices[0].message.tool_calls || []) {
+        const action = this.actions.get(toolCall.function.name);
+        if (action) {
+          const args = JSON.parse(toolCall.function.arguments);
+          const result = await action.handler(args);
+          stepResults.push({
+            tool: toolCall.function.name,
+            args,
+            result
+          });
+        }
+      }
+      
+      results.push({
+        step: step,
+        actions: stepResults,
+        completion: executorResponse.choices[0].message.content
+      });
+    }
+
       return {
-        completion: message.content,
-        actions: results
+        plan: plan.steps,
+        stepResults: results,
+        summary: plannerResponse.choices[0].message.content
       };
     } catch (error: any) {
       throw new OpenAIApiError(
