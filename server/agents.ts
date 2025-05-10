@@ -1,4 +1,3 @@
-
 import OpenAI from "openai";
 import { OpenAIApiError } from "./openai";
 import { workflowService } from "./workflow";
@@ -31,9 +30,46 @@ class AgentOrchestrator {
   }
 
   private registerDefaultActions() {
+    // Notion Database Actions
+    this.registerAction({
+      name: "create_notion_database",
+      description: "Create a new Notion database",
+      parameters: {
+        type: "object",
+        properties: {
+          parentPageId: { type: "string" },
+          title: { type: "string" },
+          properties: { type: "object" },
+          icon: { type: "string", optional: true }
+        },
+        required: ["parentPageId", "title", "properties"]
+      },
+      handler: async (params) => {
+        return notionService.createDatabase(params.parentPageId, params.title, params.properties, params.icon);
+      }
+    });
+
+    this.registerAction({
+      name: "add_notion_page",
+      description: "Add a new page to Notion database",
+      parameters: {
+        type: "object",
+        properties: {
+          databaseId: { type: "string" },
+          properties: { type: "object" },
+          icon: { type: "string", optional: true }
+        },
+        required: ["databaseId", "properties"]
+      },
+      handler: async (params) => {
+        return notionService.addDatabasePage(params.databaseId, params.properties, params.icon);
+      }
+    });
+
+    // Original workflow action
     this.registerAction({
       name: "create_workflow",
-      description: "Create a new workflow with given steps",
+      description: "Create a new workflow",
       parameters: {
         type: "object",
         properties: {
