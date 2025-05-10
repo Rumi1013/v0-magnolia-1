@@ -5,24 +5,21 @@ import { apiRequest } from '@/lib/queryClient';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { FaRobot, FaImage, FaPencilAlt, FaMagic, FaSpinner } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 
-const AIContentGenerator = () => {
+export default function AIContentGenerator() {
   const { toast } = useToast();
   const [provider, setProvider] = useState('openai');
-  const [contentType, setContentType] = useState('text');
   const [prompt, setPrompt] = useState('');
   const [generatedContent, setGeneratedContent] = useState('');
 
   const generateMutation = useMutation({
     mutationFn: async () => {
       return apiRequest('POST', `/api/${provider}/generate`, {
-        contentType,
         prompt,
       });
     },
@@ -54,8 +51,6 @@ const AIContentGenerator = () => {
         <Tabs defaultValue="text" className="space-y-4">
           <TabsList>
             <TabsTrigger value="text">Text</TabsTrigger>
-            <TabsTrigger value="image">Image</TabsTrigger>
-            <TabsTrigger value="code">Code</TabsTrigger>
           </TabsList>
 
           <TabsContent value="text">
@@ -107,6 +102,4 @@ const AIContentGenerator = () => {
       </CardContent>
     </Card>
   );
-};
-
-export default AIContentGenerator;
+}
