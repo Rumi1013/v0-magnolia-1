@@ -1,5 +1,5 @@
 import React from 'react';
-import AIContentGenerator from '../components/ui/ai-content-generator';
+import { AIContentGenerator } from '../components/ui/ai-content-generator';
 
 const AIToolsPage: React.FC = () => {
   return (
