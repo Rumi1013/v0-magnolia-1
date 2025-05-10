@@ -501,6 +501,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Orchestrate agents for complex tasks
+  app.post("/api/agents/orchestrate", async (req: Request, res: Response) => {
+    try {
+      const { task, context } = req.body;
+      const orchestrator = new AgentOrchestrator(openai);
+      const result = await orchestrator.orchestrateWorkflow(task, context);
+      res.json({ success: true, ...result });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to orchestrate agents");
+    }
+  });
+
   // Generate moon phase content
   app.post("/api/openai/moon-phase-content", async (req: Request, res: Response) => {
     try {
