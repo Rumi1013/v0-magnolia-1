@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -57,50 +58,52 @@ const AIContentGenerator = () => {
             <TabsTrigger value="code">Code</TabsTrigger>
           </TabsList>
 
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>AI Provider</Label>
-              <Select value={provider} onValueChange={setProvider}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select provider" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="openai">OpenAI GPT-4</SelectItem>
-                  <SelectItem value="anthropic">Anthropic Claude</SelectItem>
-                  <SelectItem value="grok">Grok</SelectItem>
-                  <SelectItem value="ideogram">Ideogram</SelectItem>
-                </SelectContent>
-              </Select>
+          <TabsContent value="text">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>AI Provider</Label>
+                <Select value={provider} onValueChange={setProvider}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select provider" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="openai">OpenAI GPT-4</SelectItem>
+                    <SelectItem value="anthropic">Anthropic Claude</SelectItem>
+                    <SelectItem value="grok">Grok</SelectItem>
+                    <SelectItem value="ideogram">Ideogram</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Prompt</Label>
+                <Textarea 
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Enter your prompt..."
+                  className="min-h-[100px]"
+                />
+              </div>
+
+              <Button
+                onClick={() => generateMutation.mutate()}
+                disabled={generateMutation.isPending || !prompt}
+                className="w-full"
+              >
+                {generateMutation.isPending && <FaSpinner className="mr-2 h-4 w-4 animate-spin" />}
+                Generate with {provider}
+              </Button>
+
+              {generatedContent && (
+                <Textarea
+                  value={generatedContent}
+                  readOnly
+                  className="min-h-[200px] mt-4"
+                />
+              )}
             </div>
-
-            <div className="space-y-2">
-              <Label>Prompt</Label>
-              <Textarea 
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Enter your prompt..."
-                className="min-h-[100px]"
-              />
-            </div>
-
-            <Button
-              onClick={() => generateMutation.mutate()}
-              disabled={generateMutation.isPending || !prompt}
-              className="w-full"
-            >
-              {generateMutation.isPending && <FaSpinner className="mr-2 h-4 w-4 animate-spin" />}
-              Generate with {provider}
-            </Button>
-
-            {generatedContent && (
-              <Textarea
-                value={generatedContent}
-                readOnly
-                className="min-h-[200px] mt-4"
-              />
-            )}
-          </div>
-        </TabsContent>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
