@@ -12,6 +12,13 @@ const Home: React.FC = () => {
     <div className="relative min-h-screen bg-[#0A192F] text-[#FAF3E0] overflow-hidden">
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-[#0A192F]/50 to-[#0A192F] pointer-events-none"
+          style={{
+            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(10, 25, 47, 0.1) 100%)"
+          }}
+        />
+        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,8 +52,14 @@ const Home: React.FC = () => {
       </section>
 
       {/* AI Features Grid */}
-      <section className="py-24 px-4">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 px-4 relative">
+        <div 
+          className="absolute inset-0 bg-gradient-to-t from-[#0A192F] to-transparent"
+          style={{
+            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, rgba(10, 25, 47, 0.05) 100%)"
+          }}
+        />
+        <div className="max-w-7xl mx-auto relative z-10">
           <h2 className="text-center font-playfair text-[#D4AF37] text-4xl mb-12">
             AI-Powered Features
           </h2>
@@ -58,7 +71,7 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
               >
-                <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20">
+                <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <feature.icon className="w-12 h-12 text-[#D4AF37] mb-4" />
                     <h3 className="text-xl font-playfair text-[#D4AF37] mb-2">{feature.title}</h3>
@@ -72,7 +85,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-24">
+      <section id="pricing" className="py-24 relative z-10">
         <TieredProductPricing />
       </section>
     </div>
