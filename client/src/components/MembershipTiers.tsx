@@ -31,7 +31,7 @@ const MembershipTiers: React.FC = () => {
       name: 'Magnolia Seed',
       description: 'Essential resources for those beginning their journey with basic downloadable content.',
       price: 5,
-      color: '#8FB9AA', // Sage green for Seed tier
+      color: '#4D7563', // Sage green for Seed tier (darker for better contrast)
       features: [
         { name: 'Basic affirmations & journal prompts', included: true },
         { name: 'Monthly newsletter with spiritual insights', included: true },
@@ -52,7 +52,7 @@ const MembershipTiers: React.FC = () => {
       name: 'Crescent Bloom',
       description: 'Extended resources including premium content access and personalized elements.',
       price: 12,
-      color: '#93B5C6', // Soft blue for Crescent tier
+      color: '#3D5A73', // Blue for Crescent tier (darker for better contrast)
       features: [
         { name: 'Basic affirmations & journal prompts', included: true },
         { name: 'Monthly newsletter with spiritual insights', included: true },
@@ -95,7 +95,7 @@ const MembershipTiers: React.FC = () => {
       name: 'Moonlit Sanctuary',
       description: 'Complete access to all resources with exclusive consulting sessions.',
       price: 45,
-      color: '#718AB2', // Deep blue for highest tier
+      color: '#3B4F7D', // Deep blue for highest tier (darkened for better contrast)
       features: [
         { name: 'Basic affirmations & journal prompts', included: true },
         { name: 'Monthly newsletter with spiritual insights', included: true },
