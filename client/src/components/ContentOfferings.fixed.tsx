@@ -43,7 +43,7 @@ const ContentOfferings: React.FC = () => {
         'Authentic and resonant positive statements',
         'Categories by intention, chakra, or moon phase',
         'Ready for social media or product creation',
-        "Personalized to your audience's needs"
+        "Personalized for your specific audience"
       ],
       icon: <Star className="h-6 w-6" />,
       category: 'Affirmations',
