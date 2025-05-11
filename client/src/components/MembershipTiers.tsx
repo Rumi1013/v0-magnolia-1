@@ -163,9 +163,9 @@ const MembershipTiers: React.FC = () => {
                     {feature.included ? (
                       <Check className={`h-5 w-5 mr-2 flex-shrink-0`} style={{ color: tier.color }} />
                     ) : (
-                      <X className="h-5 w-5 mr-2 text-[#0A192F]/30 flex-shrink-0" />
+                      <X className="h-5 w-5 mr-2 text-[#0A192F]/50 flex-shrink-0" />
                     )}
-                    <span className={`text-sm ${feature.included ? 'text-[#0A192F]/90' : 'text-[#0A192F]/50'}`}>
+                    <span className={`text-sm ${feature.included ? 'text-[#0A192F]/90' : 'text-[#0A192F]/70'}`}>
                       {feature.name}
                     </span>
                   </li>

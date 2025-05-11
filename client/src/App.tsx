@@ -20,6 +20,7 @@ import DashboardPage from "@/pages/dashboard-page";
 import ContentCreatorPage from "@/pages/content-creator-page";
 import ClientViewPage from "@/pages/client-view-page";
 import MembershipPage from "@/pages/membership-page";
+import ContentOfferingsPage from "@/pages/content-offerings-page";
 import { BirthChartGenerator } from "@/components/BirthChartGenerator";
 import { TieredProductPricing } from "@/components/TieredProductPricing";
 
