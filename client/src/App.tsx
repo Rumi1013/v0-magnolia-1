@@ -19,6 +19,7 @@ import CheckoutPage from "@/pages/checkout-page";
 import DashboardPage from "@/pages/dashboard-page";
 import ContentCreatorPage from "@/pages/content-creator-page";
 import ClientViewPage from "@/pages/client-view-page";
+import MembershipPage from "@/pages/membership-page";
 import { BirthChartGenerator } from "@/components/BirthChartGenerator";
 import { TieredProductPricing } from "@/components/TieredProductPricing";
 
@@ -70,6 +71,9 @@ function AppNavigation() {
           </Link>
           <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`}>
             Content Library
+          </Link>
+          <Link to="/membership" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/membership' ? 'text-[#D4AF37]' : ''}`}>
+            Membership
           </Link>
           <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`}>
             Pricing
@@ -191,6 +195,7 @@ function Router() {
               <TieredProductPricing />
             </div>
           )} />
+          <Route path="/membership" component={MembershipPage} />
           <ProtectedRoute path="/checkout" component={() => <CheckoutPage />} />
           <Route component={NotFound} />
         </Switch>
