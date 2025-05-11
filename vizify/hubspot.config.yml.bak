@@ -1,0 +1,14 @@
+defaultPortal: Magnolia_customer_portal
+portals:
+  - name: Magnolia_customer_portal
+    portalId: 242332184
+    env: prod
+    authType: personalaccesskey
+    auth:
+      tokenInfo:
+        accessToken: >-
+          COjUgP3rMhIWAAUAAAAAAAAAAAAAAAAAAAgAAAAAKBiY5MZzIKKxxSUo7ukMMhQL-nwL6micNvDuavq9Jgc2rncTiDpMAAAEQQAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAYAAAAAAAAAEEIUOK3ArR1Ogrh84MywIaY-s8fEXyJKA25hMlIAWgBgAWiiscUlcAA
+        expiresAt: '2025-05-11T13:54:27.086Z'
+    accountType: APP_DEVELOPER
+    personalAccessKey: >-
+      CiRuYTItOWNiMC0yZWZmLTQ1NzgtODA1Yi1jYWRmMTQyMjlmYjAQmOTGcxiiscUlKhkABeaRgiOoaNBZgGiF0uLC-T1ahtxQG_DvSgNuYTI
