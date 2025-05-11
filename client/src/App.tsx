@@ -73,6 +73,9 @@ function AppNavigation() {
           <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`}>
             Content Library
           </Link>
+          <Link to="/content-offerings" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/content-offerings' ? 'text-[#D4AF37]' : ''}`}>
+            Content Offerings
+          </Link>
           <Link to="/membership" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/membership' ? 'text-[#D4AF37]' : ''}`}>
             Membership
           </Link>
@@ -127,6 +130,9 @@ function AppNavigation() {
             </Link>
             <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Content Library
+            </Link>
+            <Link to="/content-offerings" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/content-offerings' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Content Offerings
             </Link>
             <Link to="/membership" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/membership' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Membership
@@ -200,6 +206,7 @@ function Router() {
             </div>
           )} />
           <Route path="/membership" component={MembershipPage} />
+          <Route path="/content-offerings" component={ContentOfferingsPage} />
           <ProtectedRoute path="/checkout" component={() => <CheckoutPage />} />
           <Route component={NotFound} />
         </Switch>

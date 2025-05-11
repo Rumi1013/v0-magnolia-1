@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import ContentOfferings from '@/components/ContentOfferings';
+import ContentOfferings from '@/components/ContentOfferings.fixed';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { MoonStar, Star, Sparkles, ArrowRight } from 'lucide-react';
