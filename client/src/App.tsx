@@ -107,7 +107,7 @@ function AppNavigation() {
       
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden mt-4 bg-[#0F2942] rounded-lg p-4 absolute left-0 right-0 mx-4 z-50 shadow-lg">
+        <div className="md:hidden mt-4 bg-[#0A192F] rounded-lg p-4 absolute left-0 right-0 mx-4 z-50 shadow-lg">
           <div className="flex flex-col space-y-4">
             <Link to="/" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Home
@@ -126,6 +126,9 @@ function AppNavigation() {
             </Link>
             <Link to="/library" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/library' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Content Library
+            </Link>
+            <Link to="/membership" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/membership' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
+              Membership
             </Link>
             <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
               Pricing
