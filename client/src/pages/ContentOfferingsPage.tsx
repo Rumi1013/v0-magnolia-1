@@ -331,7 +331,7 @@ const ContentOfferingsPage: React.FC = () => {
                       </CardContent>
                       
                       <CardFooter className="pt-0">
-                        <Button className="w-full bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
+                        <Button className="w-full bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 animate-pulse-slow hover:shadow-lg transition-all duration-300 hover-scale">
                           <BookMarked className="h-4 w-4 mr-2" />
                           View Full Content
                         </Button>
@@ -339,8 +339,8 @@ const ContentOfferingsPage: React.FC = () => {
                     </Card>
                   ))
                 ) : (
-                  <div className="col-span-3 text-center p-12 border border-dashed border-[#A3B18A]/30 rounded-md">
-                    <category.icon className="h-16 w-16 text-[#A3B18A]/30 mx-auto mb-4" />
+                  <div className="col-span-3 text-center p-12 border border-dashed border-[#A3B18A]/30 rounded-md bg-[#0D1F35] animate-pulse-slow">
+                    <category.icon className="h-16 w-16 text-[#A3B18A]/40 mx-auto mb-4 animate-float" />
                     <h3 className="text-[#D4AF37] font-medium text-xl mb-2">No Results Found</h3>
                     <p className="text-[#FAF3E0]/70 max-w-md mx-auto">
                       {searchQuery 
