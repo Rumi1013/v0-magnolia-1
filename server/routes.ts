@@ -955,7 +955,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/content/type/:contentType", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { contentType } = req.params;
-      const content = await storage: any) {
+      const content = await storage.getGeneratedContentByType(contentType);
       handleApiError(res, error, "Failed to fetch content by type");
     }
   });
