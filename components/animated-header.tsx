@@ -104,7 +104,7 @@ export default function AnimatedHeader() {
             <ShoppingBag className={`h-5 w-5 ${scrolled ? "text-magnolia-white" : "text-midnight-teal"}`} />
           </button>
           <button
-            className={`hidden md:block px-4 py-2 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors shadow-md hover:shadow-lg`}
+            className={`hidden md:block px-4 py-2 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors shadow-md hover:shadow-lg`}
           >
             Join Patron Portal
           </button>
@@ -146,7 +146,7 @@ export default function AnimatedHeader() {
                     {item.name}
                   </Link>
                 ))}
-                <button className="mt-2 px-4 py-3 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors text-left shadow-md">
+                <button className="mt-2 px-4 py-3 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors text-left shadow-md">
                   Join Patron Portal
                 </button>
               </nav>

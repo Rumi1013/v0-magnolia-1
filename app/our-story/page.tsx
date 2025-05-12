@@ -225,7 +225,7 @@ export default function OurStory() {
           </p>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
           >
             EXPLORE OUR SERVICES
             <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
