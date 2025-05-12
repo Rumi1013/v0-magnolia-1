@@ -37,12 +37,12 @@ const aiFeatures = [
 
 const Home: React.FC = () => {
   return (
-    <div className="relative min-h-screen bg-[#0A192F] text-[#FAF3E0] overflow-hidden">
+    <div className="relative min-h-screen bg-zinc-50 text-zinc-900 overflow-hidden">
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-[#0A192F]/50 to-[#0A192F] pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-b from-zinc-100 to-zinc-50 pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(10, 25, 47, 0.1) 100%)"
+            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(244, 244, 245, 0.8) 0%, rgba(250, 250, 250, 0.3) 100%)"
           }}
         />
         
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               asChild
-              className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 w-full sm:w-auto"
+              className="bg-zinc-900 text-white hover:bg-zinc-800 w-full sm:w-auto"
             >
               <Link href="/ai-tools">Try AI Tools</Link>
             </Button>
@@ -100,11 +100,11 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
               >
-                <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20 backdrop-blur-sm h-full">
+                <Card className="bg-white border-zinc-200 shadow-sm h-full hover:shadow-md transition-shadow">
                   <CardContent className="p-6 flex flex-col h-full">
-                    <feature.icon className="w-12 h-12 text-[#D4AF37] mb-4" />
-                    <h3 className="text-xl font-serif text-[#D4AF37] mb-2">{feature.title}</h3>
-                    <p className="text-sm text-[#FAF3E0]/70 font-body">{feature.description}</p>
+                    <feature.icon className="w-12 h-12 text-zinc-900 mb-4" />
+                    <h3 className="text-xl font-medium text-zinc-900 mb-2">{feature.title}</h3>
+                    <p className="text-sm text-zinc-600 font-body">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
