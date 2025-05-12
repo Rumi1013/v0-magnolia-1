@@ -1,0 +1,30 @@
+# Domain TXT Records for Midnight Magnolia
+
+# Domain Verification Records
+# --------------------------
+# To verify ownership of your domain for various services,
+# add these TXT records to your DNS configuration through your domain registrar
+
+# Google Workspace/GSuite Verification
+# Add as a TXT record to: yourdomain.com
+google-site-verification=REPLACE_WITH_YOUR_VERIFICATION_CODE
+
+# Microsoft/Office 365 Verification
+# Add as a TXT record to: yourdomain.com
+MS=REPLACE_WITH_YOUR_VERIFICATION_CODE
+
+# SPF Record (Email Security)
+# Add as a TXT record to: yourdomain.com
+v=spf1 include:_spf.google.com ~all
+
+# DKIM Record (Email Authentication)
+# Add as a TXT record to: google._domainkey.yourdomain.com
+v=DKIM1; k=rsa; p=REPLACE_WITH_YOUR_PUBLIC_KEY
+
+# DMARC Record (Email Authentication Policy)
+# Add as a TXT record to: _dmarc.yourdomain.com
+v=DMARC1; p=none; rua=mailto:admin@yourdomain.com
+
+# Custom Records
+# --------------------------
+# Add any additional TXT records specific to your services here
