@@ -39,12 +39,14 @@ function AppNavigation() {
   };
 
   return (
-    <nav className="bg-[#0A192F] border-b border-[#A3B18A]/20 py-4 px-6">
+    <nav className="bg-[#0A192F] border-b border-[#A3B18A]/20 py-3 px-6">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
-            <Logo size="md" />
-            <span className="text-[#D4AF37] font-playfair text-xl">Midnight Magnolia</span>
+          <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
+            <div className="bg-[#FAF3E0] rounded-full p-1 overflow-hidden">
+              <Logo size="sm" />
+            </div>
+            <span className="text-[#D4AF37] font-playfair text-xl md:text-2xl">Midnight Magnolia</span>
           </Link>
         </div>
         

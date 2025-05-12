@@ -1,6 +1,6 @@
 import React from 'react';
 // Import the logo directly
-import logoImage from '@assets/freepik__a-vintagemeetsmodern-logo-featuring-a-delicate-whi__90240.png';
+import logoImage from '../../assets/logo.png';
 
 export const Logo: React.FC<{
   className?: string;
@@ -20,6 +20,21 @@ export const Logo: React.FC<{
         alt="Midnight Magnolia Logo" 
         style={sizes[size]}
         className="object-contain"
+        onError={(e) => {
+          // If image fails to load, show a fallback
+          const target = e.target as HTMLImageElement;
+          target.style.display = 'none';
+          // Add a fallback element with brand color
+          const parent = target.parentElement;
+          if (parent && !parent.querySelector('.logo-fallback')) {
+            const fallback = document.createElement('div');
+            fallback.className = 'logo-fallback flex items-center justify-center rounded-full bg-[#D4AF37] text-[#0A192F] font-bold';
+            fallback.style.width = sizes[size].height;
+            fallback.style.height = sizes[size].height;
+            fallback.textContent = 'MM';
+            parent.appendChild(fallback);
+          }
+        }}
       />
     </div>
   );
