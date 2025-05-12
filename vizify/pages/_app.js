@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import { ShopifyProvider } from '../lib/shopify/context';
-import MainLayout from '../components/layout/MainLayout';
+import MainLayout from '../src/components/layout/MainLayout';
 import { useRouter } from 'next/router';
 
 function MyApp({ Component, pageProps }) {

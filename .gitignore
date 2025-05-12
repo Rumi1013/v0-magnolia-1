@@ -64,3 +64,5 @@ dist/
 build/
 out/
 hubspot.config.yml
+
+**/.claude/settings.local.json
