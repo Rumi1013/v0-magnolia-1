@@ -62,14 +62,49 @@ const sampleWorkflows: Workflow[] = [
     description: "Structured campaign execution for product launches",
     steps: [
       { name: "Content Planning", status: "In Progress", date: "May 5, 2025" },
-      { name: "Asset Creation", status: "In Progress", date: "May 8, 2025" },
-      { name: "Email Sequence Setup", status: "Not Started", date: "May 12, 2025" },
-      { name: "Social Media Scheduling", status: "Not Started", date: "May 14, 2025" },
-      { name: "Analytics Configuration", status: "Not Started", date: "May 16, 2025" }
-    ],
-    owner: "Latisha Waters",
-    category: "Marketing"
-  },
+      interface WorkflowStep {
+  name: string;
+  status: 'Complete' | 'In Progress' | 'Not Started';
+  date: string;
+}
+
+interface Workflow {
+  id: number;
+  name: string;
+  description: string;
+  steps: WorkflowStep[];
+  owner: string;
+  category: string;
+}
+
+const validateWorkflowStep = (step: WorkflowStep): boolean => {
+  return Boolean(
+    step.name &&
+    ['Complete', 'In Progress', 'Not Started'].includes(step.status) &&
+    /^\d{4}-\d{2}-\d{2}$/.test(step.date.split(' ')[0])
+  );
+};
+
+const workflowSteps: WorkflowStep[] = [
+  { name: "Asset Creation", status: "In Progress", date: "2025-05-08" },
+  { name: "Email Sequence Setup", status: "Not Started", date: "2025-05-12" },
+  { name: "Social Media Scheduling", status: "Not Started", date: "2025-05-14" },
+  { name: "Analytics Configuration", status: "Not Started", date: "2025-05-16" }
+].map(step => {
+  if (!validateWorkflowStep(step)) {
+    throw new Error(`Invalid workflow step: ${JSON.stringify(step)}`);
+  }
+  return step;
+});
+
+export const workflow: Workflow = {
+  id: 3,
+  name: "Marketing Implementation",
+  description: "Strategic marketing rollout for brand launch",
+  steps: workflowSteps,
+  owner: "Latisha Waters",
+  category: "Marketing"
+};
   {
     id: 4,
     name: "Website Deployment",
