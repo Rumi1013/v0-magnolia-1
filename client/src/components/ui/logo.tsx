@@ -16,9 +16,9 @@ export const Logo: React.FC<{
 
   // Define background styles for different variants
   const variantStyles = {
-    default: 'bg-zinc-900',
-    light: 'bg-white',
-    vintage: 'bg-zinc-900/90',
+    default: 'text-zinc-900',
+    light: 'text-white',
+    vintage: 'text-zinc-900/90',
   };
 
   return (
