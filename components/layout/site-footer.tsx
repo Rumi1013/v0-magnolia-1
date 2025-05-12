@@ -10,8 +10,9 @@ export function SiteFooter() {
       links: [
         { name: "Home", href: "/" },
         { name: "Our Story", href: "/our-story" },
-        { name: "Dashboard", href: "/dashboard" },
         { name: "Shop", href: "/shop" },
+        { name: "Blog", href: "/blog" },
+        { name: "Art Gallery", href: "/gallery" },
       ],
     },
     {
@@ -26,7 +27,7 @@ export function SiteFooter() {
     {
       title: "Connect",
       links: [
-        { name: "Contact Us", href: "#" },
+        { name: "Contact Us", href: "/contact" },
         { name: "Instagram", href: "#" },
         { name: "Pinterest", href: "#" },
         { name: "Newsletter", href: "#" },

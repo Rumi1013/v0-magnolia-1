@@ -11,17 +11,17 @@ export function SectionHeading({
   description,
   label,
   center = true,
-  titleColor = "text-midnight-blue",
+  titleColor = "text-rich-gold",
 }: SectionHeadingProps) {
   return (
     <div className={`mb-16 ${center ? "text-center" : ""}`}>
       {label && (
-        <span className="inline-block px-4 py-1 bg-rich-gold/20 rounded-full text-midnight-blue font-accent text-sm mb-4">
+        <span className="inline-block px-4 py-1 bg-rich-gold/20 rounded-full text-magnolia-white font-accent text-sm mb-4">
           {label}
         </span>
       )}
       <h2 className={`font-heading text-3xl md:text-4xl ${titleColor} mb-4 drop-shadow-sm`}>{title}</h2>
-      {description && <p className="font-body text-midnight-teal/90 max-w-2xl mx-auto">{description}</p>}
+      {description && <p className="font-body text-magnolia-white/90 max-w-2xl mx-auto">{description}</p>}
     </div>
   )
 }

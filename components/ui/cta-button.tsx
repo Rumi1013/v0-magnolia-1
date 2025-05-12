@@ -25,7 +25,7 @@ export function CTAButton({
   const variantStyles = {
     primary: "bg-rich-gold text-midnight-blue font-bold hover:bg-rich-gold/90",
     secondary: "bg-midnight-teal text-magnolia-white hover:bg-midnight-teal/90",
-    outline: "border-2 border-midnight-blue/80 bg-midnight-blue/5 text-midnight-blue/90 hover:bg-midnight-blue/10",
+    outline: "border-2 border-rich-gold/80 bg-midnight-blue/5 text-rich-gold hover:bg-rich-gold/10",
   }
 
   const sizeStyles = {

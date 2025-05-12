@@ -3,14 +3,14 @@ import { CTAButton } from "@/components/ui/cta-button"
 
 export function CTASection() {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-sage-green/10 to-magnolia-white relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-midnight-blue/90 to-midnight-teal/80 text-magnolia-white relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-sage-green/20 to-transparent"></div>
+      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-midnight-blue/0 to-midnight-blue/30"></div>
       <div className="absolute top-20 right-10 w-64 h-64 bg-rich-gold/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 left-10 w-64 h-64 bg-midnight-teal/10 rounded-full blur-3xl"></div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="max-w-4xl mx-auto bg-midnight-blue/60 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-rich-gold/20">
           <div className="grid md:grid-cols-2">
             <div className="relative h-64 md:h-auto">
               <Image src="/southern-gothic-magnolia.png" alt="Southern Gothic Magnolia" fill className="object-cover" />
@@ -22,10 +22,10 @@ export function CTASection() {
               </div>
             </div>
             <div className="p-8 md:p-10">
-              <h2 className="font-heading text-3xl text-midnight-blue mb-6 drop-shadow-sm hidden md:block">
+              <h2 className="font-heading text-3xl text-rich-gold mb-6 drop-shadow-sm hidden md:block">
                 Begin Your Transformation Journey
               </h2>
-              <p className="font-body text-midnight-teal/90 mb-8">
+              <p className="font-body text-magnolia-white/90 mb-8">
                 Ready to transform your creative vision into sustainable income streams? Explore our offerings designed
                 to empower your digital entrepreneurship journey.
               </p>
@@ -52,7 +52,7 @@ export function CTASection() {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <p className="text-sm text-midnight-blue/80">{benefit}</p>
+                    <p className="text-sm text-magnolia-white/90">{benefit}</p>
                   </div>
                 ))}
               </div>

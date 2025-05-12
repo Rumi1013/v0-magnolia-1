@@ -7,8 +7,9 @@ import { useState } from "react"
 const navItems = [
   { name: "Home", path: "/" },
   { name: "Our Story", path: "/our-story" },
-  { name: "Dashboard", path: "/dashboard" },
   { name: "Shop", path: "/shop" },
+  { name: "Blog", path: "/blog" },
+  { name: "Art Gallery", path: "/gallery" },
 ]
 
 export function SiteHeader() {
