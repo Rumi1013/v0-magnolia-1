@@ -32,3 +32,12 @@ args = "cd client && npm run dev"
 
 [objectStorage]
 defaultBucketID = "replit-objstore-f76bec2f-85e5-4553-8810-b996dc6e3908"
+
+[rules]
+
+[rules.formatter]
+
+[rules.formatter.fileExtensions]
+
+[rules.formatter.fileExtensions.".json"]
+id = "module:web/languageServer:typescript-language-server"
