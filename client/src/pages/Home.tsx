@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { DynamicIllustration } from '@/components/ui/dynamic-illustrations';
 import { Moon, Star, Sparkles, Book, Calendar } from 'lucide-react';
-import { TieredProductPricing } from '@/components/TieredProductPricing';
 
 const aiFeatures = [
   {
@@ -27,11 +26,6 @@ const aiFeatures = [
     title: "Automated Workflows",
     description: "Smart automation of your content creation process",
     icon: Calendar,
-  },
-  {
-    title: "Custom Templates",
-    description: "AI-generated templates for your digital products",
-    icon: Star,
   }
 ];
 
@@ -41,35 +35,30 @@ const Home: React.FC = () => {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
         <DynamicIllustration variant="hero" className="opacity-80" />
         <div className="absolute inset-0 backdrop-blur-sm" />
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className="text-center z-10 mb-12"
         >
-          <img 
-            src="/logo.png" 
-            alt="Midnight Magnolia" 
-            className="w-64 h-64 mx-auto mb-8"
-          />
-          <h1 className="font-playfair text-zinc-900 text-5xl md:text-6xl lg:text-7xl mb-6">
+          <h1 className="font-playfair text-[#FAF3E0] text-5xl md:text-6xl lg:text-7xl mb-6">
             Midnight Magnolia
           </h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-8 text-zinc-700">
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-8 text-[#FAF3E0]/80">
             Automate your mystical content creation with AI-powered tools
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               asChild
-              className="bg-zinc-900 text-white hover:bg-zinc-800 w-full sm:w-auto"
+              className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/80 w-full sm:w-auto"
             >
               <Link href="/ai-tools">Try AI Tools</Link>
             </Button>
             <Button 
               asChild
               variant="outline" 
-              className="border-[#D4AF37] text-[#D4AF37] w-full sm:w-auto"
+              className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37]/10 w-full sm:w-auto"
             >
               <Link href="#pricing">View Pricing</Link>
             </Button>
@@ -78,17 +67,11 @@ const Home: React.FC = () => {
       </section>
 
       <section className="py-24 px-4 relative">
-        <div 
-          className="absolute inset-0 bg-gradient-to-t from-[#0A192F] to-transparent"
-          style={{
-            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, rgba(10, 25, 47, 0.05) 100%)"
-          }}
-        />
         <div className="max-w-7xl mx-auto relative z-10">
           <h2 className="text-center font-playfair text-[#D4AF37] text-4xl mb-12">
             AI-Powered Features
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {aiFeatures.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -96,11 +79,11 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
               >
-                <Card className="bg-white border-zinc-200 shadow-sm h-full hover:shadow-md transition-shadow">
+                <Card className="bg-[#0A192F]/50 border-[#D4AF37]/20 backdrop-blur-sm">
                   <CardContent className="p-6 flex flex-col h-full">
-                    <feature.icon className="w-12 h-12 text-zinc-900 mb-4" />
-                    <h3 className="text-xl font-medium text-zinc-900 mb-2">{feature.title}</h3>
-                    <p className="text-sm text-zinc-600 font-body">{feature.description}</p>
+                    <feature.icon className="w-12 h-12 text-[#D4AF37] mb-4" />
+                    <h3 className="text-xl font-medium text-[#FAF3E0] mb-2">{feature.title}</h3>
+                    <p className="text-sm text-[#FAF3E0]/80">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -108,7 +91,6 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-
       <section id="pricing" className="py-24 relative z-10">
         <TieredProductPricing />
       </section>

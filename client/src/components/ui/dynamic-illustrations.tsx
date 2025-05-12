@@ -2,10 +2,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const DynamicIllustration: React.FC<{
+interface DynamicIllustrationProps {
   variant: 'hero' | 'feature' | 'footer';
   className?: string;
-}> = ({ variant, className }) => {
+}
+
+export const DynamicIllustration: React.FC<DynamicIllustrationProps> = ({ variant, className }) => {
   const baseStyle = "absolute inset-0 mix-blend-overlay pointer-events-none";
   
   const variants = {
@@ -48,13 +50,10 @@ export const DynamicIllustration: React.FC<{
       initial={variants[variant].initial}
       animate={variants[variant].animate}
       style={{
-        backgroundImage: `
-          url('/attached_assets/freepik__background__90242.png'),
-          radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, rgba(10, 25, 47, 0.05) 100%),
-          linear-gradient(45deg, rgba(163, 177, 138, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%)
-        `,
-        backgroundBlendMode: 'overlay, screen, normal',
-        backgroundSize: 'cover, cover, cover',
+        backgroundImage: `url('/attached_assets/freepik__background__90242.png')`,
+        backgroundBlendMode: 'overlay',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     />
   );
