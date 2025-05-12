@@ -122,7 +122,7 @@ export class WorkflowService {
       ...workflow,
       id: this.nextId++
     };
-    
+
     this.workflows.push(newWorkflow);
     return newWorkflow;
   }
@@ -133,12 +133,12 @@ export class WorkflowService {
   updateWorkflow(workflowData: UpdateWorkflow): Workflow | undefined {
     const index = this.workflows.findIndex(w => w.id === workflowData.id);
     if (index === -1) return undefined;
-    
+
     const updatedWorkflow = {
       ...this.workflows[index],
       ...workflowData
     };
-    
+
     this.workflows[index] = updatedWorkflow;
     return updatedWorkflow;
   }

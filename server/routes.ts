@@ -7,8 +7,16 @@ import { openaiService } from "./openai";
 import { astrologyService } from "./astrology";
 import { stripeService } from "./stripe";
 import { workflowService, WorkflowSchema, CreateWorkflowSchema, UpdateWorkflowSchema } from "./workflow";
+import { agentOrchestrator } from "./agents";
 import { setupAuth } from "./auth";
 import { z } from "zod";
+import {
+  insertClientSchema, 
+  insertGeneratedContentSchema, 
+  insertOrderSchema,
+  insertOrderItemSchema,
+  insertTaskSchema
+} from "@shared/schema";
 
 // Create schemas for request validation
 const createDatabaseSchema = z.object({
@@ -804,6 +812,378 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error: any) {
       handleApiError(res, error, "Failed to cancel subscription");
+    }
+  });
+
+  // ===== CLIENT MANAGEMENT API ROUTES =====
+  
+  // Get all clients
+  app.get("/api/clients", isAuthenticated, async (_req: Request, res: Response) => {
+    try {
+      const clients = await storage.getAllClients();
+      res.json({ success: true, clients });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch clients");
+    }
+  });
+  
+  // Get a specific client
+  app.get("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const clientId = parseInt(req.params.id);
+      const client = await storage.getClient(clientId);
+      
+      if (!client) {
+        return res.status(404).json({ success: false, error: "Client not found" });
+      }
+      
+      res.json({ success: true, client });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch client");
+    }
+  });
+  
+  // Create a new client
+  app.post("/api/clients", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const clientData = insertClientSchema.parse(req.body);
+      const newClient = await storage.createClient(clientData);
+      res.status(201).json({ success: true, client: newClient });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create client");
+    }
+  });
+  
+  // Update a client
+  app.patch("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const clientId = parseInt(req.params.id);
+      const clientData = req.body;
+      
+      const updatedClient = await storage.updateClient(clientId, clientData);
+      
+      if (!updatedClient) {
+        return res.status(404).json({ success: false, error: "Client not found" });
+      }
+      
+      res.json({ success: true, client: updatedClient });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to update client");
+    }
+  });
+  
+  // Delete a client
+  app.delete("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const clientId = parseInt(req.params.id);
+      const success = await storage.deleteClient(clientId);
+      
+      if (!success) {
+        return res.status(404).json({ success: false, error: "Client not found" });
+      }
+      
+      res.json({ success: true, message: "Client deleted successfully" });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to delete client");
+    }
+  });
+  
+  // ===== GENERATED CONTENT API ROUTES =====
+  
+  // Get all generated content
+  app.get("/api/content", isAuthenticated, async (_req: Request, res: Response) => {
+    try {
+      const content = await storage.getAllGeneratedContent();
+      res.json({ success: true, content });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch content");
+    }
+  });
+  
+  // Get content by type
+  app.get("/api/content/type/:contentType", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { contentType } = req.params;
+      const content = await storage.getGeneratedContentByType(contentType);
+      res.json({ success: true, content });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch content by type");
+    }
+  });
+  
+  // Get content by user
+  app.get("/api/content/user/:userId", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const content = await storage.getGeneratedContentByUser(userId);
+      res.json({ success: true, content });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch content by user");
+    }
+  });
+  
+  // Get a specific content item
+  app.get("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const contentId = parseInt(req.params.id);
+      const content = await storage.getGeneratedContent(contentId);
+      
+      if (!content) {
+        return res.status(404).json({ success: false, error: "Content not found" });
+      }
+      
+      res.json({ success: true, content });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch content");
+    }
+  });
+  
+  // Create new content
+  app.post("/api/content", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      // Include the user ID from the authenticated user
+      const contentData = insertGeneratedContentSchema.parse({
+        ...req.body,
+        userId: req.user.id
+      });
+      
+      const newContent = await storage.createGeneratedContent(contentData);
+      res.status(201).json({ success: true, content: newContent });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create content");
+    }
+  });
+  
+  // Update content
+  app.patch("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const contentId = parseInt(req.params.id);
+      const contentData = req.body;
+      
+      const updatedContent = await storage.updateGeneratedContent(contentId, contentData);
+      
+      if (!updatedContent) {
+        return res.status(404).json({ success: false, error: "Content not found" });
+      }
+      
+      res.json({ success: true, content: updatedContent });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to update content");
+    }
+  });
+  
+  // Delete content
+  app.delete("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const contentId = parseInt(req.params.id);
+      const success = await storage.deleteGeneratedContent(contentId);
+      
+      if (!success) {
+        return res.status(404).json({ success: false, error: "Content not found" });
+      }
+      
+      res.json({ success: true, message: "Content deleted successfully" });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to delete content");
+    }
+  });
+  
+  // ===== ORDER MANAGEMENT API ROUTES =====
+  
+  // Get all orders
+  app.get("/api/orders", isAuthenticated, async (_req: Request, res: Response) => {
+    try {
+      const orders = await storage.getAllOrders();
+      res.json({ success: true, orders });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch orders");
+    }
+  });
+  
+  // Get orders by client
+  app.get("/api/orders/client/:clientId", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const clientId = parseInt(req.params.clientId);
+      const orders = await storage.getOrdersByClient(clientId);
+      res.json({ success: true, orders });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch orders by client");
+    }
+  });
+  
+  // Get a specific order
+  app.get("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const orderId = parseInt(req.params.id);
+      const order = await storage.getOrder(orderId);
+      
+      if (!order) {
+        return res.status(404).json({ success: false, error: "Order not found" });
+      }
+      
+      // Get the order items
+      const items = await storage.getOrderItems(orderId);
+      
+      res.json({ success: true, order, items });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch order");
+    }
+  });
+  
+  // Create a new order
+  app.post("/api/orders", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { orderData, items } = req.body;
+      
+      // Validate order data
+      const validOrderData = insertOrderSchema.parse(orderData);
+      
+      // Create the order first
+      const newOrder = await storage.createOrder(validOrderData);
+      
+      // Then create each order item
+      if (items && Array.isArray(items)) {
+        for (const item of items) {
+          await storage.createOrderItem({
+            ...item,
+            orderId: newOrder.id
+          });
+        }
+      }
+      
+      // Get the complete order with items
+      const orderItems = await storage.getOrderItems(newOrder.id);
+      
+      res.status(201).json({ 
+        success: true, 
+        order: newOrder, 
+        items: orderItems 
+      });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create order");
+    }
+  });
+  
+  // Update an order
+  app.patch("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const orderId = parseInt(req.params.id);
+      const orderData = req.body;
+      
+      const updatedOrder = await storage.updateOrder(orderId, orderData);
+      
+      if (!updatedOrder) {
+        return res.status(404).json({ success: false, error: "Order not found" });
+      }
+      
+      res.json({ success: true, order: updatedOrder });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to update order");
+    }
+  });
+  
+  // Delete an order
+  app.delete("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const orderId = parseInt(req.params.id);
+      const success = await storage.deleteOrder(orderId);
+      
+      if (!success) {
+        return res.status(404).json({ success: false, error: "Order not found" });
+      }
+      
+      res.json({ success: true, message: "Order deleted successfully" });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to delete order");
+    }
+  });
+  
+  // ===== TASK MANAGEMENT API ROUTES =====
+  
+  // Get all tasks
+  app.get("/api/tasks", isAuthenticated, async (_req: Request, res: Response) => {
+    try {
+      const tasks = await storage.getAllTasks();
+      res.json({ success: true, tasks });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch tasks");
+    }
+  });
+  
+  // Get tasks by user
+  app.get("/api/tasks/user/:userId", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const tasks = await storage.getTasksByUser(userId);
+      res.json({ success: true, tasks });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch tasks by user");
+    }
+  });
+  
+  // Get a specific task
+  app.get("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const taskId = parseInt(req.params.id);
+      const task = await storage.getTask(taskId);
+      
+      if (!task) {
+        return res.status(404).json({ success: false, error: "Task not found" });
+      }
+      
+      res.json({ success: true, task });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to fetch task");
+    }
+  });
+  
+  // Create a new task
+  app.post("/api/tasks", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      // Include the user ID from the authenticated user
+      const taskData = insertTaskSchema.parse({
+        ...req.body,
+        userId: req.user.id
+      });
+      
+      const newTask = await storage.createTask(taskData);
+      res.status(201).json({ success: true, task: newTask });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to create task");
+    }
+  });
+  
+  // Update a task
+  app.patch("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const taskId = parseInt(req.params.id);
+      const taskData = req.body;
+      
+      const updatedTask = await storage.updateTask(taskId, taskData);
+      
+      if (!updatedTask) {
+        return res.status(404).json({ success: false, error: "Task not found" });
+      }
+      
+      res.json({ success: true, task: updatedTask });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to update task");
+    }
+  });
+  
+  // Delete a task
+  app.delete("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const taskId = parseInt(req.params.id);
+      const success = await storage.deleteTask(taskId);
+      
+      if (!success) {
+        return res.status(404).json({ success: false, error: "Task not found" });
+      }
+      
+      res.json({ success: true, message: "Task deleted successfully" });
+    } catch (error: any) {
+      handleApiError(res, error, "Failed to delete task");
     }
   });
 
