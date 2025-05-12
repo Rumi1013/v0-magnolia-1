@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'wouter';
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 // Brand colors
 const colors = {
@@ -14,24 +12,8 @@ const colors = {
   darkNavy: "#051224"
 };
 
-interface TierBenefit {
-  text: string;
-  highlight?: boolean;
-}
-
-interface PatreonTier {
-  name: string;
-  price: string;
-  tagline: string;
-  icon: string;
-  description: string;
-  benefits: string[];
-  backgroundColor: string;
-  accentColor: string;
-  link: string;
-}
-
-const tierData: PatreonTier[] = [
+// Tier data
+const tierData = [
   {
     name: "Magnolia Seed",
     price: "$3",
@@ -45,8 +27,7 @@ const tierData: PatreonTier[] = [
       "Access to patron-only feed"
     ],
     backgroundColor: colors.midnightBlue,
-    accentColor: colors.sageGreen,
-    link: "https://www.patreon.com/join/midnightmagnolia/checkout?rid=8159932"
+    accentColor: colors.sageGreen
   },
   {
     name: "Crescent Bloom",
@@ -62,8 +43,7 @@ const tierData: PatreonTier[] = [
       "Early announcements"
     ],
     backgroundColor: colors.midnightTeal,
-    accentColor: colors.magnoliaWhite,
-    link: "https://www.patreon.com/join/midnightmagnolia/checkout?rid=8159933"
+    accentColor: colors.magnoliaWhite
   },
   {
     name: "Golden Grove",
@@ -79,8 +59,7 @@ const tierData: PatreonTier[] = [
       "10% discount code for shop"
     ],
     backgroundColor: colors.darkNavy,
-    accentColor: colors.richGold,
-    link: "https://www.patreon.com/join/midnightmagnolia/checkout?rid=8159934"
+    accentColor: colors.richGold
   },
   {
     name: "Moonlit Sanctuary",
@@ -97,8 +76,7 @@ const tierData: PatreonTier[] = [
       "15% discount code for shop"
     ],
     backgroundColor: colors.midnightBlue,
-    accentColor: colors.magnoliaWhite,
-    link: "https://www.patreon.com/join/midnightmagnolia/checkout?rid=8159935"
+    accentColor: colors.magnoliaWhite
   },
   {
     name: "House of Midnight",
@@ -115,14 +93,13 @@ const tierData: PatreonTier[] = [
       "25% discount code for shop"
     ],
     backgroundColor: colors.darkNavy,
-    accentColor: colors.richGold,
-    link: "https://www.patreon.com/join/midnightmagnolia/checkout?rid=8159936"
+    accentColor: colors.richGold
   }
 ];
 
-// SVG components for decorative elements
-const MagnoliaFlower = ({ className = "" }: { className?: string }) => (
-  <svg className={className} width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+// SVGs for decoration
+const MagnoliaFlower = () => (
+  <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="50" cy="50" r="15" fill="currentColor" fillOpacity="0.7" />
     <path d="M50 35C46 41 43 48 50 50C57 48 54 41 50 35Z" fill="currentColor" />
     <path d="M50 35C54 41 57 48 50 50C43 48 46 41 50 35Z" fill="currentColor" />
@@ -131,128 +108,106 @@ const MagnoliaFlower = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const CrescentMoon = ({ className = "" }: { className?: string }) => (
-  <svg className={className} width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+const CrescentMoon = () => (
+  <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M70 30C59.5 30 50.1 34.7 44 42.3C47.6 39.6 52.1 38 57 38C72.5 38 85 50.5 85 66C85 81.5 72.5 94 57 94C52.1 94 47.6 92.4 44 89.7C50.1 97.3 59.5 102 70 102C89 102 104 87 104 68C104 49 89 34 70 34V30Z" fill="currentColor" />
   </svg>
 );
 
-const PatreonTierCard = ({ tier, index }: { tier: PatreonTier, index: number }) => {
+interface PatreonTiersProps {
+  className?: string;
+  compact?: boolean;
+}
+
+const PatreonTiers: React.FC<PatreonTiersProps> = ({ className = "", compact = false }) => {
   return (
-    <Card 
-      className="w-full overflow-hidden border-2 transition-all duration-300 hover:shadow-lg relative"
-      style={{ 
-        backgroundColor: tier.backgroundColor, 
-        borderColor: tier.accentColor,
-        color: colors.magnoliaWhite,
-      }}
-    >
-      {/* Decorative elements */}
-      <div className="absolute top-3 right-3 opacity-20" style={{ color: tier.accentColor }}>
-        {index % 2 === 0 ? <MagnoliaFlower /> : <CrescentMoon />}
+    <div className={`mx-auto max-w-6xl ${className}`}>
+      <div className="text-center mb-10">
+        <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-4">
+          Join Our Membership Community
+        </h2>
+        <p className="text-[#FAF3E0] opacity-90 max-w-2xl mx-auto font-lora">
+          Choose the tier that resonates with your journey and gain access to exclusive content, personalized guidance, and a supportive community.
+        </p>
       </div>
       
-      <CardHeader>
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-3xl">{tier.icon}</span>
-          <CardTitle 
-            className="font-playfair text-2xl" 
-            style={{ color: tier.accentColor }}
-          >
-            {tier.name}
-          </CardTitle>
-        </div>
-        
-        <Badge 
-          className="mb-2 font-medium" 
-          style={{ 
-            backgroundColor: "rgba(0,0,0,0.2)", 
-            color: tier.accentColor 
-          }}
-        >
-          {tier.price}/month
-        </Badge>
-        
-        <CardDescription 
-          className="font-lora italic text-base mb-2" 
-          style={{ color: tier.accentColor }}
-        >
-          "{tier.tagline}"
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <p className="font-lora mb-5 text-base">
-          {tier.description}
-        </p>
-        
-        <h3 
-          className="font-montserrat text-sm uppercase tracking-wider mb-3"
-          style={{ color: tier.accentColor }}
-        >
-          Includes:
-        </h3>
-        
-        <ul className="space-y-2">
-          {tier.benefits.map((benefit, i) => (
-            <li key={i} className="flex items-start gap-2 font-lora text-base">
-              <span style={{ color: tier.accentColor }}>✦</span>
-              {benefit}
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      
-      <CardFooter>
-        <a href={tier.link} target="_blank" rel="noopener noreferrer" className="w-full">
-          <Button 
-            className="w-full font-montserrat text-sm uppercase tracking-wider font-semibold transition-all duration-300"
-            style={{ 
-              backgroundColor: tier.accentColor, 
-              color: tier.backgroundColor 
+      <div className={`grid gap-8 ${compact ? 'md:grid-cols-2 lg:grid-cols-3' : 'md:grid-cols-1 lg:grid-cols-2'}`}>
+        {tierData.map((tier, index) => (
+          <Card 
+            key={tier.name} 
+            className="overflow-hidden border-0 shadow-lg relative"
+            style={{
+              backgroundColor: tier.backgroundColor,
+              borderColor: tier.accentColor,
+              borderWidth: "1px",
+              borderStyle: "solid"
             }}
           >
-            Join {tier.name}
-          </Button>
-        </a>
-      </CardFooter>
-    </Card>
-  );
-};
-
-const PatreonTiers = () => {
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="font-playfair text-4xl md:text-5xl text-center mb-8 text-[#D4AF37]">
-        Midnight Magnolia Membership
-      </h1>
-      
-      <p className="font-lora text-lg text-center max-w-3xl mx-auto mb-12 text-[#FAF3E0]">
-        Join our intimate community of seekers and creators. Your membership supports our independent work and grants you access to exclusive content, tools, and a space to nurture your personal practice.
-      </p>
-      
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {tierData.slice(0, 3).map((tier, index) => (
-          <PatreonTierCard key={index} tier={tier} index={index} />
+            {/* Decorative elements */}
+            <div className="absolute top-4 right-4 opacity-20" style={{ color: tier.accentColor }}>
+              {index % 2 === 0 ? <MagnoliaFlower /> : <CrescentMoon />}
+            </div>
+            
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <span className="text-3xl">{tier.icon}</span>
+                <div>
+                  <CardTitle className="text-2xl font-playfair" style={{ color: tier.accentColor }}>
+                    {tier.name}
+                  </CardTitle>
+                  <div className="inline-block mt-1 px-3 py-1 rounded-md" style={{ backgroundColor: "rgba(0,0,0,0.2)", color: tier.accentColor }}>
+                    <span className="font-bold">{tier.price}</span>
+                    <span className="text-sm">/month</span>
+                  </div>
+                </div>
+              </div>
+              <CardDescription className="italic mt-3 font-lora text-base" style={{ color: tier.accentColor }}>
+                "{tier.tagline}"
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent>
+              <p className="text-[#FAF3E0] mb-6 font-lora">
+                {tier.description}
+              </p>
+              
+              <div>
+                <h4 className="uppercase text-xs tracking-wider mb-3 font-bold" style={{ color: tier.accentColor }}>
+                  Includes:
+                </h4>
+                <ul className="space-y-2">
+                  {tier.benefits.map((benefit, i) => (
+                    <li key={i} className="flex items-start gap-2 text-[#FAF3E0] font-lora">
+                      <span style={{ color: tier.accentColor }}>✦</span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+            
+            <CardFooter className="pt-4">
+              <Button 
+                className="w-full transition-transform hover:scale-105"
+                style={{ backgroundColor: tier.accentColor, color: tier.backgroundColor }}
+              >
+                Join {tier.name}
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
       
-      <div className="grid gap-8 md:grid-cols-2 mt-8 max-w-4xl mx-auto">
-        {tierData.slice(3).map((tier, index) => (
-          <PatreonTierCard key={index + 3} tier={tier} index={index + 3} />
-        ))}
-      </div>
-      
-      <div className="mt-16 max-w-3xl mx-auto p-6 bg-[#0A192F]/70 border border-[#A3B18A] rounded-lg">
-        <h3 className="font-playfair text-xl text-[#D4AF37] mb-3">
-          About Our Membership Program
-        </h3>
-        <p className="font-lora text-[#FAF3E0] mb-4">
-          Midnight Magnolia's membership program is designed for soul-centered individuals seeking to deepen their spiritual practice while supporting independent creators. Each tier builds upon the previous, offering a comprehensive journey through our offerings.
+      <div className="mt-12 text-center">
+        <p className="text-[#FAF3E0]/80 max-w-2xl mx-auto mb-6 font-lora">
+          All memberships automatically renew but can be cancelled anytime. Join our community today and begin your transformative journey with Midnight Magnolia.
         </p>
-        <p className="font-lora text-[#FAF3E0]">
-          Your patronage directly supports the creation of enchanting, thoughtful content that honors ancestral wisdom and Southern Gothic aesthetics while embracing modern mysticism.
-        </p>
+        <Button 
+          className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 hover:text-[#0A192F] px-8"
+          size="lg"
+        >
+          Explore All Membership Benefits
+        </Button>
       </div>
     </div>
   );
