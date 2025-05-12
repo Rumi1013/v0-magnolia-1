@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
+// Ensure all required libraries are imported
 
 export default function Home() {
   return (

@@ -11,20 +11,22 @@ const nextConfig = {
       },
     ],
   },
-  // Explicitly enable App Router
-  experimental: {
-    appDir: true,
-  },
-  // Ensure Pages Router continues to work alongside App Router
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  // Redirects for better compatibility
+  // For Next.js 13+ compatibility
+  appDir: true,
+  // For better debug information
+  distDir: '.next',
+  // For preserving the original structure
+  trailingSlash: true,
+  // Force static optimization for better compatibility
+  output: 'standalone',
+  // Handle redirects
   async redirects() {
     return [
       {
-        source: '/pages',
+        source: '/:path*',
         destination: '/',
         permanent: false,
-      },
+      }
     ];
   },
 }

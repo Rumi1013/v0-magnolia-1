@@ -1,15 +1,36 @@
+"use client";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold text-midnight-blue mb-6">
+    <main style={{
+      display: 'flex',
+      minHeight: '100vh',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
+      background: '#FAF3E0',
+      color: '#0A192F'
+    }}>
+      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
         Midnight Magnolia
       </h1>
-      <p className="text-xl text-midnight-teal mb-8">
+      <p style={{ fontSize: '1.25rem', marginBottom: '2rem', color: '#0A3B4D' }}>
         A Southern Digital Sanctuary
       </p>
-      <div className="flex flex-col md:flex-row gap-4">
-        <a href="/pages" className="btn btn-primary px-8 py-3">
-          Visit Pages Router Version
+      <div>
+        <a
+          href="/pages"
+          style={{
+            backgroundColor: '#D4AF37',
+            color: '#0A192F',
+            padding: '0.75rem 2rem',
+            borderRadius: '0.375rem',
+            textDecoration: 'none',
+            fontWeight: 'bold'
+          }}
+        >
+          Visit Main Site
         </a>
       </div>
     </main>
