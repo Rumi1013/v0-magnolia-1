@@ -99,6 +99,9 @@ function AppNavigation() {
                 <Link to="/dashboard" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/dashboard' ? 'text-[#D4AF37]' : ''}`}>
                   <span className="text-[#FAF3E0] hover:text-[#D4AF37]">My Dashboard</span>
                 </Link>
+                <Link to="/admin/integrations" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/admin/integrations' ? 'text-[#D4AF37]' : ''}`}>
+                  <span className="text-[#FAF3E0] hover:text-[#D4AF37]">Integrations</span>
+                </Link>
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -167,6 +170,15 @@ function AppNavigation() {
                       My Dashboard
                     </Button>
                   </Link>
+                  <Link to="/admin/integrations" onClick={() => setIsMenuOpen(false)}>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black w-full mb-2"
+                    >
+                      Integrations
+                    </Button>
+                  </Link>
                   <Button 
                     variant="outline" 
                     size="sm" 
@@ -210,6 +222,7 @@ function AppRouter() {
           <ProtectedRoute path="/dashboard" component={() => <DashboardPage />} />
           <ProtectedRoute path="/content-creator" component={() => <ContentCreatorPage />} />
           <ProtectedRoute path="/content-fulfillment" component={() => <ContentFulfillmentPage />} />
+          <ProtectedRoute path="/admin/integrations" component={() => <AdminIntegrations />} />
           <Route path="/library" component={() => <ClientViewPage />} />
           <Route path="/birth-chart" component={() => (
             <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
