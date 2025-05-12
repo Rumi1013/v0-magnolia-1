@@ -15,6 +15,8 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  // Output directory
+  distDir: '.next',
   // Ensure stable output for Vercel
   poweredByHeader: false,
   // Typescript
