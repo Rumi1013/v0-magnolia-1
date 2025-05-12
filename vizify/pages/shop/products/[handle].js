@@ -3,21 +3,21 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useShopify } from '../../../lib/shopify/context';
-import ShoppingCart from '../../../components/shopify/ShoppingCart';
+import ShoppingCart from '../../../src/components/shopify/ShoppingCart';
 import { getAllProducts, getProductByHandle } from '../../../lib/shopify/client';
 import styles from '../../../styles/shopify/ProductDetail.module.css';
 
 // Get paths for all products for static generation
 export async function getStaticPaths() {
   const products = await getAllProducts();
-  
+
   const paths = products.map((product) => ({
     params: { handle: product.handle },
   }));
-  
+
   return {
     paths,
-    fallback: 'blocking', // Show a loading state for new products
+    fallback: false, // Do not attempt to render pages that aren't built at build time
   };
 }
 
@@ -37,8 +37,7 @@ export async function getStaticProps({ params }) {
     return {
       props: {
         product: JSON.parse(JSON.stringify(product)),
-      },
-      revalidate: 3600, // Revalidate every hour
+      }
     };
   } catch (error) {
     console.error(`Error fetching product with handle ${handle}:`, error);

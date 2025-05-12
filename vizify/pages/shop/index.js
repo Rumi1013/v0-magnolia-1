@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useShopify } from '../../lib/shopify/context';
-import ProductCard from '../../components/shopify/ProductCard';
-import ShoppingCart from '../../components/shopify/ShoppingCart';
+import ProductCard from '../../src/components/shopify/ProductCard';
+import ShoppingCart from '../../src/components/shopify/ShoppingCart';
 import { getAllProducts, getAllCollections } from '../../lib/shopify/client';
 import styles from '../../styles/shopify/Shop.module.css';
 
@@ -11,14 +11,13 @@ export async function getStaticProps() {
   try {
     const products = await getAllProducts();
     const collections = await getAllCollections();
-    
+
     return {
       props: {
         initialProducts: JSON.parse(JSON.stringify(products)) || [],
         initialCollections: JSON.parse(JSON.stringify(collections)) || [],
       },
-      // Revalidate every hour
-      revalidate: 3600,
+      // No revalidate for static export
     };
   } catch (error) {
     console.error('Error fetching shop data:', error);
@@ -27,7 +26,6 @@ export async function getStaticProps() {
         initialProducts: [],
         initialCollections: [],
       },
-      revalidate: 60, // Retry sooner if there was an error
     };
   }
 }
