@@ -96,12 +96,36 @@ function AppNavigation() {
 
             {user ? (
               <div className="flex items-center space-x-4">
-                <Link to="/dashboard" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/dashboard' ? 'text-[#D4AF37]' : ''}`}>
-                  <span className="text-[#FAF3E0] hover:text-[#D4AF37]">My Dashboard</span>
-                </Link>
-                <Link to="/admin/integrations" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/admin/integrations' ? 'text-[#D4AF37]' : ''}`}>
-                  <span className="text-[#FAF3E0] hover:text-[#D4AF37]">Integrations</span>
-                </Link>
+                <div className="relative group">
+                  <button className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 flex items-center`}>
+                    <span className="text-[#FAF3E0] hover:text-[#D4AF37]">Admin</span>
+                    <svg className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-[#0A192F] z-10 hidden group-hover:block">
+                    <div className="py-1">
+                      <Link to="/admin/dashboard" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        Dashboard
+                      </Link>
+                      <Link to="/admin/content-creator" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        Content Creator
+                      </Link>
+                      <Link to="/admin/ai-tools" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        AI Tools
+                      </Link>
+                      <Link to="/admin/workflows" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        Workflows
+                      </Link>
+                      <Link to="/admin/integrations" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        Integrations
+                      </Link>
+                      <Link to="/admin/grimoire" className="block px-4 py-2 text-sm text-[#FAF3E0] hover:bg-[#051224] hover:text-[#D4AF37]">
+                        Digital Grimoire
+                      </Link>
+                    </div>
+                  </div>
+                </div>
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -216,19 +240,18 @@ function AppRouter() {
         <Switch>
           <Route path="/auth" component={AuthPage} />
           <Route path="/" component={Home} />
-          <ProtectedRoute path="/notion" component={() => <Notion />} />
-          <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
-          <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
-          <ProtectedRoute path="/dashboard" component={() => <DashboardPage />} />
-          <ProtectedRoute path="/content-creator" component={() => <ContentCreatorPage />} />
-          <ProtectedRoute path="/content-fulfillment" component={() => <ContentFulfillmentPage />} />
+          {/* Admin Backend Routes (Protected) */}
+          <ProtectedRoute path="/admin/dashboard" component={() => <DashboardPage />} />
+          <ProtectedRoute path="/admin/notion" component={() => <Notion />} />
+          <ProtectedRoute path="/admin/workflows" component={() => <WorkflowPage />} />
+          <ProtectedRoute path="/admin/ai-tools" component={() => <AIToolsPage />} />
+          <ProtectedRoute path="/admin/content-creator" component={() => <ContentCreatorPage />} />
+          <ProtectedRoute path="/admin/content-fulfillment" component={() => <ContentFulfillmentPage />} />
           <ProtectedRoute path="/admin/integrations" component={() => <AdminIntegrations />} />
+          <ProtectedRoute path="/admin/grimoire" component={() => <DigitalGrimoirePage />} />
+          
+          {/* Customer-Facing (Public) Routes */}
           <Route path="/library" component={() => <ClientViewPage />} />
-          <Route path="/birth-chart" component={() => (
-            <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
-              <BirthChartGenerator />
-            </div>
-          )} />
           <Route path="/pricing" component={() => (
             <div className="bg-gradient-to-b from-[#0A192F]/5 to-[#FAF3E0]/20 min-h-screen py-8">
               <TieredProductPricing />

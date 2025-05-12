@@ -1,355 +1,377 @@
-import React from 'react';
-import { Link } from 'wouter';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { 
+  BookOpen, 
+  FileText, 
+  Star, 
+  Moon, 
+  Music, 
+  Calendar, 
+  Download, 
+  Heart,
+  Sparkles,
+  MapPin,
+  Feather,
+  Scroll,
+  BookMarked,
+  Search
+} from 'lucide-react';
 
-// Brand colors
-const colors = {
-  midnightBlue: "#0A192F",
-  midnightTeal: "#0A3B4D",
-  magnoliaWhite: "#FAF3E0",
-  richGold: "#D4AF37",
-  sageGreen: "#A3B18A",
-  darkNavy: "#051224"
-};
-
-const ContentOfferingsPage = () => {
-  // Content Types from the Patreon Templates
-  const contentTypes = [
-    {
-      id: "affirmations",
-      name: "Monthly Affirmation Cards",
-      icon: "✨",
-      description: "Beautiful affirmation cards with southern gothic aesthetic and soul-centered wisdom.",
-      examples: [
-        {
-          title: "May Affirmations: Blooming Through Shadows",
-          details: "Theme: Growth After Adversity",
-          samples: [
-            "I bloom most brilliantly in the spaces where darkness once lived.",
-            "My resilience is rooted in generations of survivors who whisper strength to me.",
-            "I trust the midnight hour to reveal what daylight cannot.",
-            "My shadow self carries wisdom I am now ready to receive.",
-            "Like the magnolia, I thrive despite storms, not in their absence."
-          ],
-          tiers: ["Magnolia Seed", "Crescent Bloom", "Golden Grove", "Moonlit Sanctuary", "House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "wallpapers",
-      name: "Digital Wallpapers",
-      icon: "🖼️",
-      description: "Exclusive phone and desktop wallpapers with inspirational quotes and beautiful design.",
-      examples: [
-        {
-          title: "May Wallpapers: Midnight Garden",
-          details: "Theme: Southern Gothic Gardens",
-          samples: [
-            "Magnolia by Moonlight - Silhouetted magnolia tree against night sky with text overlay: 'Even in darkness, I bloom'",
-            "Garden of Memories - Spanish moss hanging from elegant branches with text overlay: 'Rooted in ancestry, growing toward possibility'",
-            "Midnight Sanctuary - Garden gate with magnolia wreath with text overlay: 'Sacred boundaries, sacred space'"
-          ],
-          tiers: ["Magnolia Seed", "Crescent Bloom", "Golden Grove", "Moonlit Sanctuary", "House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "tarot",
-      name: "Monthly Tarot Card",
-      icon: "🔮",
-      description: "Deep dive into tarot wisdom with southern gothic interpretations and personal reflection prompts.",
-      examples: [
-        {
-          title: "May Tarot Insight: The Hermit",
-          details: "Card Details: The Hermit (IX of Major Arcana)",
-          samples: [
-            "The Hermit brings us the gift of sacred solitude – not as isolation, but as the needed space where wisdom germinates.",
-            "In Southern Gothic tradition, The Hermit represents the elder who knows the old ways, the healer who lives at the edge of town with remedies others have forgotten.",
-            "Journal Prompts: What wisdom am I seeking that can only be found in silence?",
-            "Affirmation: I honor the wisdom that only silence can reveal."
-          ],
-          tiers: ["Crescent Bloom", "Golden Grove", "Moonlit Sanctuary", "House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "journals",
-      name: "Journal Pages & Worksheets",
-      icon: "📝",
-      description: "Printable journal pages and worksheets for deeper spiritual practice and personal growth.",
-      examples: [
-        {
-          title: "May Journal Pages: Ancestral Healing",
-          details: "Theme: Connecting with Family Wisdom",
-          samples: [
-            "Ancestral Wisdom Tracker - Document family sayings, wisdom, and traditions",
-            "Healing Genogram Template - Map family patterns to identify areas for healing",
-            "Letter to Ancestors - Guided writing prompts for dialoguing with those who came before",
-            "Ancestral Recipes & Remedies - Preserve family healing traditions",
-            "Monthly Ancestral Altar Guide - Create sacred space for ancestral connection"
-          ],
-          tiers: ["Golden Grove", "Moonlit Sanctuary", "House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "audio",
-      name: "Audio Rituals & Playlists",
-      icon: "🎧",
-      description: "Guided meditations, rituals, and curated playlists for your spiritual practice.",
-      examples: [
-        {
-          title: "May Audio: Magnolia Moon Meditation",
-          details: "Type: Guided Meditation with Visualization",
-          samples: [
-            "Introduction - Welcome and setting intention for connecting with inner strength",
-            "Grounding - Deep breathing exercise with body scan for tension release",
-            "Magnolia Visualization - Imagining a magnolia tree growing from your heart center",
-            "Moonlight Illumination - Visualization of moonlight revealing hidden strengths",
-            "Integration - Bringing insights back into daily life"
-          ],
-          tiers: ["Golden Grove", "Moonlit Sanctuary", "House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "personalized",
-      name: "Personalized Content",
-      icon: "💌",
-      description: "Custom affirmations, tarot readings, and personalized guidance for your unique journey.",
-      examples: [
-        {
-          title: "Monthly Personalized Affirmation",
-          details: "Custom affirmation based on your current life circumstances and spiritual focus.",
-          samples: [],
-          tiers: ["Moonlit Sanctuary", "House of Midnight"]
-        },
-        {
-          title: "Custom Tarot Reading",
-          details: "Monthly personal tarot reading with detailed interpretation and guidance.",
-          samples: [],
-          tiers: ["House of Midnight"]
-        }
-      ]
-    },
-    {
-      id: "physical",
-      name: "Physical Mail Package",
-      icon: "📦",
-      description: "Quarterly physical mailings with tangible magical items and exclusive printed materials.",
-      examples: [
-        {
-          title: "Quarterly Physical Mail Package",
-          details: "A curated collection of physical items sent by mail each quarter.",
-          samples: [
-            "Printed affirmation cards on premium cardstock",
-            "Custom printed journal with exclusive prompts",
-            "Ritual items and tools",
-            "Handwritten note from the creator",
-            "Seasonal themed physical products"
-          ],
-          tiers: ["House of Midnight"]
-        }
-      ]
-    }
+const ContentOfferingsPage: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Content categories
+  const categories = [
+    { id: 'affirmations', name: 'Affirmation Cards', icon: Star },
+    { id: 'tarot', name: 'Tarot Readings', icon: Moon },
+    { id: 'journals', name: 'Journal Prompts', icon: FileText },
+    { id: 'rituals', name: 'Ritual Guides', icon: Sparkles },
+    { id: 'audio', name: 'Audio Content', icon: Music },
+    { id: 'seasonal', name: 'Seasonal Collections', icon: Calendar }
   ];
-
-  // Tier information from PatreonTiers.tsx
-  const tierData = [
-    {
-      name: "Magnolia Seed",
-      price: "$3",
-      tagline: "Plant the seeds of transformation",
-      icon: "🌱",
-      accentColor: colors.sageGreen,
-      backgroundColor: colors.midnightBlue
-    },
-    {
-      name: "Crescent Bloom",
-      price: "$7",
-      tagline: "Illuminate your path through shadow and light",
-      icon: "🌙",
-      accentColor: colors.magnoliaWhite,
-      backgroundColor: colors.midnightTeal
-    },
-    {
-      name: "Golden Grove",
-      price: "$15",
-      tagline: "Nurture your creative spirit and ancestral wisdom",
-      icon: "✨",
-      accentColor: colors.richGold,
-      backgroundColor: colors.darkNavy
-    },
-    {
-      name: "Moonlit Sanctuary",
-      price: "$30",
-      tagline: "Enter the sacred space of collective healing",
-      icon: "🌑",
-      accentColor: colors.magnoliaWhite,
-      backgroundColor: colors.midnightBlue
-    },
-    {
-      name: "House of Midnight",
-      price: "$75",
-      tagline: "Dwell in the ancestral mansion of creative abundance",
-      icon: "🏛️",
-      accentColor: colors.richGold,
-      backgroundColor: colors.darkNavy
+  
+  // Sample content for each category
+  const contentItems = {
+    affirmations: [
+      {
+        id: 'aff1',
+        title: 'Ancestral Connection',
+        preview: '/assets/affirmation-preview.jpg',
+        description: 'A set of 5 digital affirmation cards focusing on connecting with ancestral wisdom and power.',
+        tier: 'Magnolia Seed',
+        sample: 'I honor the strength and resilience that flows through my ancestral lineage. Their wisdom guides my path forward.',
+        tags: ['ancestry', 'connection', 'strength']
+      },
+      {
+        id: 'aff2',
+        title: 'Shadow Embrace',
+        preview: '/assets/affirmation-shadow.jpg',
+        description: 'Affirmations that help you embrace and integrate your shadow aspects with compassion.',
+        tier: 'Crescent Bloom',
+        sample: 'I embrace my shadows with gentle curiosity. Within their depths, I discover treasures of wisdom and healing.',
+        tags: ['shadow work', 'integration', 'healing']
+      },
+      {
+        id: 'aff3',
+        title: 'Southern Roots',
+        preview: '/assets/affirmation-southern.jpg',
+        description: 'Affirmations that connect you to the mystical essence of Southern landscapes and traditions.',
+        tier: 'Golden Grove',
+        sample: 'The Spanish moss of my soul hangs gracefully, collecting the wisdom of generations. I am rooted in this sacred earth.',
+        tags: ['southern', 'roots', 'tradition']
+      }
+    ],
+    tarot: [
+      {
+        id: 'tarot1',
+        title: 'Monthly Moon Reading',
+        preview: '/assets/tarot-moon.jpg',
+        description: 'A three-card spread offering guidance for the lunar cycle ahead.',
+        tier: 'Crescent Bloom',
+        sample: 'Your first card, The Empress, suggests this lunar cycle brings abundant creative energy. The second card...',
+        tags: ['lunar cycle', 'monthly guidance', 'three-card spread']
+      },
+      {
+        id: 'tarot2',
+        title: 'Shadow & Light Pathway',
+        preview: '/assets/tarot-shadow.jpg',
+        description: 'A specialized spread examining the interplay between your shadow aspects and light.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'In the Shadow position, the Seven of Swords reveals your tendency to self-sabotage through intellectualization...',
+        tags: ['shadow work', 'integration', 'balance']
+      },
+      {
+        id: 'tarot3',
+        title: 'Ancestor Wisdom Channel',
+        preview: '/assets/tarot-ancestor.jpg',
+        description: 'A unique spread designed to connect with ancestral guides and their messages.',
+        tier: 'House of Midnight',
+        sample: 'Your ancestral guide appears as the Queen of Cups, suggesting you come from a lineage of intuitive healers...',
+        tags: ['ancestry', 'guidance', 'channeling']
+      }
+    ],
+    journals: [
+      {
+        id: 'journal1',
+        title: 'Shadow Integration Journal',
+        preview: '/assets/journal-shadow.jpg',
+        description: 'A 7-day journal prompt series focused on identifying and integrating shadow aspects.',
+        tier: 'Golden Grove',
+        sample: 'Day 1: Recall a recent situation where you felt triggered. Describe the emotion that arose and the thoughts that accompanied it...',
+        tags: ['shadow work', '7-day series', 'integration']
+      },
+      {
+        id: 'journal2',
+        title: 'Southern Gothic Reflections',
+        preview: '/assets/journal-gothic.jpg',
+        description: 'Atmospheric prompts inspired by Southern Gothic themes and landscapes.',
+        tier: 'Golden Grove',
+        sample: 'The old magnolia tree stands witness to generations of secrets. What whispers would you hear if you pressed your ear to its bark?',
+        tags: ['southern gothic', 'atmospheric', 'creative writing']
+      },
+      {
+        id: 'journal3',
+        title: 'Full Moon Release Pages',
+        preview: '/assets/journal-fullmoon.jpg',
+        description: 'Printable journal pages designed for full moon release rituals and reflection.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'List what you are ready to release with this full moon. Then, explore how each item has served you before you let it go...',
+        tags: ['full moon', 'release ritual', 'printable']
+      }
+    ],
+    rituals: [
+      {
+        id: 'ritual1',
+        title: 'New Moon Intention Setting',
+        preview: '/assets/ritual-newmoon.jpg',
+        description: 'A simple yet powerful ritual for setting intentions at the new moon.',
+        tier: 'Golden Grove',
+        sample: 'Gather: A black candle, a small piece of paper, a pen, and a small bowl of water. Begin by creating sacred space...',
+        tags: ['new moon', 'intentions', 'beginnings']
+      },
+      {
+        id: 'ritual2',
+        title: 'Ancestral Altar Creation',
+        preview: '/assets/ritual-altar.jpg',
+        description: 'Guide to creating and working with an ancestral connection altar.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'Your ancestral altar is a bridge between worlds. Start by selecting a location that will remain undisturbed...',
+        tags: ['ancestor work', 'altar', 'connection']
+      },
+      {
+        id: 'ritual3',
+        title: 'Southern Crossroads Working',
+        preview: '/assets/ritual-crossroads.jpg',
+        description: 'A traditional Southern crossroads ritual adapted for modern practitioners.',
+        tier: 'House of Midnight',
+        sample: 'The crossroads has long been a place of power in Southern folk tradition. This working draws upon those currents...',
+        tags: ['southern tradition', 'crossroads', 'folk magic']
+      }
+    ],
+    audio: [
+      {
+        id: 'audio1',
+        title: 'Magnolia Meditation',
+        preview: '/assets/audio-magnolia.jpg',
+        description: 'A 15-minute guided meditation connecting to the magnolia as a symbol of grace and strength.',
+        tier: 'Golden Grove',
+        sample: 'Audio preview not available in text form.',
+        tags: ['meditation', '15-minute', 'tree connection']
+      },
+      {
+        id: 'audio2',
+        title: 'Southern Gothic Ambient Mix',
+        preview: '/assets/audio-gothic.jpg',
+        description: 'Atmospheric background audio for ritual work, featuring cicadas, distant thunder, and soft piano.',
+        tier: 'Golden Grove',
+        sample: 'Audio preview not available in text form.',
+        tags: ['ambient', 'atmospheric', 'background']
+      },
+      {
+        id: 'audio3',
+        title: 'Shadow Integration Journey',
+        preview: '/assets/audio-shadow.jpg',
+        description: 'A 30-minute guided journey into the shadow realm with gentle integration guidance.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'Audio preview not available in text form.',
+        tags: ['shadow work', 'guided journey', '30-minute']
+      }
+    ],
+    seasonal: [
+      {
+        id: 'seasonal1',
+        title: 'Summer Solstice Collection',
+        preview: '/assets/seasonal-summer.jpg',
+        description: 'A comprehensive collection of affirmations, journal prompts, and a ritual for the summer solstice.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'This collection includes 5 solstice-themed affirmation cards, 3 journal prompts, and a full fire-centered ritual...',
+        tags: ['summer solstice', 'collection', 'fire element']
+      },
+      {
+        id: 'seasonal2',
+        title: 'Autumn Equinox Bundle',
+        preview: '/assets/seasonal-autumn.jpg',
+        description: 'An atmospheric bundle of content celebrating the balance of light and dark at the autumn equinox.',
+        tier: 'Moonlit Sanctuary',
+        sample: 'The Autumn Equinox Bundle includes balance-focused journal prompts, a guided meditation, and a harvest ritual...',
+        tags: ['autumn equinox', 'balance', 'harvest']
+      },
+      {
+        id: 'seasonal3',
+        title: 'Southern Gothic Halloween',
+        preview: '/assets/seasonal-halloween.jpg',
+        description: 'A special collection exploring the veil-thinning season through a Southern Gothic lens.',
+        tier: 'House of Midnight',
+        sample: 'This premium collection includes exclusive cemetery photography, ancestral connection rituals, and haunting audio...',
+        tags: ['halloween', 'southern gothic', 'ancestors']
+      }
+    ]
+  };
+  
+  // Filter content items based on search query (across all categories)
+  const filterContentItems = (items: any) => {
+    if (!searchQuery) return items;
+    
+    const query = searchQuery.toLowerCase();
+    const result = {};
+    
+    Object.keys(items).forEach(category => {
+      result[category] = items[category].filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.description.toLowerCase().includes(query) || 
+        item.sample.toLowerCase().includes(query) || 
+        item.tags.some(tag => tag.toLowerCase().includes(query))
+      );
+    });
+    
+    return result;
+  };
+  
+  const filteredContent = filterContentItems(contentItems);
+  
+  // Helper function to determine tier badge color
+  const getTierColor = (tier: string) => {
+    switch (tier) {
+      case 'Magnolia Seed':
+        return 'bg-[#A3B18A]/70 hover:bg-[#A3B18A]';
+      case 'Crescent Bloom':
+        return 'bg-[#0A3B4D]/70 hover:bg-[#0A3B4D]';
+      case 'Golden Grove':
+        return 'bg-[#D4AF37]/70 hover:bg-[#D4AF37] text-[#0A192F]';
+      case 'Moonlit Sanctuary':
+        return 'bg-[#FAF3E0]/70 hover:bg-[#FAF3E0] text-[#0A192F]';
+      case 'House of Midnight':
+        return 'bg-gradient-to-r from-[#D4AF37]/80 to-[#0A3B4D]/80 hover:from-[#D4AF37] hover:to-[#0A3B4D]';
+      default:
+        return 'bg-[#0A3B4D]/70 hover:bg-[#0A3B4D]';
     }
-  ];
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#051224] to-[#0A192F]">
-      {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-playfair text-5xl md:text-6xl text-[#D4AF37] mb-6">
-              Content & Offerings
-            </h1>
-            <p className="font-lora text-xl text-[#FAF3E0] mb-8 leading-relaxed">
-              Explore the enchanting content available through our Patreon membership tiers.
-              Each piece is crafted with intention, combining Southern Gothic aesthetics with
-              spiritual guidance and ancestral wisdom.
-            </p>
-            <Link to="/membership">
-              <Button 
-                className="bg-[#D4AF37] text-[#051224] hover:bg-[#D4AF37]/90 font-montserrat"
-                size="lg"
+    <div className="bg-[#0A192F] min-h-screen py-12">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-playfair text-[#D4AF37] mb-6">
+            Content Offerings
+          </h1>
+          <p className="text-xl font-lora text-[#FAF3E0] mb-8 leading-relaxed">
+            Explore our curated collection of content designed to nurture your spiritual journey and 
+            creative expression through our Southern Gothic aesthetic.
+          </p>
+          
+          {/* Search bar */}
+          <div className="relative max-w-lg mx-auto mb-8">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#A3B18A]" />
+            <Input 
+              placeholder="Search content offerings..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 bg-[#051224] border-[#A3B18A]/30 text-[#FAF3E0] py-6"
+            />
+          </div>
+        </div>
+        
+        {/* Content Tabs */}
+        <Tabs defaultValue="affirmations" className="w-full">
+          <TabsList className="grid grid-cols-2 md:grid-cols-6 bg-[#051224] mb-8">
+            {categories.map(category => (
+              <TabsTrigger 
+                key={category.id}
+                value={category.id}
+                className="data-[state=active]:bg-[#0A3B4D] data-[state=active]:text-[#FAF3E0] py-3"
               >
-                View Membership Tiers
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Content Showcase */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <Tabs defaultValue={contentTypes[0].id} className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 mb-8 bg-[#0A192F]/50">
-              {contentTypes.map(type => (
-                <TabsTrigger 
-                  key={type.id} 
-                  value={type.id}
-                  className="text-[#FAF3E0] data-[state=active]:text-[#D4AF37] data-[state=active]:bg-[#0A192F]/70"
-                >
-                  <span className="mr-2">{type.icon}</span>
-                  <span className="hidden md:inline">{type.name}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            
-            {contentTypes.map(type => (
-              <TabsContent key={type.id} value={type.id} className="focus-visible:outline-none focus-visible:ring-0">
-                <div className="bg-[#0A192F]/50 rounded-lg p-6 border border-[#A3B18A]/20">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl">{type.icon}</span>
-                    <h2 className="font-playfair text-2xl md:text-3xl text-[#D4AF37]">
-                      {type.name}
-                    </h2>
-                  </div>
-                  
-                  <p className="font-lora text-lg text-[#FAF3E0] mb-8">
-                    {type.description}
-                  </p>
-                  
-                  <div className="space-y-8">
-                    {type.examples.map((example, idx) => (
-                      <Card key={idx} className="bg-[#051224] border-[#A3B18A]/30">
-                        <CardHeader>
-                          <CardTitle className="text-[#D4AF37] font-playfair">{example.title}</CardTitle>
-                          <CardDescription className="text-[#FAF3E0]/80 font-lora">
-                            {example.details}
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          {example.samples && example.samples.length > 0 ? (
-                            <div className="space-y-3">
-                              {example.samples.map((sample, sIdx) => (
-                                <p key={sIdx} className="font-lora text-[#FAF3E0] border-l-2 border-[#D4AF37] pl-3 py-1">
-                                  {sample}
-                                </p>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="font-lora text-[#FAF3E0] italic">
-                              This personalized content is unique to each member.
-                            </p>
-                          )}
-                          
-                          <div className="mt-6">
-                            <h4 className="text-[#A3B18A] font-montserrat text-sm uppercase tracking-wider mb-2">
-                              Available in these tiers:
-                            </h4>
-                            <div className="flex flex-wrap gap-2">
-                              {example.tiers.map((tierName, tIdx) => {
-                                const tier = tierData.find(t => t.name === tierName);
-                                return tier ? (
-                                  <div 
-                                    key={tIdx}
-                                    className="px-3 py-1 rounded-full text-sm flex items-center gap-1"
-                                    style={{ 
-                                      backgroundColor: tier.backgroundColor,
-                                      border: `1px solid ${tier.accentColor}`,
-                                      color: tier.accentColor
-                                    }}
-                                  >
-                                    <span>{tier.icon}</span>
-                                    <span>{tierName}</span>
-                                  </div>
-                                ) : null;
-                              })}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </TabsContent>
+                <category.icon className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">{category.name}</span>
+                <span className="md:hidden">{category.id === 'affirmations' ? 'Affirm.' : 
+                                           category.id === 'seasonal' ? 'Season.' : 
+                                           category.name.split(' ')[0]}</span>
+              </TabsTrigger>
             ))}
-          </Tabs>
+          </TabsList>
+          
+          {/* Content display for each tab */}
+          {categories.map(category => (
+            <TabsContent key={category.id} value={category.id} className="mt-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredContent[category.id]?.length ? (
+                  filteredContent[category.id].map(item => (
+                    <Card key={item.id} className="bg-[#051224] border border-[#A3B18A]/30 overflow-hidden hover:border-[#A3B18A]/60 transition-all duration-300">
+                      <div className="h-48 w-full bg-[#0A3B4D]/50 flex items-center justify-center relative">
+                        <category.icon className="h-16 w-16 text-[#D4AF37]/30" />
+                        <Badge className={`absolute top-3 right-3 ${getTierColor(item.tier)}`}>
+                          {item.tier}
+                        </Badge>
+                      </div>
+                      
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-[#D4AF37] font-playfair">{item.title}</CardTitle>
+                        <CardDescription className="text-[#FAF3E0]/70 font-lora">
+                          {item.description}
+                        </CardDescription>
+                      </CardHeader>
+                      
+                      <CardContent className="pt-0">
+                        <div className="bg-[#0A192F] p-3 rounded border border-[#A3B18A]/20 mb-4">
+                          <h4 className="text-[#D4AF37] text-sm font-medium mb-2">Content Sample:</h4>
+                          <p className="text-[#FAF3E0] text-sm italic font-lora">"{item.sample}"</p>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          {item.tags.map(tag => (
+                            <Badge key={tag} variant="outline" className="text-[#A3B18A] border-[#A3B18A]/30 hover:border-[#A3B18A]/60">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                      
+                      <CardFooter className="pt-0">
+                        <Button className="w-full bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
+                          <BookMarked className="h-4 w-4 mr-2" />
+                          View Full Content
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))
+                ) : (
+                  <div className="col-span-3 text-center p-12 border border-dashed border-[#A3B18A]/30 rounded-md">
+                    <category.icon className="h-16 w-16 text-[#A3B18A]/30 mx-auto mb-4" />
+                    <h3 className="text-[#D4AF37] font-medium text-xl mb-2">No Results Found</h3>
+                    <p className="text-[#FAF3E0]/70 max-w-md mx-auto">
+                      {searchQuery 
+                        ? `No ${category.name.toLowerCase()} match your search criteria. Try different keywords or clear your search.`
+                        : `There are currently no ${category.name.toLowerCase()} available.`}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+        
+        {/* Membership CTA */}
+        <div className="mt-16 mb-8 text-center">
+          <h2 className="text-2xl md:text-3xl font-playfair text-[#D4AF37] mb-4">
+            Unlock Our Full Collection
+          </h2>
+          <p className="text-[#FAF3E0] max-w-2xl mx-auto mb-6 font-lora">
+            Join our membership program to unlock access to our complete library of content.
+            Choose the tier that resonates with your journey.
+          </p>
+          <Button 
+            className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 px-8 py-6 text-lg"
+            onClick={() => window.location.href = '/membership'}
+          >
+            <Heart className="h-4 w-4 mr-2" />
+            Explore Membership Options
+          </Button>
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-[#051224]/80">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-playfair text-3xl md:text-4xl text-[#D4AF37] mb-6">
-              Begin Your Journey Today
-            </h2>
-            <p className="font-lora text-lg text-[#FAF3E0] mb-8">
-              Join our community of seekers and creators. Choose the membership tier
-              that resonates with you and start receiving enchanting content that nurtures
-              your spiritual practice.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/membership">
-                <Button 
-                  className="bg-[#D4AF37] text-[#051224] hover:bg-[#D4AF37]/90 font-montserrat w-full sm:w-auto"
-                  size="lg"
-                >
-                  View Membership Tiers
-                </Button>
-              </Link>
-              <a href="https://www.patreon.com/midnightmagnolia" target="_blank" rel="noopener noreferrer">
-                <Button 
-                  variant="outline" 
-                  className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 font-montserrat w-full sm:w-auto"
-                  size="lg"
-                >
-                  Visit Patreon Page
-                </Button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };
