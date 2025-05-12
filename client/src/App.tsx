@@ -13,8 +13,6 @@ import ErrorBoundary from "@/components/ui/error-boundary";
 
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-import Notion from "@/pages/Notion";
-import AuthPage from "@/pages/auth-page";
 import WorkflowPage from "@/pages/workflow-page";
 import AIToolsPage from "@/pages/ai-tools-page";
 import CheckoutPage from "@/pages/checkout-page";
@@ -214,9 +212,7 @@ function AppRouter() {
       <AppNavigation />
       <main className="flex-grow">
         <Switch>
-          <Route path="/auth" component={AuthPage} />
           <Route path="/" component={Home} />
-          <ProtectedRoute path="/notion" component={() => <Notion />} />
           <ProtectedRoute path="/workflows" component={() => <WorkflowPage />} />
           <ProtectedRoute path="/ai-tools" component={() => <AIToolsPage />} />
           <ProtectedRoute path="/dashboard" component={() => <DashboardPage />} />
