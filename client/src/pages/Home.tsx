@@ -10,7 +10,6 @@ import { TieredProductPricing } from '@/components/TieredProductPricing';
 const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-[#0A192F] text-[#FAF3E0] overflow-hidden">
-      {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
         <div 
           className="absolute inset-0 bg-gradient-to-b from-[#0A192F]/50 to-[#0A192F] pointer-events-none"
@@ -26,7 +25,7 @@ const Home: React.FC = () => {
           className="text-center z-10 mb-12"
         >
           <img 
-            src="/logo-animated.png" 
+            src="/logo.png" 
             alt="Midnight Magnolia" 
             className="w-64 h-64 mx-auto mb-8"
           />
@@ -38,20 +37,23 @@ const Home: React.FC = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <Link href="/ai-tools">
-              <Button className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
-                Try AI Tools
-              </Button>
+              <a className="inline-block">
+                <Button className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
+                  Try AI Tools
+                </Button>
+              </a>
             </Link>
             <Link href="#pricing">
-              <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37]">
-                View Pricing
-              </Button>
+              <a className="inline-block">
+                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37]">
+                  View Pricing
+                </Button>
+              </a>
             </Link>
           </div>
         </motion.div>
       </section>
 
-      {/* AI Features Grid */}
       <section className="py-24 px-4 relative">
         <div 
           className="absolute inset-0 bg-gradient-to-t from-[#0A192F] to-transparent"
@@ -74,8 +76,8 @@ const Home: React.FC = () => {
                 <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20 backdrop-blur-sm">
                   <CardContent className="p-6">
                     <feature.icon className="w-12 h-12 text-[#D4AF37] mb-4" />
-                    <h3 className="text-xl font-playfair text-[#D4AF37] mb-2">{feature.title}</h3>
-                    <p className="text-[#FAF3E0]/80">{feature.description}</p>
+                    <h3 className="text-xl font-serif text-[#D4AF37] mb-2">{feature.title}</h3>
+                    <p className="text-sm text-[#FAF3E0]/70 font-body mb-4">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -84,7 +86,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section id="pricing" className="py-24 relative z-10">
         <TieredProductPricing />
       </section>
