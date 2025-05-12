@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/ui/protected-route";
 import { Button } from "@/components/ui/button";
 import { LogOut, Menu, Moon, Sun, X } from "lucide-react";
+import Logo from "@/components/ui/logo";
 import { useState } from "react";
 
 import NotFound from "@/pages/not-found";
@@ -41,8 +42,9 @@ function AppNavigation() {
     <nav className="bg-[#0A192F] border-b border-[#A3B18A]/20 py-4 px-6">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="text-[#D4AF37] font-playfair text-xl hover:text-[#D4AF37]/80 transition-colors duration-300">
-            Midnight Magnolia
+          <Link to="/" className="flex items-center space-x-2 hover:opacity-90 transition-opacity">
+            <Logo size="md" />
+            <span className="text-[#D4AF37] font-playfair text-xl">Midnight Magnolia</span>
           </Link>
         </div>
         
