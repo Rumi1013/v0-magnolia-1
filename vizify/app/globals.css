@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --midnight-blue: #0a192f;
+  --midnight-teal: #0A3B4D;
+  --magnolia-white: #faf3e0;
+  --rich-gold: #d4af37;
+  --rich-gold-dark: #b28e1e; /* Darker for better contrast */
+  --sage-green: #a3b18a;
+  --sage-green-dark: #7d8a68; /* Darker for better contrast */
+}
+
+body {
+  font-family: "Lora", serif;
+  color: var(--midnight-blue);
+  background-color: var(--magnolia-white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", serif;
+}
+
+.font-accent {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Animation Keyframes */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Midnight Magnolia Theme Classes */
+.midnight-theme {
+  background-color: var(--magnolia-white);
+  color: var(--midnight-blue);
+}
+
+.midnight-container {
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.midnight-heading {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.midnight-subheading {
+  font-size: 1.5rem;
+  color: var(--rich-gold);
+  margin-bottom: 2rem;
+}
+
+/* Button Component */
+.midnight-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.midnight-button:hover {
+  transform: translateY(-2px);
+}
+
+.midnight-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.midnight-button-primary {
+  background-color: var(--rich-gold);
+  color: var(--midnight-blue);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border: 2px solid var(--rich-gold);
+}
+
+.midnight-button-primary:hover {
+  background-color: var(--rich-gold-dark);
+  border-color: var(--rich-gold-dark);
+}
+
+.midnight-button-secondary {
+  background-color: var(--midnight-teal);
+  color: var(--magnolia-white);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border: 2px solid var(--midnight-teal);
+}
+
+.midnight-button-secondary:hover {
+  background-color: #092C3A; /* Slightly darker teal */
+  border-color: #092C3A;
+}
+
+.midnight-button-outline {
+  background-color: transparent;
+  border: 2px solid var(--midnight-blue);
+  color: var(--midnight-blue);
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.midnight-button-outline:hover {
+  background-color: var(--midnight-blue);
+  color: var(--magnolia-white);
+}
+
+/* Button Sizes */
+.midnight-button-lg {
+  height: 2.75rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-size: 1rem;
+}
