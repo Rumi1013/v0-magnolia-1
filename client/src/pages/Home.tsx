@@ -40,9 +40,10 @@ const Home: React.FC = () => {
     <div className="relative min-h-screen bg-zinc-50 text-zinc-900 overflow-hidden">
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-zinc-100 to-zinc-50 pointer-events-none"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(244, 244, 245, 0.8) 0%, rgba(250, 250, 250, 0.3) 100%)"
+            backgroundImage: "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(10, 25, 47, 0.05) 100%), linear-gradient(180deg, rgba(250, 243, 224, 0.2) 0%, rgba(10, 25, 47, 0.1) 100%)",
+            backdropFilter: "blur(8px)"
           }}
         />
         

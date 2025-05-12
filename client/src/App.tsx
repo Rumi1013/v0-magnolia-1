@@ -42,7 +42,7 @@ function AppNavigation() {
 
   return (
     <ErrorBoundary>
-      <nav className="bg-[#0A192F] border-b border-[#A3B18A]/20 py-3 px-6">
+      <nav className="bg-[#0A192F]/95 backdrop-blur-md border-b border-[#D4AF37]/20 py-3 px-6 fixed w-full z-50">
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">

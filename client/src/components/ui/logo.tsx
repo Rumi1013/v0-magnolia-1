@@ -22,7 +22,10 @@ export const Logo: React.FC<{
   };
 
   return (
-    <div className={`relative rounded-full ${variantStyles[variant]} ${className}`}>
+    <div className={`relative rounded-full overflow-hidden shadow-lg ${variantStyles[variant]} ${className}`}
+         style={{
+           background: "linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(10, 25, 47, 0.05) 100%)",
+         }}>
       <img 
         src={logoImage} 
         alt="Midnight Magnolia Logo" 
