@@ -92,25 +92,25 @@ export function AutomationSection() {
           <div className="text-center mb-8">
             <h3 className="font-heading text-2xl text-rich-gold mb-2">The Power of Automation</h3>
             <p className="text-magnolia-white/90">
-              Strategic automation creates freedom and sustainability for creative entrepreneurs.
+              Strategic automation creates more time and efficiency for creative entrepreneurs.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div>
-              <p className="text-3xl font-accent text-rich-gold mb-2">70%</p>
+              <p className="text-3xl font-accent text-rich-gold mb-2">30%</p>
               <p className="text-sm text-magnolia-white/80">Time Saved on Routine Tasks</p>
             </div>
             <div>
               <p className="text-3xl font-accent text-rich-gold mb-2">24/7</p>
-              <p className="text-sm text-magnolia-white/80">Business Operations</p>
+              <p className="text-sm text-magnolia-white/80">Digital Product Delivery</p>
             </div>
             <div>
-              <p className="text-3xl font-accent text-rich-gold mb-2">35%</p>
-              <p className="text-sm text-magnolia-white/80">Increase in Revenue</p>
+              <p className="text-3xl font-accent text-rich-gold mb-2">15%</p>
+              <p className="text-sm text-magnolia-white/80">Potential Revenue Increase</p>
             </div>
             <div>
-              <p className="text-3xl font-accent text-rich-gold mb-2">5x</p>
-              <p className="text-sm text-magnolia-white/80">Return on Investment</p>
+              <p className="text-3xl font-accent text-rich-gold mb-2">2x</p>
+              <p className="text-sm text-magnolia-white/80">Typical Return on Investment</p>
             </div>
           </div>
         </div>

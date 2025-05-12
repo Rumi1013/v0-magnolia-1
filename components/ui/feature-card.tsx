@@ -24,7 +24,7 @@ export function FeatureCard({ title, description, icon, link }: FeatureCardProps
       {link && (
         <Link
           href={link.href}
-          className="mt-4 inline-flex items-center text-rich-gold font-accent text-sm hover:underline group relative z-10"
+          className="mt-4 inline-flex items-center text-midnight-teal font-accent text-sm hover:underline group relative z-10"
         >
           {link.text}
           <ArrowRight className="ml-1 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />

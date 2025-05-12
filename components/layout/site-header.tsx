@@ -1,106 +1,167 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
-
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "Our Story", path: "/our-story" },
-  { name: "Shop", path: "/shop" },
-  { name: "Blog", path: "/blog" },
-  { name: "Art Gallery", path: "/gallery" },
-]
+import { Menu, X, User } from "lucide-react"
+import { ShoppingCart } from "@/components/ui/shopping-cart"
+import { UserAccountModal } from "@/components/ui/user-account-modal"
 
 export function SiteHeader() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleUserModal = () => setIsUserModalOpen(!isUserModalOpen)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-midnight-blue/95 backdrop-blur-sm py-3 shadow-lg">
-      <div className="container mx-auto px-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="relative w-10 h-10 overflow-hidden rounded-full border-2 border-rich-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]">
-            <Image src="/logo/midnight-magnolia-warm.png" alt="Midnight Magnolia" fill className="object-cover" />
-          </div>
-          <span className="font-heading text-xl text-magnolia-white">Midnight Magnolia</span>
-        </Link>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled ? "bg-midnight-blue/90 backdrop-blur-md shadow-lg py-3" : "bg-transparent py-5"
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo/midnight-magnolia-logo-9.jpeg"
+              alt="Midnight Magnolia"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+            <span className="font-heading text-xl text-magnolia-white">Midnight Magnolia</span>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className="font-accent text-sm text-magnolia-white hover:text-rich-gold transition-colors relative group"
-            >
-              {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-rich-gold transition-all duration-300 group-hover:w-full"></span>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            <Link href="/" className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors">
+              Home
             </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-4">
-          <button className="hidden md:block px-4 py-2 bg-rich-gold text-midnight-blue font-bold rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors shadow-md hover:shadow-lg">
-            Join Patron Portal
-          </button>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-full hover:bg-magnolia-white/10 transition-colors"
-            aria-label="Toggle mobile menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-magnolia-white"
+            <Link href="/our-story" className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors">
+              Our Story
+            </Link>
+            <Link href="/shop" className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors">
+              Shop
+            </Link>
+            <Link href="/blog" className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors">
+              Journal
+            </Link>
+            <Link href="/community" className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors">
+              Community
+            </Link>
+            <Link
+              href="/patron-portal"
+              className="font-body text-magnolia-white/90 hover:text-rich-gold transition-colors"
             >
-              {mobileMenuOpen ? (
-                <>
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </>
-              ) : (
-                <>
-                  <line x1="3" y1="12" x2="21" y2="12"></line>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <line x1="3" y1="18" x2="21" y2="18"></line>
-                </>
-              )}
-            </svg>
-          </button>
+              Patron Portal
+            </Link>
+          </nav>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-4">
+            <ShoppingCart />
+            <button
+              onClick={toggleUserModal}
+              className="p-2 rounded-full bg-rich-gold/10 hover:bg-rich-gold/20 transition-colors text-rich-gold"
+              aria-label="User Account"
+            >
+              <User className="h-5 w-5" />
+            </button>
+            <button
+              onClick={toggleMenu}
+              className="p-2 rounded-full bg-rich-gold/10 hover:bg-rich-gold/20 transition-colors text-rich-gold md:hidden"
+              aria-label="Menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-midnight-blue/95 border-t border-midnight-blue/50">
-          <div className="container mx-auto px-4 py-4">
-            <nav className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.path}
-                  className="font-accent text-magnolia-white hover:text-rich-gold transition-colors py-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <button className="mt-2 px-4 py-3 bg-rich-gold text-midnight-blue font-bold rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors text-left shadow-md">
-                Join Patron Portal
+      {isMenuOpen && (
+        <div className="fixed inset-0 bg-midnight-blue/95 z-50 flex flex-col md:hidden">
+          <div className="container mx-auto px-4 py-5">
+            <div className="flex justify-between items-center">
+              <Link href="/" className="flex items-center gap-2" onClick={toggleMenu}>
+                <Image
+                  src="/logo/midnight-magnolia-logo-9.jpeg"
+                  alt="Midnight Magnolia"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+                <span className="font-heading text-xl text-magnolia-white">Midnight Magnolia</span>
+              </Link>
+              <button
+                onClick={toggleMenu}
+                className="p-2 rounded-full bg-rich-gold/10 hover:bg-rich-gold/20 transition-colors text-rich-gold"
+                aria-label="Close Menu"
+              >
+                <X className="h-5 w-5" />
               </button>
-            </nav>
+            </div>
           </div>
+          <nav className="flex-1 flex flex-col justify-center items-center gap-8 text-center">
+            <Link
+              href="/"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link
+              href="/our-story"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Our Story
+            </Link>
+            <Link
+              href="/shop"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Shop
+            </Link>
+            <Link
+              href="/blog"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Journal
+            </Link>
+            <Link
+              href="/community"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Community
+            </Link>
+            <Link
+              href="/patron-portal"
+              className="font-heading text-2xl text-magnolia-white hover:text-rich-gold transition-colors"
+              onClick={toggleMenu}
+            >
+              Patron Portal
+            </Link>
+          </nav>
         </div>
       )}
+
+      {/* User Account Modal */}
+      {isUserModalOpen && <UserAccountModal onClose={toggleUserModal} />}
     </header>
   )
 }

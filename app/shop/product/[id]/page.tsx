@@ -4,6 +4,12 @@ import { ArrowLeft, ShoppingCart, Download, Star, Check, Plus, Minus, ArrowRight
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
 
+export function generateStaticParams() {
+  // This would normally come from a database or CMS
+  // For now, we'll hardcode the product IDs we know exist
+  return [{ id: "1" }, { id: "2" }, { id: "3" }, { id: "4" }, { id: "5" }, { id: "6" }]
+}
+
 export default function ProductDetail({ params }: { params: { id: string } }) {
   // This would normally come from a database or CMS
   const product = {
@@ -37,9 +43,9 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     image: "/products/magnolia-reset-journal.png",
     gallery: [
       "/products/magnolia-reset-journal.png",
-      "/placeholder.svg?height=600&width=600&query=journal interior spread",
-      "/placeholder.svg?height=600&width=600&query=journal prompts page",
-      "/placeholder.svg?height=600&width=600&query=journal weekly reflection",
+      "/placeholder.svg?key=mbezl",
+      "/placeholder.svg?key=u3hdk",
+      "/placeholder.svg?key=ellrt",
     ],
     category: "Digital Journals",
     features: [

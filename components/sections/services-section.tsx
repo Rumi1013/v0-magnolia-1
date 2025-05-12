@@ -1,151 +1,49 @@
 import { SectionHeading } from "@/components/ui/section-heading"
-import { CTAButton } from "@/components/ui/cta-button"
+import { FeatureCard } from "@/components/ui/feature-card"
+import { Sparkles, BookOpen, Palette, Lightbulb } from "lucide-react"
 
 export function ServicesSection() {
-  const services = [
-    {
-      title: "Digital Strategy & Design",
-      description:
-        "Creating seamless experiences that not only look beautiful but function intuitively—because I understand how both the code and the human need to work together.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-6 w-6 text-rich-gold"
-        >
-          <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
-          <line x1="16" y1="8" x2="2" y2="22"></line>
-          <line x1="17.5" y1="15" x2="9" y2="15"></line>
-        </svg>
-      ),
-      link: {
-        href: "#",
-        text: "Learn more",
-      },
-    },
-    {
-      title: "Neurodivergent Design",
-      description:
-        "Creating digital spaces and systems that work for diverse minds and processing styles, with ADHD-friendly design principles.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-6 w-6 text-rich-gold"
-        >
-          <path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2v-2"></path>
-          <path d="M9 10h10l-3-3"></path>
-          <path d="M9 14h10l-3 3"></path>
-        </svg>
-      ),
-      link: {
-        href: "#",
-        text: "Learn more",
-      },
-    },
-    {
-      title: "Automation for Liberation",
-      description:
-        "Developing automated systems that create freedom—both financial and temporal—so that creators can focus on their genius zone instead of repetitive tasks.",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-6 w-6 text-rich-gold"
-        >
-          <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"></path>
-          <path d="M8.5 8.5v.01"></path>
-          <path d="M16 15.5v.01"></path>
-          <path d="M12 12v.01"></path>
-          <path d="M11 17v.01"></path>
-          <path d="M7 14v.01"></path>
-        </svg>
-      ),
-      link: {
-        href: "#",
-        text: "Learn more",
-      },
-    },
-  ]
-
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-midnight-blue/90 to-midnight-blue/80 text-magnolia-white relative overflow-hidden">
+    <section className="py-16 md:py-24 bg-magnolia-white relative overflow-hidden">
       {/* Decorative Elements */}
-      <div className="absolute top-20 right-10 w-64 h-64 bg-rich-gold/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-20 right-10 w-64 h-64 bg-sage-green/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 left-10 w-64 h-64 bg-midnight-teal/10 rounded-full blur-3xl"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeading
-          label="OUR SERVICES"
-          title="How We Can Help You Thrive"
-          description="Midnight Magnolia offers a range of services designed to support your creative and healing journey."
-          titleColor="text-rich-gold"
+          label="SERVICES"
+          title="Creative Solutions for Neurodivergent Minds"
+          description="Tailored resources and services designed to support your unique journey of healing, creativity, and sustainable growth."
+          labelColor="text-midnight-teal"
+          titleColor="text-midnight-blue"
+          descriptionColor="text-midnight-teal/90"
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="bg-midnight-blue/40 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-rich-gold/20 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <h3 className="font-heading text-xl text-rich-gold mb-3 flex items-center">
-                <span className="w-8 h-8 bg-rich-gold/20 rounded-full flex items-center justify-center mr-3">
-                  {service.icon}
-                </span>
-                {service.title}
-              </h3>
-              <p className="font-body text-magnolia-white/90 mb-4">{service.description}</p>
-              <a
-                href={service.link.href}
-                className="font-accent text-sm text-rich-gold hover:underline inline-flex items-center gap-1 group"
-              >
-                {service.link.text}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-3 w-3 transform group-hover:translate-x-1 transition-transform"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-            </div>
-          ))}
-        </div>
-
-        {/* Services CTA */}
-        <div className="mt-16 text-center">
-          <CTAButton href="/services" variant="primary">
-            View All Services
-          </CTAButton>
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-12">
+          <FeatureCard
+            title="Digital Journals & Workbooks"
+            description="ADHD-friendly digital journals and workbooks designed for neurodivergent minds, with flexible structures and visual cues."
+            icon={<BookOpen className="h-6 w-6 text-midnight-teal" />}
+            link={{ href: "/shop", text: "Browse Journals" }}
+          />
+          <FeatureCard
+            title="Southern Gothic Tarot"
+            description="Unique tarot deck and guidebook infused with Southern Gothic aesthetics and ancestral wisdom for personal reflection."
+            icon={<Sparkles className="h-6 w-6 text-midnight-teal" />}
+            link={{ href: "/shop", text: "Explore Tarot" }}
+          />
+          <FeatureCard
+            title="Art Prints & Merchandise"
+            description="Curated collection of art prints, stickers, and merchandise featuring original Southern Gothic-inspired designs."
+            icon={<Palette className="h-6 w-6 text-midnight-teal" />}
+            link={{ href: "/gallery", text: "View Gallery" }}
+          />
+          <FeatureCard
+            title="Business Planning Services"
+            description="Strategic planning services for creative entrepreneurs, with a focus on sustainable systems and automation."
+            icon={<Lightbulb className="h-6 w-6 text-midnight-teal" />}
+            link={{ href: "/contact", text: "Learn More" }}
+          />
         </div>
       </div>
     </section>

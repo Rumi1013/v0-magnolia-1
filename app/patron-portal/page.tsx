@@ -1,49 +1,87 @@
 import Image from "next/image"
-import { ArrowRight, Lock, Star, Sparkles, Check } from "lucide-react"
+import { ArrowRight, Check } from "lucide-react"
 import { SiteHeader } from "@/components/layout/site-header"
 import { SiteFooter } from "@/components/layout/site-footer"
+import { MonthlyContentSection } from "@/components/sections/monthly-content-section"
 
 export default function PatronPortal() {
   const membershipTiers = [
     {
-      name: "Magnolia Bud",
-      price: "$7/month",
-      description: "Begin your journey with exclusive content and early access to new releases.",
+      name: "Magnolia Seed",
+      price: "$3/month",
+      tagline: "Plant the seeds of transformation",
+      icon: "🌱",
+      description:
+        "Join the beginning of our journey with monthly affirmations, digital wallpapers, and community recognition.",
       features: [
-        "Monthly digital wallpapers",
-        "Early access to new products",
-        "Exclusive articles and resources",
-        "10% discount on all products",
+        "Monthly digital affirmation cards",
+        "Exclusive phone/desktop wallpapers",
+        "Supporter recognition",
+        "Access to patron-only feed",
       ],
-      icon: <Star className="h-5 w-5 text-rich-gold" />,
       popular: false,
     },
     {
-      name: "Magnolia Bloom",
-      price: "$17/month",
-      description: "Deepen your transformation with premium content and community access.",
+      name: "Crescent Bloom",
+      price: "$7/month",
+      tagline: "Illuminate your path through shadow and light",
+      icon: "🌙",
+      description: "Expand your experience with tarot insights and exclusive content to guide your journey.",
       features: [
-        "Everything in Magnolia Bud",
-        "Monthly live Q&A sessions",
-        "Access to community forum",
-        "Exclusive mini-courses",
-        "20% discount on all products",
+        "Everything in Magnolia Seed tier",
+        "Monthly digital tarot card",
+        "Private blog/vlog content",
+        "Archived content access",
+        "Early announcements",
       ],
-      icon: <Sparkles className="h-5 w-5 text-rich-gold" />,
       popular: true,
     },
     {
-      name: "Magnolia Legacy",
-      price: "$37/month",
-      description: "Full immersion with personalized support and premium resources.",
+      name: "Golden Grove",
+      price: "$15/month",
+      tagline: "Nurture your creative spirit and ancestral wisdom",
+      icon: "✨",
+      description: "Deepen your practice with journals, audio rituals, and exclusive previews of upcoming creations.",
       features: [
-        "Everything in Magnolia Bloom",
-        "Monthly 1:1 coaching call",
-        "Custom digital resources",
-        "Beta testing for new products",
-        "30% discount on all products",
+        "Everything in previous tiers",
+        "Monthly printable journal pages",
+        "Guided audio rituals or playlists",
+        "Sneak peeks of upcoming products",
+        "10% discount code for shop",
       ],
-      icon: <Lock className="h-5 w-5 text-rich-gold" />,
+      popular: false,
+    },
+    {
+      name: "Moonlit Sanctuary",
+      price: "$30/month",
+      tagline: "Enter the sacred space of collective healing",
+      icon: "🌑",
+      description: "Join our inner circle with personalized content, early access, and community gatherings.",
+      features: [
+        "Everything in previous tiers",
+        "Personalized monthly affirmation",
+        "Early access to product releases",
+        "Quarterly community circle",
+        "Input on monthly themes",
+        "15% discount code for shop",
+      ],
+      popular: false,
+    },
+    {
+      name: "House of Midnight",
+      price: "$75/month",
+      tagline: "Dwell in the ancestral mansion of creative abundance",
+      icon: "🏛️",
+      description:
+        "Experience our most exclusive offerings including physical mailings, personal readings, and direct creator access.",
+      features: [
+        "Everything in previous tiers",
+        "Quarterly physical mail package",
+        "Monthly custom tarot reading",
+        "Product development input",
+        "Seasonal 1:1 connection",
+        "25% discount code for shop",
+      ],
       popular: false,
     },
   ]
@@ -87,7 +125,7 @@ export default function PatronPortal() {
           <h2 className="font-heading text-3xl text-rich-gold mb-12 text-center">Choose Your Membership</h2>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {membershipTiers.map((tier, index) => (
+            {membershipTiers.slice(0, 3).map((tier, index) => (
               <div
                 key={index}
                 className={`bg-midnight-blue/40 backdrop-blur-sm p-6 rounded-lg shadow-lg border ${
@@ -101,10 +139,11 @@ export default function PatronPortal() {
                 )}
                 <div className="text-center mb-6">
                   <div className="w-12 h-12 bg-rich-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    {tier.icon}
+                    <span className="text-2xl">{tier.icon}</span>
                   </div>
                   <h3 className="font-heading text-xl text-rich-gold mb-2">{tier.name}</h3>
                   <p className="text-2xl font-accent text-magnolia-white mb-2">{tier.price}</p>
+                  <p className="text-sm italic text-rich-gold/90 mb-2">"{tier.tagline}"</p>
                   <p className="text-sm text-magnolia-white/80">{tier.description}</p>
                 </div>
                 <ul className="space-y-3 mb-8">
@@ -130,8 +169,17 @@ export default function PatronPortal() {
               </div>
             ))}
           </div>
+
+          <div className="mt-12 text-center">
+            <button className="text-rich-gold hover:text-rich-gold/80 transition-colors font-accent">
+              View higher tier options (Moonlit Sanctuary & House of Midnight) →
+            </button>
+          </div>
         </div>
       </section>
+
+      {/* Monthly Content Section */}
+      <MonthlyContentSection />
 
       {/* Exclusive Content Preview */}
       <section className="py-16 bg-midnight-blue/90">
@@ -149,7 +197,21 @@ export default function PatronPortal() {
                   <div className="absolute inset-0 bg-gradient-to-t from-midnight-blue/90 to-transparent"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="bg-rich-gold/90 rounded-full p-3 opacity-90">
-                      <Lock className="h-6 w-6 text-midnight-blue" />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-6 w-6 text-midnight-blue"
+                      >
+                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -175,42 +237,41 @@ export default function PatronPortal() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-gradient-to-b from-midnight-blue/80 to-midnight-teal/90">
+      <section className="py-16 bg-magnolia-white">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="font-heading text-3xl text-rich-gold mb-12 text-center">What Our Patrons Say</h2>
+          <h2 className="font-heading text-3xl text-midnight-blue mb-12 text-center">What Our Patrons Say</h2>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-midnight-blue/40 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-rich-gold/20">
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-sage-green/20">
               <div className="flex items-center gap-4 mb-4">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden">
                   <Image src="/professional-black-woman-portrait.png" alt="Patron" fill className="object-cover" />
                 </div>
                 <div>
-                  <p className="font-heading text-lg text-rich-gold">Amara J.</p>
-                  <p className="text-sm text-magnolia-white/80">Magnolia Bloom Member</p>
+                  <p className="font-heading text-lg text-midnight-blue">Amara J.</p>
+                  <p className="text-sm text-midnight-teal/80">Crescent Bloom Member</p>
                 </div>
               </div>
-              <p className="text-magnolia-white/90 italic">
-                "The resources and community I've found through the Patron Portal have been invaluable for my healing
-                journey. The ADHD-friendly systems have helped me create consistency in my creative practice for the
-                first time."
+              <p className="text-midnight-teal italic">
+                "The resources and community I've found through the Patron Portal have been valuable for my healing
+                journey. The ADHD-friendly systems have helped me create consistency in my creative practice."
               </p>
             </div>
 
-            <div className="bg-midnight-blue/40 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-rich-gold/20">
+            <div className="bg-white p-6 rounded-lg shadow-lg border border-sage-green/20">
               <div className="flex items-center gap-4 mb-4">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                  <Image src="/placeholder.svg?key=4n6q7" alt="Patron" fill className="object-cover" />
+                  <Image src="/professional-woman-portrait.png" alt="Patron" fill className="object-cover" />
                 </div>
                 <div>
-                  <p className="font-heading text-lg text-rich-gold">Tasha M.</p>
-                  <p className="text-sm text-magnolia-white/80">Magnolia Legacy Member</p>
+                  <p className="font-heading text-lg text-midnight-blue">Tasha M.</p>
+                  <p className="text-sm text-midnight-teal/80">Golden Grove Member</p>
                 </div>
               </div>
-              <p className="text-magnolia-white/90 italic">
-                "The 1:1 coaching calls have transformed my business. I've implemented automation systems that have
-                increased my revenue while actually working fewer hours. This community understands the unique
-                challenges of neurodivergent creators."
+              <p className="text-midnight-teal italic">
+                "The monthly journal pages have transformed my self-reflection practice. I've implemented several of the
+                suggested systems that have helped me balance creativity with my day job. This community understands the
+                unique challenges of neurodivergent creators."
               </p>
             </div>
           </div>
@@ -247,7 +308,7 @@ export default function PatronPortal() {
               {
                 question: "Is there a community component?",
                 answer:
-                  "Yes! Magnolia Bloom and Legacy members have access to our private community forum where you can connect with other patrons, share your journey, and participate in collaborative projects.",
+                  "Yes! Crescent Bloom and higher tier members have access to our private community forum where you can connect with other patrons, share your journey, and participate in collaborative projects.",
               },
             ].map((faq, index) => (
               <div

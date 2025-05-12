@@ -7,9 +7,9 @@ import { AboutSection } from "@/components/sections/about-section"
 import { ServicesSection } from "@/components/sections/services-section"
 import { ProductsSection } from "@/components/sections/products-section"
 import { AutomationSection } from "@/components/sections/automation-section"
-import { CelestialToolsSection } from "@/components/sections/celestial-tools-section"
 import { CommunitySection } from "@/components/sections/community-section"
 import { PatronPortalSection } from "@/components/sections/patron-portal-section"
+import { EcommerceSection } from "@/components/sections/ecommerce-section"
 import { CTASection } from "@/components/sections/cta-section"
 
 export default function Home() {
@@ -20,8 +20,8 @@ export default function Home() {
       <AboutSection />
       <ServicesSection />
       <ProductsSection />
+      <EcommerceSection />
       <AutomationSection />
-      <CelestialToolsSection />
       <CommunitySection />
       <PatronPortalSection />
       <CTASection />
