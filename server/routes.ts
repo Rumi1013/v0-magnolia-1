@@ -10,6 +10,23 @@ import { workflowService, WorkflowSchema, CreateWorkflowSchema, UpdateWorkflowSc
 import { agentOrchestrator } from "./agents";
 import { setupAuth } from "./auth";
 import { z } from "zod";
+// Import integration route handlers
+import {
+  getNotionDatabase,
+  createNotionPage,
+  getAirtableRecords,
+  createAirtableRecord,
+  syncHubSpotContact,
+  createHubSpotDeal,
+  getPatreonMember,
+  createPatreonPost,
+  handlePatreonWebhook,
+  generateGoogleUploadUrl,
+  triggerContentDistribution,
+  triggerClientOnboarding,
+  handleMakeResponse,
+  checkIntegrationStatus
+} from "./integrations/route-handlers";
 import {
   insertClientSchema, 
   insertGeneratedContentSchema, 
@@ -1186,6 +1203,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to delete task");
     }
   });
+
+  // ===== INTEGRATION API ROUTES =====
+  
+  // Check all integrations status
+  app.get("/api/integrations/status", checkIntegrationStatus);
+  
+  // ===== MAKE.COM INTEGRATION ROUTES =====
+  
+  // Trigger content distribution workflow in Make.com
+  app.post("/api/integrations/make/content-distribution", triggerContentDistribution);
+  
+  // Trigger client onboarding workflow in Make.com
+  app.post("/api/integrations/make/client-onboarding", triggerClientOnboarding);
+  
+  // Receive webhook responses from Make.com workflows
+  app.post("/api/integrations/make/webhook", handleMakeResponse);
+  
+  // ===== PATREON INTEGRATION ROUTES =====
+  
+  // Get Patreon member information
+  app.get("/api/integrations/patreon/members/:memberId", getPatreonMember);
+  
+  // Create a post on Patreon
+  app.post("/api/integrations/patreon/posts", createPatreonPost);
+  
+  // Handle Patreon webhooks
+  app.post("/api/integrations/patreon/webhook", handlePatreonWebhook);
+  
+  // ===== HUBSPOT INTEGRATION ROUTES =====
+  
+  // Sync a client to HubSpot
+  app.post("/api/integrations/hubspot/contacts", syncHubSpotContact);
+  
+  // Create a deal in HubSpot
+  app.post("/api/integrations/hubspot/deals", createHubSpotDeal);
+  
+  // ===== GOOGLE CLOUD INTEGRATION ROUTES =====
+  
+  // Generate a signed upload URL for Google Cloud Storage
+  app.post("/api/integrations/google/upload-url", generateGoogleUploadUrl);
+  
+  // ===== ADDITIONAL NOTION INTEGRATION ROUTES =====
+  
+  // Get a Notion database by name/type (extension of existing Notion routes)
+  app.get("/api/integrations/notion/databases/by-name/:databaseName", getNotionDatabase);
+  
+  // Create a Notion page with specific template
+  app.post("/api/integrations/notion/pages/template", createNotionPage);
+  
+  // ===== ADDITIONAL AIRTABLE INTEGRATION ROUTES =====
+  
+  // Get Airtable records by query
+  app.post("/api/integrations/airtable/query", getAirtableRecords);
+  
+  // Create a record in Airtable
+  app.post("/api/integrations/airtable/records", createAirtableRecord);
 
   const httpServer = createServer(app);
 
