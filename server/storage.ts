@@ -1,6 +1,16 @@
-import { users, type User, type InsertUser, tarotCards, type TarotCard, type InsertTarotCard, digitalProducts, type DigitalProduct, type InsertDigitalProduct, patreonContent, type PatreonContent, type InsertPatreonContent } from "@shared/schema";
+import { 
+  users, type User, type InsertUser, 
+  tarotCards, type TarotCard, type InsertTarotCard, 
+  digitalProducts, type DigitalProduct, type InsertDigitalProduct, 
+  patreonContent, type PatreonContent, type InsertPatreonContent,
+  clients, type Client, type InsertClient,
+  generatedContent, type GeneratedContent, type InsertGeneratedContent,
+  orders, type Order, type InsertOrder,
+  orderItems, type OrderItem, type InsertOrderItem,
+  tasks, type Task, type InsertTask
+} from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { Store } from "express-session";
 
 export interface IStorage {
@@ -9,6 +19,8 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, user: Partial<Omit<User, "id">>): Promise<User | undefined>;
+  updateStripeCustomerId(id: number, customerId: string): Promise<User | undefined>;
+  updateUserStripeInfo(id: number, stripeInfo: { customerId: string; subscriptionId: string }): Promise<User | undefined>;
   
   // Tarot card methods
   getTarotCard(id: number): Promise<TarotCard | undefined>;
@@ -31,6 +43,43 @@ export interface IStorage {
   createPatreonContent(content: InsertPatreonContent): Promise<PatreonContent>;
   updatePatreonContent(id: number, content: Partial<Omit<PatreonContent, "id">>): Promise<PatreonContent | undefined>;
   deletePatreonContent(id: number): Promise<boolean>;
+  
+  // Client methods
+  getClient(id: number): Promise<Client | undefined>;
+  getAllClients(): Promise<Client[]>;
+  createClient(client: InsertClient): Promise<Client>;
+  updateClient(id: number, client: Partial<Omit<Client, "id">>): Promise<Client | undefined>;
+  deleteClient(id: number): Promise<boolean>;
+  
+  // Generated content methods
+  getGeneratedContent(id: number): Promise<GeneratedContent | undefined>;
+  getAllGeneratedContent(): Promise<GeneratedContent[]>;
+  getGeneratedContentByType(contentType: string): Promise<GeneratedContent[]>;
+  getGeneratedContentByUser(userId: number): Promise<GeneratedContent[]>;
+  createGeneratedContent(content: InsertGeneratedContent): Promise<GeneratedContent>;
+  updateGeneratedContent(id: number, content: Partial<Omit<GeneratedContent, "id">>): Promise<GeneratedContent | undefined>;
+  deleteGeneratedContent(id: number): Promise<boolean>;
+  
+  // Order methods
+  getOrder(id: number): Promise<Order | undefined>;
+  getAllOrders(): Promise<Order[]>;
+  getOrdersByClient(clientId: number): Promise<Order[]>;
+  createOrder(order: InsertOrder): Promise<Order>;
+  updateOrder(id: number, order: Partial<Omit<Order, "id">>): Promise<Order | undefined>;
+  deleteOrder(id: number): Promise<boolean>;
+  
+  // Order item methods
+  getOrderItems(orderId: number): Promise<OrderItem[]>;
+  createOrderItem(item: InsertOrderItem): Promise<OrderItem>;
+  deleteOrderItem(id: number): Promise<boolean>;
+  
+  // Task methods
+  getTask(id: number): Promise<Task | undefined>;
+  getAllTasks(): Promise<Task[]>;
+  getTasksByUser(userId: number): Promise<Task[]>;
+  createTask(task: InsertTask): Promise<Task>;
+  updateTask(id: number, task: Partial<Omit<Task, "id">>): Promise<Task | undefined>;
+  deleteTask(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -53,6 +102,25 @@ export class DatabaseStorage implements IStorage {
   async updateUser(id: number, userData: Partial<Omit<User, "id">>): Promise<User | undefined> {
     const [updatedUser] = await db.update(users)
       .set(userData)
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+  
+  async updateStripeCustomerId(id: number, customerId: string): Promise<User | undefined> {
+    const [updatedUser] = await db.update(users)
+      .set({ stripeCustomerId: customerId })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+  
+  async updateUserStripeInfo(id: number, stripeInfo: { customerId: string; subscriptionId: string }): Promise<User | undefined> {
+    const [updatedUser] = await db.update(users)
+      .set({ 
+        stripeCustomerId: stripeInfo.customerId,
+        stripeSubscriptionId: stripeInfo.subscriptionId
+      })
       .where(eq(users.id, id))
       .returning();
     return updatedUser;
@@ -143,6 +211,149 @@ export class DatabaseStorage implements IStorage {
   
   async deletePatreonContent(id: number): Promise<boolean> {
     const result = await db.delete(patreonContent).where(eq(patreonContent.id, id));
+    return true;
+  }
+  
+  // Client methods
+  async getClient(id: number): Promise<Client | undefined> {
+    const [client] = await db.select().from(clients).where(eq(clients.id, id));
+    return client;
+  }
+  
+  async getAllClients(): Promise<Client[]> {
+    return await db.select().from(clients);
+  }
+  
+  async createClient(client: InsertClient): Promise<Client> {
+    const [newClient] = await db.insert(clients).values(client).returning();
+    return newClient;
+  }
+  
+  async updateClient(id: number, clientData: Partial<Omit<Client, "id">>): Promise<Client | undefined> {
+    const [updatedClient] = await db.update(clients)
+      .set(clientData)
+      .where(eq(clients.id, id))
+      .returning();
+    return updatedClient;
+  }
+  
+  async deleteClient(id: number): Promise<boolean> {
+    const result = await db.delete(clients).where(eq(clients.id, id));
+    return true;
+  }
+  
+  // Generated content methods
+  async getGeneratedContent(id: number): Promise<GeneratedContent | undefined> {
+    const [content] = await db.select().from(generatedContent).where(eq(generatedContent.id, id));
+    return content;
+  }
+  
+  async getAllGeneratedContent(): Promise<GeneratedContent[]> {
+    return await db.select().from(generatedContent);
+  }
+  
+  async getGeneratedContentByType(contentType: string): Promise<GeneratedContent[]> {
+    return await db.select().from(generatedContent).where(eq(generatedContent.contentType, contentType));
+  }
+  
+  async getGeneratedContentByUser(userId: number): Promise<GeneratedContent[]> {
+    return await db.select().from(generatedContent).where(eq(generatedContent.userId, userId));
+  }
+  
+  async createGeneratedContent(content: InsertGeneratedContent): Promise<GeneratedContent> {
+    const [newContent] = await db.insert(generatedContent).values(content).returning();
+    return newContent;
+  }
+  
+  async updateGeneratedContent(id: number, contentData: Partial<Omit<GeneratedContent, "id">>): Promise<GeneratedContent | undefined> {
+    const [updatedContent] = await db.update(generatedContent)
+      .set(contentData)
+      .where(eq(generatedContent.id, id))
+      .returning();
+    return updatedContent;
+  }
+  
+  async deleteGeneratedContent(id: number): Promise<boolean> {
+    const result = await db.delete(generatedContent).where(eq(generatedContent.id, id));
+    return true;
+  }
+  
+  // Order methods
+  async getOrder(id: number): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order;
+  }
+  
+  async getAllOrders(): Promise<Order[]> {
+    return await db.select().from(orders);
+  }
+  
+  async getOrdersByClient(clientId: number): Promise<Order[]> {
+    return await db.select().from(orders).where(eq(orders.clientId, clientId));
+  }
+  
+  async createOrder(order: InsertOrder): Promise<Order> {
+    const [newOrder] = await db.insert(orders).values(order).returning();
+    return newOrder;
+  }
+  
+  async updateOrder(id: number, orderData: Partial<Omit<Order, "id">>): Promise<Order | undefined> {
+    const [updatedOrder] = await db.update(orders)
+      .set(orderData)
+      .where(eq(orders.id, id))
+      .returning();
+    return updatedOrder;
+  }
+  
+  async deleteOrder(id: number): Promise<boolean> {
+    const result = await db.delete(orders).where(eq(orders.id, id));
+    return true;
+  }
+  
+  // Order item methods
+  async getOrderItems(orderId: number): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  }
+  
+  async createOrderItem(item: InsertOrderItem): Promise<OrderItem> {
+    const [newItem] = await db.insert(orderItems).values(item).returning();
+    return newItem;
+  }
+  
+  async deleteOrderItem(id: number): Promise<boolean> {
+    const result = await db.delete(orderItems).where(eq(orderItems.id, id));
+    return true;
+  }
+  
+  // Task methods
+  async getTask(id: number): Promise<Task | undefined> {
+    const [task] = await db.select().from(tasks).where(eq(tasks.id, id));
+    return task;
+  }
+  
+  async getAllTasks(): Promise<Task[]> {
+    return await db.select().from(tasks);
+  }
+  
+  async getTasksByUser(userId: number): Promise<Task[]> {
+    return await db.select().from(tasks).where(eq(tasks.userId, userId));
+  }
+  
+  async createTask(task: InsertTask): Promise<Task> {
+    const [newTask] = await db.insert(tasks).values(task).returning();
+    return newTask;
+  }
+  
+  async updateTask(id: number, taskData: Partial<Omit<Task, "id">>): Promise<Task | undefined> {
+    const [updatedTask] = await db.update(tasks)
+      .set(taskData)
+      .where(eq(tasks.id, id))
+      .returning();
+    return updatedTask;
+  }
+  
+  async deleteTask(id: number): Promise<boolean> {
+    const result = await db.delete(tasks).where(eq(tasks.id, id));
     return true;
   }
 }
