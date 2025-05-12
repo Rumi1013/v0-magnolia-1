@@ -50,9 +50,9 @@ const Home: React.FC = () => {
       </section>
       
       {/* Featured Tiers */}
-      <section className="py-16 bg-[#051224]">
+      <section className="py-16 bg-[#0B1D35]">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-10 text-center animate-float">
             Membership Tiers
           </h2>
           
@@ -61,11 +61,11 @@ const Home: React.FC = () => {
           <div className="mt-12 text-center">
             <Button 
               variant="outline" 
-              className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10"
+              className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 hover-scale"
               asChild
             >
               <Link to="/membership">
-                View All Tier Details <ArrowRight className="ml-2 h-4 w-4" />
+                View All Tier Details <ArrowRight className="ml-2 h-4 w-4 animate-float" />
               </Link>
             </Button>
           </div>
@@ -73,10 +73,10 @@ const Home: React.FC = () => {
       </section>
       
       {/* Content Preview */}
-      <section className="py-16">
+      <section className="py-16 bg-[#122A46]">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-4 animate-float">
               Featured Content
             </h2>
             <p className="text-lg font-lora text-[#FAF3E0] max-w-2xl mx-auto">
@@ -86,8 +86,8 @@ const Home: React.FC = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-[#051224] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all">
-              <div className="w-12 h-12 rounded-full bg-[#0A3B4D] flex items-center justify-center mb-4">
+            <div className="bg-[#0D1F35] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all hover-scale">
+              <div className="w-12 h-12 rounded-full bg-[#155268] flex items-center justify-center mb-4 animate-pulse-slow">
                 <Star className="h-6 w-6 text-[#D4AF37]" />
               </div>
               <h3 className="text-xl font-playfair text-[#D4AF37] mb-3">Affirmation Cards</h3>
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
               </p>
               <Button 
                 variant="outline" 
-                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full"
+                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full hover-scale"
                 asChild
               >
                 <Link to="/content-offerings?tab=affirmations">
@@ -105,8 +105,8 @@ const Home: React.FC = () => {
               </Button>
             </div>
             
-            <div className="bg-[#051224] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all">
-              <div className="w-12 h-12 rounded-full bg-[#0A3B4D] flex items-center justify-center mb-4">
+            <div className="bg-[#0D1F35] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all hover-scale">
+              <div className="w-12 h-12 rounded-full bg-[#155268] flex items-center justify-center mb-4 animate-pulse-slow">
                 <FileText className="h-6 w-6 text-[#D4AF37]" />
               </div>
               <h3 className="text-xl font-playfair text-[#D4AF37] mb-3">Journal Prompts</h3>
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
               </p>
               <Button 
                 variant="outline" 
-                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full"
+                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full hover-scale"
                 asChild
               >
                 <Link to="/content-offerings?tab=journals">
@@ -124,8 +124,8 @@ const Home: React.FC = () => {
               </Button>
             </div>
             
-            <div className="bg-[#051224] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all">
-              <div className="w-12 h-12 rounded-full bg-[#0A3B4D] flex items-center justify-center mb-4">
+            <div className="bg-[#0D1F35] p-6 rounded-lg border border-[#A3B18A]/30 hover:border-[#A3B18A]/60 transition-all hover-scale">
+              <div className="w-12 h-12 rounded-full bg-[#155268] flex items-center justify-center mb-4 animate-pulse-slow">
                 <Sparkles className="h-6 w-6 text-[#D4AF37]" />
               </div>
               <h3 className="text-xl font-playfair text-[#D4AF37] mb-3">Ritual Guides</h3>
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
               </p>
               <Button 
                 variant="outline" 
-                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full"
+                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 w-full hover-scale"
                 asChild
               >
                 <Link to="/content-offerings?tab=rituals">
@@ -146,7 +146,7 @@ const Home: React.FC = () => {
           
           <div className="mt-12 text-center">
             <Button 
-              className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90"
+              className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 animate-pulse-gold hover-scale"
               asChild
             >
               <Link to="/content-offerings">
@@ -158,20 +158,20 @@ const Home: React.FC = () => {
       </section>
       
       {/* Testimonials */}
-      <section className="py-16 bg-[#051224]">
+      <section className="py-16 bg-[#0D1F35]">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-10 text-center">
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-10 text-center animate-float">
             From Our Community
           </h2>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-[#0A192F] p-6 rounded-lg border border-[#A3B18A]/20">
+            <div className="bg-[#122240] p-6 rounded-lg border border-[#A3B18A]/20 hover:border-[#A3B18A]/60 transition-all hover-scale">
               <p className="text-[#FAF3E0] italic font-lora mb-4">
                 "The monthly journal prompts have completely transformed my self-reflection practice. 
                 Each one feels like it was written specifically for me. This membership is the anchor in my spiritual practice."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#0A3B4D] flex items-center justify-center text-lg">
+                <div className="w-10 h-10 rounded-full bg-[#155268] flex items-center justify-center text-lg animate-pulse-slow">
                   ✨
                 </div>
                 <div className="ml-3">
@@ -181,13 +181,13 @@ const Home: React.FC = () => {
               </div>
             </div>
             
-            <div className="bg-[#0A192F] p-6 rounded-lg border border-[#A3B18A]/20">
+            <div className="bg-[#122240] p-6 rounded-lg border border-[#A3B18A]/20 hover:border-[#A3B18A]/60 transition-all hover-scale">
               <p className="text-[#FAF3E0] italic font-lora mb-4">
                 "The tarot insights have been incredibly accurate for my journey. 
                 I look forward to them each month as a guide for what's coming. The aesthetic perfectly captures that Southern Gothic vibe I love."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#0A3B4D] flex items-center justify-center text-lg">
+                <div className="w-10 h-10 rounded-full bg-[#155268] flex items-center justify-center text-lg animate-pulse-slow">
                   🌙
                 </div>
                 <div className="ml-3">
@@ -197,13 +197,13 @@ const Home: React.FC = () => {
               </div>
             </div>
             
-            <div className="bg-[#0A192F] p-6 rounded-lg border border-[#A3B18A]/20">
+            <div className="bg-[#122240] p-6 rounded-lg border border-[#A3B18A]/20 hover:border-[#A3B18A]/60 transition-all hover-scale">
               <p className="text-[#FAF3E0] italic font-lora mb-4">
                 "The quarterly packages are like receiving a piece of magic in the mail. 
                 The personalized readings have been spot on, and the 1:1 connections have given me insights I wouldn't have found elsewhere."
               </p>
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#0A3B4D] flex items-center justify-center text-lg">
+                <div className="w-10 h-10 rounded-full bg-[#155268] flex items-center justify-center text-lg animate-pulse-slow">
                   🏛️
                 </div>
                 <div className="ml-3">

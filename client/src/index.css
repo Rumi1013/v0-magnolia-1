@@ -86,6 +86,10 @@
   animation: pulse 2s infinite;
 }
 
+.animate-pulse-slow {
+  animation: pulse 4s infinite;
+}
+
 .animate-shimmer {
   background: linear-gradient(
     90deg,
