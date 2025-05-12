@@ -34,12 +34,11 @@ const registerSchema = loginSchema.extend({
 
 const AuthPage: React.FC = () => {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [_, setLocation] = useLocation();
   const { user, loginMutation, registerMutation } = useAuth();
 
-  // Redirect if already logged in
   useEffect(() => {
+    // Redirect if already logged in
     if (user) {
       setLocation('/dashboard');
     }

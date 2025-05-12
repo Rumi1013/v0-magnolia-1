@@ -52,46 +52,46 @@ const DashboardPage: React.FC = () => {
               
               <nav className="space-y-1">
                 <Link href="/dashboard">
-                  <a className="flex items-center space-x-3 bg-[#0A192F]/90 text-[#D4AF37] px-4 py-3 rounded-md">
+                  <div className="flex items-center space-x-3 bg-[#0A192F]/90 text-[#D4AF37] px-4 py-3 rounded-md">
                     <LayoutDashboard className="h-5 w-5" />
                     <span>Dashboard</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/content-creator">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <FileText className="h-5 w-5" />
                     <span>Content Creation</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/library">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <BookOpen className="h-5 w-5" />
                     <span>Digital Library</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/ai-tools">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <Sparkles className="h-5 w-5" />
                     <span>AI Tools</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/pricing">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <ShoppingCart className="h-5 w-5" />
                     <span>Orders & Sales</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/clients">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <Users className="h-5 w-5" />
                     <span>Client Management</span>
-                  </a>
+                  </div>
                 </Link>
                 <Link href="/settings">
-                  <a className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
+                  <div className="flex items-center space-x-3 px-4 py-3 rounded-md hover:bg-[#0A192F]/90 text-[#FAF3E0] hover:text-[#D4AF37] transition-colors">
                     <Settings className="h-5 w-5" />
                     <span>Settings</span>
-                  </a>
+                  </div>
                 </Link>
               </nav>
               
