@@ -295,47 +295,39 @@ const DashboardPage: React.FC = () => {
               <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <Link href="/content-creator">
-                    <a className="block">
-                      <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
-                        <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
-                          <Star className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-medium text-[#0A192F]">Affirmation Card</h3>
+                    <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
+                      <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
+                        <Star className="h-6 w-6" />
                       </div>
-                    </a>
+                      <h3 className="font-medium text-[#0A192F]">Affirmation Card</h3>
+                    </div>
                   </Link>
                   
                   <Link href="/content-creator">
-                    <a className="block">
-                      <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
-                        <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
-                          <MoonStar className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-medium text-[#0A192F]">Tarot Description</h3>
+                    <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
+                      <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
+                        <MoonStar className="h-6 w-6" />
                       </div>
-                    </a>
+                      <h3 className="font-medium text-[#0A192F]">Tarot Description</h3>
+                    </div>
                   </Link>
                   
                   <Link href="/content-creator">
-                    <a className="block">
-                      <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
-                        <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
-                          <ScrollText className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-medium text-[#0A192F]">Journal Prompt</h3>
+                    <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
+                      <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
+                        <ScrollText className="h-6 w-6" />
                       </div>
-                    </a>
+                      <h3 className="font-medium text-[#0A192F]">Journal Prompt</h3>
+                    </div>
                   </Link>
                   
                   <Link href="/content-creator">
-                    <a className="block">
-                      <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
-                        <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
-                          <ShoppingCart className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-medium text-[#0A192F]">Product Listing</h3>
+                    <div className="border border-[#0A192F]/10 rounded-lg p-4 text-center hover:bg-[#0A192F]/5 transition-colors">
+                      <div className="h-12 w-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37]">
+                        <ShoppingCart className="h-6 w-6" />
                       </div>
-                    </a>
+                      <h3 className="font-medium text-[#0A192F]">Product Listing</h3>
+                    </div>
                   </Link>
                 </div>
               </CardContent>
