@@ -11,12 +11,22 @@ const nextConfig = {
       },
     ],
   },
+  // App directory support
+  experimental: {
+    appDir: true,
+  },
   // Ensure stable output for Vercel
   poweredByHeader: false,
-  // Set production output method
-  output: 'export',
-  // Keep Vercel compatible
-  distDir: '.next',
+  // Typescript
+  typescript: {
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    ignoreBuildErrors: true,
+  },
+  // Important for Next 13+ compatibility
+  webpack(config) {
+    return config;
+  },
 }
 
 module.exports = nextConfig

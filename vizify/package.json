@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export -o out",
-    "start": "npx serve out",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint"
   },
   "engines": {
@@ -33,9 +33,13 @@
     "@shopify/app": "^3.48.0",
     "@shopify/cli": "^3.48.0",
     "@shopify/theme": "^3.48.0",
+    "@types/node": "^20.9.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.43.0",
     "eslint-config-next": "^13.4.7",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.2.2"
   }
 }
