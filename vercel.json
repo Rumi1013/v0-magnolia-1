@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd ./your-project-directory && npm install && npm run build",
-  "outputDirectory": "./your-project-directory/.next",
-  "devCommand": "cd ./your-project-directory && npm run dev",
-  "installCommand": "cd ./your-project-directory && npm install"
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": ".next",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
 }
