@@ -1,21 +1,9 @@
 {
   "version": 2,
-  "public": true,
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "buildCommand": "echo 'Using static deployment'",
-  "outputDirectory": "public",
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
   "devCommand": "npm run dev",
   "installCommand": "npm install --legacy-peer-deps",
-  "github": {
-    "silent": true
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-      ]
-    }
-  ]
+  "framework": "nextjs",
+  "regions": ["iad1"]
 }

@@ -11,24 +11,12 @@ const nextConfig = {
       },
     ],
   },
-  // For Next.js 13+ compatibility
-  appDir: true,
-  // For better debug information
+  // Ensure stable output for Vercel
+  poweredByHeader: false,
+  // Set production output method
+  output: 'export',
+  // Keep Vercel compatible
   distDir: '.next',
-  // For preserving the original structure
-  trailingSlash: true,
-  // Force static optimization for better compatibility
-  output: 'standalone',
-  // Handle redirects
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        destination: '/',
-        permanent: false,
-      }
-    ];
-  },
 }
 
 module.exports = nextConfig

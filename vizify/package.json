@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "next build"
+    "build": "next build && next export -o out",
+    "start": "npx serve out",
+    "lint": "next lint"
   },
   "engines": {
     "node": ">=18.x"
@@ -18,11 +17,11 @@
     "@shopify/polaris": "^11.1.2",
     "@shopify/shopify-api": "^7.5.1",
     "date-fns": "^2.30.0",
-    "framer-motion": "^12.10.5",
+    "framer-motion": "^10.16.4",
     "graphql": "^16.6.0",
     "isomorphic-fetch": "^3.0.0",
-    "lucide-react": "^0.509.0",
-    "next": "^14.0.4",
+    "lucide-react": "^0.294.0",
+    "next": "13.4.19",
     "next-auth": "^4.22.1",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
