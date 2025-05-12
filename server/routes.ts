@@ -1282,6 +1282,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Create a record in Airtable
   app.post("/api/integrations/airtable/records", createAirtableRecord);
+  
+  // ===== NOTION TEMPLATES ROUTES =====
+  
+  // Initialize Notion content templates (call this during startup)
+  initializeContentTemplates().catch(err => {
+    console.error('Error initializing Notion templates:', err);
+  });
+  
+  // Get content templates by type
+  app.get("/api/templates/:type", isAuthenticated, getContentTemplates);
+  
+  // Add a new content template
+  app.post("/api/templates/:type", isAuthenticated, addContentTemplate);
+  
+  // Update an existing content template
+  app.put("/api/templates/:type/:id", isAuthenticated, updateContentTemplate);
+  
+  // Delete a content template
+  app.delete("/api/templates/:type/:id", isAuthenticated, deleteContentTemplate);
+
+  // ===== PATREON INTEGRATION ROUTES =====
+  
+  // Start the Patreon OAuth flow
+  app.get("/api/patreon/auth", isAuthenticated, initiatePatreonAuth);
+  
+  // Callback for Patreon OAuth
+  app.get("/api/patreon/callback", handlePatreonCallback);
+  
+  // Get Patreon campaign info
+  app.get("/api/patreon/campaign", isAuthenticated, getPatreonCampaignInfo);
+  
+  // Create a post on Patreon
+  app.post("/api/patreon/post", isAuthenticated, createPatreonPost);
+  
+  // Sync content from database to Patreon
+  app.post("/api/patreon/sync", isAuthenticated, syncContentToPatreon);
 
   const httpServer = createServer(app);
 
