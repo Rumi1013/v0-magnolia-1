@@ -1,30 +1,26 @@
-# Domain TXT Records for Midnight Magnolia
+# Domain Records for Midnight Magnolia
 
-# Domain Verification Records
+# Vercel Domain Configuration
 # --------------------------
-# To verify ownership of your domain for various services,
-# add these TXT records to your DNS configuration through your domain registrar
+# These records are needed to connect your domain to Vercel hosting
 
-# Google Workspace/GSuite Verification
-# Add as a TXT record to: yourdomain.com
-google-site-verification=REPLACE_WITH_YOUR_VERIFICATION_CODE
+# CNAME Record for Vercel (Main domain)
+# Type: CNAME
+# Name: midnight-magnolia
+# Value: cname.vercel-dns.com.
 
-# Microsoft/Office 365 Verification
-# Add as a TXT record to: yourdomain.com
-MS=REPLACE_WITH_YOUR_VERIFICATION_CODE
+# TXT Record for Vercel Domain Verification
+# Type: TXT
+# Name: _vercel
+# Value: vc-domain-verify=midnight-magnolia.replit.app,092b2a71c93999cd5d61
 
-# SPF Record (Email Security)
-# Add as a TXT record to: yourdomain.com
-v=spf1 include:_spf.google.com ~all
+# Implementation Instructions:
+# 1. Log in to your domain registrar's control panel
+# 2. Navigate to DNS management section
+# 3. Add the CNAME record exactly as shown above
+# 4. Add the TXT record exactly as shown above
+# 5. Save changes and allow time for DNS propagation (can take up to 48 hours)
+# 6. Verify the connection in your Vercel dashboard
 
-# DKIM Record (Email Authentication)
-# Add as a TXT record to: google._domainkey.yourdomain.com
-v=DKIM1; k=rsa; p=REPLACE_WITH_YOUR_PUBLIC_KEY
-
-# DMARC Record (Email Authentication Policy)
-# Add as a TXT record to: _dmarc.yourdomain.com
-v=DMARC1; p=none; rua=mailto:admin@yourdomain.com
-
-# Custom Records
-# --------------------------
-# Add any additional TXT records specific to your services here
+# Note: These settings will point the midnight-magnolia subdomain to your Vercel-hosted application
+# The TXT record verifies your ownership of the domain for Vercel
