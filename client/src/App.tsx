@@ -52,14 +52,14 @@ function AppNavigation() {
               <span className="text-[#D4AF37] font-playfair text-xl md:text-2xl">Midnight Magnolia</span>
             </Link>
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden">
             <Button variant="ghost" size="icon" onClick={toggleMenu} className="text-[#FAF3E0]">
               {isMenuOpen ? <X /> : <Menu />}
             </Button>
           </div>
-          
+
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/' ? 'text-[#D4AF37]' : ''}`}>
@@ -92,7 +92,7 @@ function AppNavigation() {
             <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`}>
               Pricing
             </Link>
-            
+
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link to="/dashboard" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/dashboard' ? 'text-[#D4AF37]' : ''}`}>
@@ -103,7 +103,7 @@ function AppNavigation() {
                   size="sm" 
                   onClick={handleLogout}
                   disabled={logoutMutation.isPending}
-                  className="border-[#D4AF37] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black"
+                  className="border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white transition-colors duration-300"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
@@ -118,7 +118,7 @@ function AppNavigation() {
             )}
           </div>
         </div>
-        
+
         {/* Mobile menu */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 bg-[#0A192F] rounded-lg p-4 absolute left-0 right-0 mx-4 z-50 shadow-lg">
@@ -153,7 +153,7 @@ function AppNavigation() {
               <Link to="/pricing" className={`text-[#FAF3E0] hover:text-[#D4AF37] transition-colors duration-300 ${location === '/pricing' ? 'text-[#D4AF37]' : ''}`} onClick={() => setIsMenuOpen(false)}>
                 Pricing
               </Link>
-              
+
               {user ? (
                 <>
                   <div className="text-[#FAF3E0] pt-2 border-t border-[#A3B18A]/20">Welcome, {user.username}</div>

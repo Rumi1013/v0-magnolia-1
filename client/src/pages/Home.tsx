@@ -57,10 +57,10 @@ const Home: React.FC = () => {
             alt="Midnight Magnolia" 
             className="w-64 h-64 mx-auto mb-8"
           />
-          <h1 className="font-playfair text-[#D4AF37] text-5xl md:text-6xl lg:text-7xl mb-6">
+          <h1 className="font-playfair text-zinc-900 text-5xl md:text-6xl lg:text-7xl mb-6">
             Midnight Magnolia
           </h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-8">
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-8 text-zinc-700">
             Automate your mystical content creation with AI-powered tools
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
