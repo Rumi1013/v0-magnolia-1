@@ -134,14 +134,8 @@ async function setupNotion() {
   }
 }
 
-// Run the setup if this script is executed directly
-if (require.main === module) {
-  setupNotion()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error('Setup failed:', error);
-      process.exit(1);
-    });
-}
+// Run the setup if needed - in ES modules, we'll handle this differently
+// The setup will be called explicitly from other files instead
+export default setupNotion;
 
 export { setupNotion, extractPageIdFromUrl };

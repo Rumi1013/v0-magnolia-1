@@ -1,0 +1,105 @@
+25-05-12 17:30:11.57
+2e724410
+User
+Node.js v20.18.1
+2025-05-12 17:30:11.58
+2e724410
+System
+command finished with error [sh -c node server/index.ts]: exit status 1
+2025-05-12 17:30:11.72
+2e724410
+User
+node:internal/modules/esm/get_format:176
+2025-05-12 17:30:11.72
+2e724410
+User
+throw new ERR_UNKNOWN_FILE_EXTENSION(ext, filepath);
+2025-05-12 17:30:11.72
+2e724410
+User
+^
+2025-05-12 17:30:11.72
+2e724410
+User
+2025-05-12 17:30:11.72
+2e724410
+User
+TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for /home/runner/workspace/server/index.ts
+2025-05-12 17:30:11.72
+2e724410
+User
+at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:176:9)
+2025-05-12 17:30:11.72
+2e724410
+User
+at defaultGetFormat (node:internal/modules/esm/get_format:219:36)
+2025-05-12 17:30:11.72
+2e724410
+User
+at defaultLoad (node:internal/modules/esm/load:143:22)
+2025-05-12 17:30:11.72
+2e724410
+User
+at async ModuleLoader.load (node:internal/modules/esm/loader:555:7)
+2025-05-12 17:30:11.72
+2e724410
+User
+at async ModuleLoader.moduleProvider (node:internal/modules/esm/loader:434:45)
+2025-05-12 17:30:11.72
+2e724410
+User
+at async link (node:internal/modules/esm/module_job:87:21) {
+2025-05-12 17:30:11.72
+2e724410
+User
+code: 'ERR_UNKNOWN_FILE_EXTENSION'
+2025-05-12 17:30:11.72
+2e724410
+User
+}
+2025-05-12 17:30:11.72
+2e724410
+User
+2025-05-12 17:30:11.72
+2e724410
+User
+Node.js v20.18.1
+2025-05-12 17:30:11.72
+2e724410
+System
+command finished with error [sh -c node server/index.ts]: exit status 1
+2025-05-12 17:30:11.96
+2e724410
+User
+node:internal/modules/esm/get_format:176
+2025-05-12 17:30:11.96
+2e724410
+User
+throw new ERR_UNKNOWN_FILE_EXTENSION(ext, filepath);
+2025-05-12 17:30:11.96
+2e724410
+User
+^
+2025-05-12 17:30:11.96
+2e724410
+User
+2025-05-12 17:30:11.96
+2e724410
+User
+TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for /home/runner/workspace/server/index.ts
+2025-05-12 17:30:11.96
+2e724410
+User
+at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:176:9)
+2025-05-12 17:30:11.96
+2e724410
+User
+at defaultGetFormat (node:internal/modules/esm/get_format:219:36)
+2025-05-12 17:30:11.96
+2e724410
+User
+at defaultLoad (node:internal/modules/esm/load:143:22)
+2025-05-12 17:30:11.96
+2e724410
+User
+at async ModuleLoader.load (node:internal/modules/esm/loader:555:7)

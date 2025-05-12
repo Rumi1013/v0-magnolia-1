@@ -1,4 +1,3 @@
-typescript
 // Adding health check route and ensuring correct export of notionService.
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
@@ -956,6 +955,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { contentType } = req.params;
       const content = await storage.getGeneratedContentByType(contentType);
+      res.json({ success: true, content });
+    } catch (error: any) {
       handleApiError(res, error, "Failed to fetch content by type");
     }
   });
