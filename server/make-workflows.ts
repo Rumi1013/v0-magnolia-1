@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import fetch from 'node-fetch';
+import { workflowTemplates } from './make-workflow-templates';
 
 const MAKE_API_BASE_URL = 'https://eu1.make.com/api/v2';
 const MAKE_API_KEY = process.env.MAKE_API_KEY;
@@ -772,38 +773,13 @@ export async function testWebhook(req: Request, res: Response) {
  */
 export function getAvailableBlueprints(req: Request, res: Response) {
   try {
-    const blueprints = [
-      {
-        id: 'monthly-content-batch',
-        name: 'Monthly Content Batch Production',
-        description: 'Automates the monthly content batch creation process for Midnight Magnolia Patreon',
-        category: 'content-creation'
-      },
-      {
-        id: 'patreon-post-scheduler',
-        name: 'Patreon Content Publishing',
-        description: 'Automatically publishes scheduled content to Patreon from Notion',
-        category: 'content-delivery'
-      },
-      {
-        id: 'patron-welcome-automation',
-        name: 'New Patron Welcome Sequence',
-        description: 'Automatically process and welcome new Patreon members',
-        category: 'patron-management'
-      },
-      {
-        id: 'notion-airtable-sync',
-        name: 'Notion to Airtable Content Sync',
-        description: 'Synchronizes content database between Notion and Airtable',
-        category: 'integration'
-      },
-      {
-        id: 'weekly-analytics-report',
-        name: 'Weekly Analytics Report',
-        description: 'Generates and delivers a weekly report of Patreon and content analytics',
-        category: 'analytics'
-      }
-    ];
+    // Map the workflow templates to simplified blueprint objects to send to the client
+    const blueprints = workflowTemplates.map(template => ({
+      id: template.id,
+      name: template.name,
+      description: template.description,
+      category: template.category
+    }));
     
     res.json(blueprints);
   } catch (error) {
