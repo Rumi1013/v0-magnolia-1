@@ -1,0 +1,295 @@
+import React from 'react';
+
+const MidnightMagnoliaTierGraphics = () => {
+  // Brand colors
+  const colors = {
+    midnightBlue: "#0A192F",
+    midnightTeal: "#0A3B4D",
+    magnoliaWhite: "#FAF3E0",
+    richGold: "#D4AF37",
+    sageGreen: "#A3B18A",
+    darkNavy: "#051224"
+  };
+
+  const tierData = [
+    {
+      name: "Magnolia Seed",
+      price: "$3",
+      tagline: "Plant the seeds of transformation",
+      icon: "🌱",
+      description: "Join the beginning of our journey with monthly affirmations, digital wallpapers, and community recognition.",
+      benefits: [
+        "Monthly digital affirmation cards",
+        "Exclusive phone/desktop wallpapers",
+        "Supporter recognition",
+        "Access to patron-only feed"
+      ],
+      backgroundColor: colors.midnightBlue,
+      accentColor: colors.sageGreen
+    },
+    {
+      name: "Crescent Bloom",
+      price: "$7",
+      tagline: "Illuminate your path through shadow and light",
+      icon: "🌙",
+      description: "Expand your experience with tarot insights and exclusive content to guide your journey.",
+      benefits: [
+        "Everything in Magnolia Seed tier",
+        "Monthly digital tarot card",
+        "Private blog/vlog content",
+        "Archived content access",
+        "Early announcements"
+      ],
+      backgroundColor: colors.midnightTeal,
+      accentColor: colors.magnoliaWhite
+    },
+    {
+      name: "Golden Grove",
+      price: "$15",
+      tagline: "Nurture your creative spirit and ancestral wisdom",
+      icon: "✨",
+      description: "Deepen your practice with journals, audio rituals, and exclusive previews of upcoming creations.",
+      benefits: [
+        "Everything in previous tiers",
+        "Monthly printable journal pages",
+        "Guided audio rituals or playlists",
+        "Sneak peeks of upcoming products",
+        "10% discount code for shop"
+      ],
+      backgroundColor: colors.darkNavy,
+      accentColor: colors.richGold
+    },
+    {
+      name: "Moonlit Sanctuary",
+      price: "$30",
+      tagline: "Enter the sacred space of collective healing",
+      icon: "🌑",
+      description: "Join our inner circle with personalized content, early access, and community gatherings.",
+      benefits: [
+        "Everything in previous tiers",
+        "Personalized monthly affirmation",
+        "Early access to product releases",
+        "Quarterly community circle",
+        "Input on monthly themes",
+        "15% discount code for shop"
+      ],
+      backgroundColor: colors.midnightBlue,
+      accentColor: colors.magnoliaWhite
+    },
+    {
+      name: "House of Midnight",
+      price: "$75",
+      tagline: "Dwell in the ancestral mansion of creative abundance",
+      icon: "🏛️",
+      description: "Experience our most exclusive offerings including physical mailings, personal readings, and direct creator access.",
+      benefits: [
+        "Everything in previous tiers",
+        "Quarterly physical mail package",
+        "Monthly custom tarot reading",
+        "Product development input",
+        "Seasonal 1:1 connection",
+        "25% discount code for shop"
+      ],
+      backgroundColor: colors.darkNavy,
+      accentColor: colors.richGold
+    }
+  ];
+
+  // Magnolia flower SVG path for decoration
+  const magnoliaFlower = (
+    <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="15" fill="currentColor" fillOpacity="0.7" />
+      <path d="M50 35C46 41 43 48 50 50C57 48 54 41 50 35Z" fill="currentColor" />
+      <path d="M50 35C54 41 57 48 50 50C43 48 46 41 50 35Z" fill="currentColor" />
+      <path d="M50 35C57 39 64 39 62 46C55 48 52 41 50 35Z" fill="currentColor" />
+      <path d="M50 35C43 39 36 39 38 46C45 48 48 41 50 35Z" fill="currentColor" />
+    </svg>
+  );
+
+  // Crescent moon SVG for decoration
+  const crescentMoon = (
+    <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 30C59.5 30 50.1 34.7 44 42.3C47.6 39.6 52.1 38 57 38C72.5 38 85 50.5 85 66C85 81.5 72.5 94 57 94C52.1 94 47.6 92.4 44 89.7C50.1 97.3 59.5 102 70 102C89 102 104 87 104 68C104 49 89 34 70 34V30Z" fill="currentColor" />
+    </svg>
+  );
+
+  return (
+    <div style={{ fontFamily: "'Montserrat', sans-serif", color: colors.magnoliaWhite, maxWidth: "100%" }}>
+      <h1 style={{ 
+        fontFamily: "'Playfair Display', serif", 
+        color: colors.richGold, 
+        textAlign: "center", 
+        margin: "20px 0 40px",
+        fontSize: "2.5rem"
+      }}>
+        Midnight Magnolia Patreon Tiers
+      </h1>
+      
+      <div style={{ 
+        display: "flex", 
+        flexDirection: "column", 
+        gap: "40px",
+        maxWidth: "800px",
+        margin: "0 auto"
+      }}>
+        {tierData.map((tier, index) => (
+          <div key={index} style={{
+            backgroundColor: tier.backgroundColor,
+            borderRadius: "8px",
+            padding: "30px",
+            boxShadow: `0 4px 20px rgba(0, 0, 0, 0.3)`,
+            border: `1px solid ${tier.accentColor}`,
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            {/* Decorative elements positioned absolutely */}
+            <div style={{ position: "absolute", top: "10px", right: "10px", opacity: 0.2, color: tier.accentColor }}>
+              {index % 2 === 0 ? magnoliaFlower : crescentMoon}
+            </div>
+            
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+              <span style={{ fontSize: "2rem", marginRight: "10px" }}>{tier.icon}</span>
+              <h2 style={{ 
+                fontFamily: "'Playfair Display', serif", 
+                color: tier.accentColor,
+                margin: 0,
+                fontSize: "1.8rem"
+              }}>
+                {tier.name}
+              </h2>
+            </div>
+            
+            <div style={{ 
+              backgroundColor: "rgba(0,0,0,0.2)", 
+              display: "inline-block",
+              padding: "3px 12px",
+              borderRadius: "4px",
+              marginBottom: "15px",
+              color: tier.accentColor,
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: "600"
+            }}>
+              {tier.price}/month
+            </div>
+            
+            <p style={{ 
+              fontFamily: "'Lora', serif", 
+              fontStyle: "italic",
+              color: tier.accentColor,
+              marginBottom: "20px",
+              fontSize: "1rem"
+            }}>
+              "{tier.tagline}"
+            </p>
+            
+            <p style={{ 
+              fontFamily: "'Lora', serif", 
+              marginBottom: "20px",
+              fontSize: "1rem",
+              lineHeight: "1.6"
+            }}>
+              {tier.description}
+            </p>
+            
+            <div style={{ marginTop: "20px" }}>
+              <h3 style={{ 
+                fontFamily: "'Montserrat', sans-serif", 
+                fontSize: "0.9rem",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                color: tier.accentColor,
+                marginBottom: "10px"
+              }}>
+                Includes:
+              </h3>
+              
+              <ul style={{ 
+                listStyleType: "none", 
+                padding: 0,
+                margin: 0
+              }}>
+                {tier.benefits.map((benefit, i) => (
+                  <li key={i} style={{ 
+                    marginBottom: "8px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "8px",
+                    fontFamily: "'Lora', serif",
+                    fontSize: "0.95rem"
+                  }}>
+                    <span style={{ color: tier.accentColor }}>✦</span>
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <button style={{
+              backgroundColor: tier.accentColor,
+              color: tier.backgroundColor,
+              border: "none",
+              padding: "12px 24px",
+              borderRadius: "4px",
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: "600",
+              fontSize: "0.9rem",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              marginTop: "25px",
+              cursor: "pointer",
+              transition: "transform 0.3s, box-shadow 0.3s",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+            }}>
+              Join {tier.name}
+            </button>
+          </div>
+        ))}
+      </div>
+      
+      {/* Usage instructions for Patreon */}
+      <div style={{ 
+        maxWidth: "800px",
+        margin: "40px auto 20px",
+        padding: "20px",
+        backgroundColor: "rgba(10, 25, 47, 0.5)",
+        borderRadius: "8px",
+        border: `1px solid ${colors.sageGreen}`
+      }}>
+        <h3 style={{ 
+          fontFamily: "'Playfair Display', serif", 
+          color: colors.richGold,
+          marginBottom: "15px"
+        }}>
+          Implementation Notes
+        </h3>
+        <p style={{ fontFamily: "'Lora', serif", marginBottom: "15px" }}>
+          These tier graphics are designed to match your Midnight Magnolia brand identity. For implementation on Patreon:
+        </p>
+        <ul style={{ 
+          listStyleType: "none", 
+          padding: 0,
+          margin: 0
+        }}>
+          <li style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
+            <span style={{ color: colors.richGold }}>1.</span>
+            Export each tier design as a PNG image (1200×800px recommended)
+          </li>
+          <li style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
+            <span style={{ color: colors.richGold }}>2.</span>
+            Upload each tier image as the tier header in Patreon
+          </li>
+          <li style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
+            <span style={{ color: colors.richGold }}>3.</span>
+            Copy the tier descriptions and benefits text for each level
+          </li>
+          <li style={{ marginBottom: "10px", display: "flex", gap: "8px" }}>
+            <span style={{ color: colors.richGold }}>4.</span>
+            Ensure typography settings in Patreon match your brand fonts where possible
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default MidnightMagnoliaTierGraphics;
