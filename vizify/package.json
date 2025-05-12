@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "shopify": "shopify app dev"
+    "vercel-build": "next build"
   },
   "engines": {
     "node": ">=18.x"
