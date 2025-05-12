@@ -7,6 +7,34 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Moon, Star, Sparkles, Book, Calendar } from 'lucide-react';
 import { TieredProductPricing } from '@/components/TieredProductPricing';
 
+const aiFeatures = [
+  {
+    title: "Content Generation",
+    description: "AI-powered creation of tarot readings, journal prompts, and product descriptions",
+    icon: Sparkles,
+  },
+  {
+    title: "Lunar Content Planning",
+    description: "Automated content scheduling aligned with moon phases",
+    icon: Moon,
+  },
+  {
+    title: "Digital Grimoire",
+    description: "AI-assisted creation of mystical digital products",
+    icon: Book,
+  },
+  {
+    title: "Automated Workflows",
+    description: "Smart automation of your content creation process",
+    icon: Calendar,
+  },
+  {
+    title: "Custom Templates",
+    description: "AI-generated templates for your digital products",
+    icon: Star,
+  }
+];
+
 const Home: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-[#0A192F] text-[#FAF3E0] overflow-hidden">
@@ -35,17 +63,20 @@ const Home: React.FC = () => {
           <p className="text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed mb-8">
             Automate your mystical content creation with AI-powered tools
           </p>
-          <div className="flex gap-4 justify-center">
-            <Link to="/ai-tools">
-              <Button className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
-                Try AI Tools
-              </Button>
-            </Link>
-            <Link to="#pricing">
-              <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37]">
-                View Pricing
-              </Button>
-            </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button 
+              asChild
+              className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 w-full sm:w-auto"
+            >
+              <Link href="/ai-tools">Try AI Tools</Link>
+            </Button>
+            <Button 
+              asChild
+              variant="outline" 
+              className="border-[#D4AF37] text-[#D4AF37] w-full sm:w-auto"
+            >
+              <Link href="#pricing">View Pricing</Link>
+            </Button>
           </div>
         </motion.div>
       </section>
@@ -64,16 +95,16 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {aiFeatures.map((feature, index) => (
               <motion.div
-                key={index}
+                key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.2 }}
               >
-                <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20 backdrop-blur-sm">
-                  <CardContent className="p-6">
+                <Card className="bg-[#0A192F]/60 border-[#D4AF37]/20 backdrop-blur-sm h-full">
+                  <CardContent className="p-6 flex flex-col h-full">
                     <feature.icon className="w-12 h-12 text-[#D4AF37] mb-4" />
                     <h3 className="text-xl font-serif text-[#D4AF37] mb-2">{feature.title}</h3>
-                    <p className="text-sm text-[#FAF3E0]/70 font-body mb-4">{feature.description}</p>
+                    <p className="text-sm text-[#FAF3E0]/70 font-body">{feature.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -88,33 +119,5 @@ const Home: React.FC = () => {
     </div>
   );
 };
-
-const aiFeatures = [
-  {
-    title: "Content Generation",
-    description: "AI-powered creation of tarot readings, journal prompts, and product descriptions",
-    icon: Sparkles,
-  },
-  {
-    title: "Lunar Content Planning",
-    description: "Automated content scheduling aligned with moon phases",
-    icon: Moon,
-  },
-  {
-    title: "Digital Grimoire",
-    description: "AI-assisted creation of mystical digital products",
-    icon: Book,
-  },
-  {
-    title: "Automated Workflows",
-    description: "Smart automation of your content creation process",
-    icon: Calendar,
-  },
-  {
-    title: "Custom Templates",
-    description: "AI-generated templates for your digital products",
-    icon: Star,
-  }
-];
 
 export default Home;
