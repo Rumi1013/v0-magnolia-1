@@ -10,15 +10,15 @@ export const Logo: React.FC<{
   // Define sizes for different variants
   const sizes = {
     sm: { height: '32px', width: 'auto' },
-    md: { height: '40px', width: 'auto' },
-    lg: { height: '60px', width: 'auto' },
+    md: { height: '48px', width: 'auto' },
+    lg: { height: '72px', width: 'auto' },
   };
 
   // Define background styles for different variants
   const variantStyles = {
-    default: 'bg-[#0A192F]',
-    light: 'bg-[#FAF3E0]',
-    vintage: 'bg-[#0A192F]/90',
+    default: 'bg-zinc-900',
+    light: 'bg-white',
+    vintage: 'bg-zinc-900/90',
   };
 
   return (
@@ -27,7 +27,7 @@ export const Logo: React.FC<{
         src={logoImage} 
         alt="Midnight Magnolia Logo" 
         style={sizes[size]}
-        className="object-contain"
+        className="object-contain drop-shadow-md"
         onError={(e) => {
           const target = e.target as HTMLImageElement;
           target.style.display = 'none';
