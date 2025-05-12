@@ -8,7 +8,7 @@ channel = "stable-24_05"
 [deployment]
 deploymentTarget = "autoscale"
 build = ["sh", "-c", "cd client && npm run build"]
-run = ["sh", "-c", "cd client && npm run preview -- --host 0.0.0.0"]
+run = ["sh", "-c", "node server/index.ts"]
 
 [[ports]]
 localPort = 5000

@@ -1,11 +1,12 @@
+
 import React from 'react';
-// Import the logo directly
 import logoImage from '../../assets/logo.png';
 
 export const Logo: React.FC<{
   className?: string;
   size?: 'sm' | 'md' | 'lg';
-}> = ({ className, size = 'md' }) => {
+  variant?: 'default' | 'light' | 'vintage';
+}> = ({ className, size = 'md', variant = 'default' }) => {
   // Define sizes for different variants
   const sizes = {
     sm: { height: '32px', width: 'auto' },
@@ -13,22 +14,30 @@ export const Logo: React.FC<{
     lg: { height: '60px', width: 'auto' },
   };
 
+  // Define background styles for different variants
+  const variantStyles = {
+    default: 'bg-[#0A192F]',
+    light: 'bg-[#FAF3E0]',
+    vintage: 'bg-[#0A192F]/90',
+  };
+
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative rounded-full ${variantStyles[variant]} ${className}`}>
       <img 
         src={logoImage} 
         alt="Midnight Magnolia Logo" 
         style={sizes[size]}
         className="object-contain"
         onError={(e) => {
-          // If image fails to load, show a fallback
           const target = e.target as HTMLImageElement;
           target.style.display = 'none';
-          // Add a fallback element with brand color
+          
           const parent = target.parentElement;
           if (parent && !parent.querySelector('.logo-fallback')) {
             const fallback = document.createElement('div');
-            fallback.className = 'logo-fallback flex items-center justify-center rounded-full bg-[#D4AF37] text-[#0A192F] font-bold';
+            fallback.className = `logo-fallback flex items-center justify-center rounded-full 
+              ${variant === 'light' ? 'bg-[#0A192F] text-[#D4AF37]' : 'bg-[#D4AF37] text-[#0A192F]'} 
+              font-serif`;
             fallback.style.width = sizes[size].height;
             fallback.style.height = sizes[size].height;
             fallback.textContent = 'MM';
@@ -36,6 +45,10 @@ export const Logo: React.FC<{
           }
         }}
       />
+      
+      {/* Optional decorative elements */}
+      <div className="absolute inset-0 rounded-full ring-1 ring-[#D4AF37]/20"></div>
+      <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-[#D4AF37]/10 to-[#A3B18A]/10 blur-sm"></div>
     </div>
   );
 };
