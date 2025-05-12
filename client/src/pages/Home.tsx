@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DynamicIllustration } from '@/components/ui/dynamic-illustrations';
 import { Moon, Star, Sparkles, Book, Calendar } from 'lucide-react';
+import { TieredProductPricing } from "@/components/TieredProductPricing";
 
 const aiFeatures = [
   {
