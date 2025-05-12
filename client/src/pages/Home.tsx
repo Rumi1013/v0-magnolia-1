@@ -37,15 +37,10 @@ const aiFeatures = [
 
 const Home: React.FC = () => {
   return (
-    <div className="relative min-h-screen bg-zinc-50 text-zinc-900 overflow-hidden">
+    <div className="relative min-h-screen bg-[#0A192F] text-[#FAF3E0] overflow-hidden">
       <section className="relative min-h-screen flex flex-col items-center justify-center px-4">
-        <div 
-          className="absolute inset-0 pointer-events-none bg-center bg-cover"
-          style={{
-            backgroundImage: `url('/attached_assets/freepik__background__90242.png'), radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, rgba(10, 25, 47, 0.05) 100%)`,
-            backdropFilter: "blur(8px)"
-          }}
-        />
+        <DynamicIllustration variant="hero" className="opacity-80" />
+        <div className="absolute inset-0 backdrop-blur-sm" />
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
