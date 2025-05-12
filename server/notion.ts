@@ -23,13 +23,27 @@ class NotionApiError extends Error {
 
 // Initialize the Notion client with error handling
 const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
+  auth: process.env.NOTION_INTEGRATION_SECRET,
 });
 
 // Validate if API key is set
-if (!process.env.NOTION_API_KEY) {
-  console.warn('NOTION_API_KEY environment variable is not set. Notion integration will not work.');
+if (!process.env.NOTION_INTEGRATION_SECRET) {
+  console.warn('NOTION_INTEGRATION_SECRET environment variable is not set. Notion integration will not work.');
 }
+
+// Extract page ID from Notion page URL
+function extractPageIdFromUrl(pageUrl: string): string {
+  const match = pageUrl.match(/([a-f0-9]{32})(?:[?#]|$)/i);
+  if (match && match[1]) {
+    return match[1];
+  }
+  throw new NotionApiError('Failed to extract page ID from URL', 400, 'invalid_page_url');
+}
+
+// Get the parent page ID for Midnight Magnolia from environment variables
+export const NOTION_PAGE_ID = process.env.NOTION_PAGE_URL 
+  ? extractPageIdFromUrl(process.env.NOTION_PAGE_URL)
+  : null;
 
 export class NotionService {
   /**

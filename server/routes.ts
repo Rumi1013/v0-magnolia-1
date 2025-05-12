@@ -27,6 +27,21 @@ import {
   handleMakeResponse,
   checkIntegrationStatus
 } from "./integrations/route-handlers";
+// Import Notion templates handlers
+import {
+  getContentTemplates,
+  addContentTemplate,
+  updateContentTemplate,
+  deleteContentTemplate,
+  initializeContentTemplates
+} from "./notion-templates";
+// Import Patreon handlers
+import {
+  initiatePatreonAuth,
+  handlePatreonCallback,
+  getPatreonCampaignInfo,
+  syncContentToPatreon
+} from "./patreon";
 import {
   insertClientSchema, 
   insertGeneratedContentSchema, 
