@@ -183,7 +183,7 @@ export default function Shop() {
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors whitespace-nowrap"
+                className="px-6 py-3 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors whitespace-nowrap"
               >
                 Subscribe
               </button>

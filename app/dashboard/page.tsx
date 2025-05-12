@@ -72,7 +72,7 @@ export default function Dashboard() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               href="#products"
-              className="px-6 py-3 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
+              className="px-6 py-3 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
             >
               <span className="inline-flex items-center">
                 Explore Products
@@ -241,7 +241,7 @@ export default function Dashboard() {
           <div className="text-center mt-12">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors group shadow-md hover:shadow-lg"
             >
               View All Products
               <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
@@ -380,7 +380,7 @@ export default function Dashboard() {
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-rich-gold text-magnolia-white rounded-md font-accent text-sm hover:bg-rich-gold/90 transition-colors whitespace-nowrap shadow-md hover:shadow-lg"
+                className="px-6 py-3 bg-rich-gold text-midnight-blue rounded-md font-accent text-sm font-semibold hover:bg-rich-gold/90 transition-colors whitespace-nowrap shadow-md hover:shadow-lg"
               >
                 Subscribe
               </button>
