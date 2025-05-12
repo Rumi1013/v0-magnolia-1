@@ -115,6 +115,14 @@ function handleApiError(res: Response, error: any, defaultMessage: string) {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication - returns auth middleware functions
   const { isAuthenticated, isAdmin } = setupAuth(app);
+  
+  // Register service integration routes
+  import('./integrations').then(integrations => {
+    integrations.registerIntegrationRoutes(app);
+    console.log('Service integration routes registered');
+  }).catch(error => {
+    console.error('Failed to register integration routes:', error);
+  });
   // Check Notion integration health
   app.get("/api/notion/health", async (_req: Request, res: Response) => {
     try {
