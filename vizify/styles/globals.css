@@ -51,18 +51,99 @@ a {
   margin-bottom: 2rem;
 }
 
+/* Button Component */
 .midnight-button {
-  background-color: var(--rich-gold);
-  color: var(--midnight-blue);
-  padding: 0.75rem 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 0.375rem;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
   border: none;
   transition: all 0.2s ease;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .midnight-button:hover {
-  opacity: 0.9;
   transform: translateY(-2px);
+}
+
+.midnight-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.midnight-button-primary {
+  background-color: var(--rich-gold);
+  color: var(--midnight-blue);
+}
+
+.midnight-button-primary:hover {
+  background-color: #C09F32; /* Slightly darker gold */
+}
+
+.midnight-button-secondary {
+  background-color: var(--midnight-teal);
+  color: var(--magnolia-white);
+}
+
+.midnight-button-secondary:hover {
+  background-color: #092C3A; /* Slightly darker teal */
+}
+
+.midnight-button-outline {
+  background-color: transparent;
+  border: 1px solid var(--midnight-blue);
+  color: var(--midnight-blue);
+}
+
+.midnight-button-outline:hover {
+  background-color: var(--midnight-blue);
+  color: var(--magnolia-white);
+}
+
+.midnight-button-ghost {
+  background-color: transparent;
+  color: var(--midnight-blue);
+}
+
+.midnight-button-ghost:hover {
+  background-color: rgba(10, 25, 47, 0.1);
+}
+
+.midnight-button-link {
+  background-color: transparent;
+  color: var(--midnight-blue);
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* Button Sizes */
+.midnight-button-sm {
+  height: 2.25rem; /* h-9 */
+  padding-left: 0.75rem; /* px-3 */
+  padding-right: 0.75rem;
+  font-size: 0.75rem; /* text-xs */
+}
+
+.midnight-button-md {
+  height: 2.5rem; /* h-10 */
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem;
+  font-size: 0.875rem; /* text-sm */
+}
+
+.midnight-button-lg {
+  height: 2.75rem; /* h-11 */
+  padding-left: 1.5rem; /* px-6 */
+  padding-right: 1.5rem;
+  font-size: 1rem; /* text-base */
+}
+
+.midnight-button-xl {
+  height: 3rem; /* h-12 */
+  padding-left: 2rem; /* px-8 */
+  padding-right: 2rem;
+  font-size: 1rem; /* text-base */
 }
