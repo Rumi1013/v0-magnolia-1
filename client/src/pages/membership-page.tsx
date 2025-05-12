@@ -3,7 +3,7 @@ import MembershipTiers from '@/components/MembershipTiers';
 import { Helmet } from 'react-helmet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Heart, BookOpen, Sparkles, RefreshCw, Star, MoonStar } from 'lucide-react';
 
 const MembershipPage: React.FC = () => {
@@ -103,18 +103,18 @@ const MembershipPage: React.FC = () => {
 
       <div className="bg-[#FAF3E0]/30 min-h-screen">
         {/* Hero Section */}
-        <section className="relative bg-[#0A192F] text-white py-24 px-4">
+        <section className="relative bg-[#122240] text-white py-24 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="grid md:grid-cols-2 gap-10 items-center">
               <div>
-                <h1 className="text-4xl md:text-5xl font-playfair mb-6">
+                <h1 className="text-4xl md:text-5xl font-playfair mb-6 animate-float">
                   Elevate Your Spiritual <span className="text-[#D4AF37]">Content Creation</span>
                 </h1>
                 <p className="text-[#FAF3E0] text-lg mb-8 max-w-xl">
                   Join our tiered membership program and unlock the Digital Grimoire - your ultimate toolkit for creating mystical content with ease, flow, and authentic spiritual depth.
                 </p>
                 <div className="flex space-x-4 items-center">
-                  <MoonStar className="h-6 w-6 text-[#D4AF37]" />
+                  <MoonStar className="h-6 w-6 text-[#D4AF37] animate-pulse-slow" />
                   <p className="text-[#FAF3E0]/80">
                     Trusted by 1,200+ spiritual creators and entrepreneurs
                   </p>
@@ -122,28 +122,28 @@ const MembershipPage: React.FC = () => {
               </div>
               <div className="flex justify-center">
                 <div className="relative">
-                  <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-2xl"></div>
-                  <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-2xl"></div>
-                  <div className="relative bg-[#0A192F]/40 p-6 rounded-lg border border-[#FAF3E0]/10 backdrop-blur-sm">
+                  <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-2xl animate-pulse-slow"></div>
+                  <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#D4AF37]/10 rounded-full blur-2xl animate-pulse-slow"></div>
+                  <div className="relative bg-[#155268]/40 p-6 rounded-lg border border-[#FAF3E0]/10 backdrop-blur-sm animate-shimmer">
                     <div className="flex flex-col space-y-4">
-                      <div className="flex items-center p-3 bg-[#0A192F]/60 rounded-md border border-[#FAF3E0]/10">
-                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3" />
+                      <div className="flex items-center p-3 bg-[#0D1F35]/80 rounded-md border border-[#FAF3E0]/10 hover-scale transition-all duration-300">
+                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3 animate-pulse-slow" />
                         <span className="text-[#FAF3E0]">AI-Powered Content Generation</span>
                       </div>
-                      <div className="flex items-center p-3 bg-[#0A192F]/60 rounded-md border border-[#FAF3E0]/10">
-                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3" />
+                      <div className="flex items-center p-3 bg-[#0D1F35]/80 rounded-md border border-[#FAF3E0]/10 hover-scale transition-all duration-300">
+                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3 animate-pulse-slow" />
                         <span className="text-[#FAF3E0]">Guided Workflow Templates</span>
                       </div>
-                      <div className="flex items-center p-3 bg-[#0A192F]/60 rounded-md border border-[#FAF3E0]/10">
-                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3" />
+                      <div className="flex items-center p-3 bg-[#0D1F35]/80 rounded-md border border-[#FAF3E0]/10 hover-scale transition-all duration-300">
+                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3 animate-pulse-slow" />
                         <span className="text-[#FAF3E0]">Tarot & Oracle Resources</span>
                       </div>
-                      <div className="flex items-center p-3 bg-[#0A192F]/60 rounded-md border border-[#FAF3E0]/10">
-                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3" />
+                      <div className="flex items-center p-3 bg-[#0D1F35]/80 rounded-md border border-[#FAF3E0]/10 hover-scale transition-all duration-300">
+                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3 animate-pulse-slow" />
                         <span className="text-[#FAF3E0]">Spiritual Content Library</span>
                       </div>
-                      <div className="flex items-center p-3 bg-[#0A192F]/60 rounded-md border border-[#FAF3E0]/10">
-                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3" />
+                      <div className="flex items-center p-3 bg-[#0D1F35]/80 rounded-md border border-[#FAF3E0]/10 hover-scale transition-all duration-300">
+                        <CheckCircle className="h-5 w-5 text-[#D4AF37] mr-3 animate-pulse-slow" />
                         <span className="text-[#FAF3E0]">Multi-Platform Publishing</span>
                       </div>
                     </div>
@@ -155,10 +155,10 @@ const MembershipPage: React.FC = () => {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-20 px-4 bg-white">
+        <section className="py-20 px-4 bg-gradient-to-b from-white to-[#FAF3E0]/50">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4">
+              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4 animate-float">
                 Benefits of Membership
               </h2>
               <p className="text-[#0A192F]/80 max-w-2xl mx-auto">
@@ -168,9 +168,13 @@ const MembershipPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {benefits.map((benefit, index) => (
-                <Card key={index} className="border-[#0A192F]/10">
+                <Card key={index} 
+                  className="border-[#0A192F]/10 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm bg-white/70"
+                >
                   <CardHeader className="pb-2">
-                    {benefit.icon}
+                    <div className="animate-pulse-slow">
+                      {benefit.icon}
+                    </div>
                     <CardTitle className="text-xl font-medium text-[#0A192F] mt-4">
                       {benefit.title}
                     </CardTitle>
@@ -192,10 +196,10 @@ const MembershipPage: React.FC = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 px-4 bg-white">
+        <section className="py-20 px-4 bg-gradient-to-b from-[#FAF3E0]/30 to-white">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4">
+              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4 animate-float">
                 What Our Members Say
               </h2>
               <p className="text-[#0A192F]/80 max-w-2xl mx-auto">
@@ -205,19 +209,22 @@ const MembershipPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {testimonials.map((testimonial) => (
-                <Card key={testimonial.id} className="border-[#0A192F]/10">
+                <Card 
+                  key={testimonial.id} 
+                  className="border-[#0A192F]/10 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-[#FAF3E0]/20 hover:-translate-y-1"
+                >
                   <CardHeader>
-                    <div className="flex items-center space-x-1 mb-4">
+                    <div className="flex items-center space-x-1 mb-4 animate-shimmer">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="h-4 w-4 fill-[#D4AF37] text-[#D4AF37]" />
                       ))}
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-[#0A192F]/80 italic mb-6">"{testimonial.quote}"</p>
+                    <p className="text-[#0A192F]/80 italic mb-6 leading-relaxed">"{testimonial.quote}"</p>
                     <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#0A192F]/10 flex items-center justify-center mr-3">
-                        <span className="text-[#0A192F] font-medium">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0D1F35] to-[#122240] flex items-center justify-center mr-3 shadow-md">
+                        <span className="text-[#FAF3E0] font-medium">
                           {testimonial.name.charAt(0)}
                         </span>
                       </div>
@@ -226,7 +233,7 @@ const MembershipPage: React.FC = () => {
                         <div className="flex items-center">
                           <span className="text-[#0A192F]/70 text-sm">{testimonial.role}</span>
                           <span className="mx-2 text-[#0A192F]/30">•</span>
-                          <span className="text-[#D4AF37] text-sm">{testimonial.tier} Member</span>
+                          <span className="text-[#D4AF37] text-sm font-medium">{testimonial.tier} Member</span>
                         </div>
                       </div>
                     </div>
@@ -238,10 +245,10 @@ const MembershipPage: React.FC = () => {
         </section>
 
         {/* FAQ Section */}
-        <section className="py-20 px-4 bg-[#F8F5EB]">
+        <section className="py-20 px-4 bg-gradient-to-b from-white to-[#F8F5EB]">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4">
+              <h2 className="text-3xl font-playfair text-[#0A192F] mb-4 animate-float">
                 Frequently Asked Questions
               </h2>
               <p className="text-[#0A192F]/80 max-w-2xl mx-auto">
@@ -250,14 +257,14 @@ const MembershipPage: React.FC = () => {
             </div>
 
             <Tabs defaultValue="general" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-8">
-                <TabsTrigger value="general" className="data-[state=active]:bg-[#0A192F] data-[state=active]:text-white">
+              <TabsList className="grid w-full grid-cols-3 mb-8 shadow-md">
+                <TabsTrigger value="general" className="data-[state=active]:bg-[#122240] data-[state=active]:text-white transition-all duration-300">
                   General
                 </TabsTrigger>
-                <TabsTrigger value="membership" className="data-[state=active]:bg-[#0A192F] data-[state=active]:text-white">
+                <TabsTrigger value="membership" className="data-[state=active]:bg-[#122240] data-[state=active]:text-white transition-all duration-300">
                   Membership
                 </TabsTrigger>
-                <TabsTrigger value="features" className="data-[state=active]:bg-[#0A192F] data-[state=active]:text-white">
+                <TabsTrigger value="features" className="data-[state=active]:bg-[#122240] data-[state=active]:text-white transition-all duration-300">
                   Features
                 </TabsTrigger>
               </TabsList>

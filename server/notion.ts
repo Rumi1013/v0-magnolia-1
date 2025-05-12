@@ -18,6 +18,22 @@ export const notion = process.env.NOTION_INTEGRATION_SECRET
   ? new Client({ auth: process.env.NOTION_INTEGRATION_SECRET }) 
   : null;
 
+export const notionService = {
+  notion,
+  checkNotionHealth,
+  getNotionDatabases,
+  getNotionDatabase,
+  updateNotionDatabase,
+  createNotionDatabase,
+  createNotionPage,
+  queryNotionDatabase,
+  getNotionDatabasePages,
+  getNotionPage,
+  updateNotionPage,
+  deleteNotionPage,
+  addBlocksToPage
+};
+
 // Extract the page ID from the Notion page URL
 export function extractPageIdFromUrl(pageUrl: string): string {
   const match = pageUrl.match(/([a-f0-9]{32})(?:[?#]|$)/i);

@@ -1,3 +1,5 @@
+typescript
+// Adding health check route and ensuring correct export of notionService.
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
@@ -101,7 +103,7 @@ const appendBlockChildrenSchema = z.object({
 // Helper function to handle API errors consistently
 function handleApiError(res: Response, error: any, defaultMessage: string) {
   console.error(`API Error: ${defaultMessage}`, error);
-  
+
   // Check if it's our custom NotionApiError with status code
   if (error.status) {
     return res.status(error.status).json({
@@ -110,7 +112,7 @@ function handleApiError(res: Response, error: any, defaultMessage: string) {
       code: error.code
     });
   }
-  
+
   // Handle Zod validation errors
   if (error.errors) {
     return res.status(400).json({
@@ -119,7 +121,7 @@ function handleApiError(res: Response, error: any, defaultMessage: string) {
       details: error.errors
     });
   }
-  
+
   // Default error response
   return res.status(500).json({
     success: false,
@@ -130,7 +132,7 @@ function handleApiError(res: Response, error: any, defaultMessage: string) {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication - returns auth middleware functions
   const { isAuthenticated, isAdmin } = setupAuth(app);
-  
+
   // Register service integration routes
   import('./integrations').then(integrations => {
     integrations.registerIntegrationRoutes(app);
@@ -138,6 +140,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }).catch(error => {
     console.error('Failed to register integration routes:', error);
   });
+  // Add health check endpoint for deployments
+  app.get("/", (_req, res) => {
+    res.status(200).send("OK");
+  });
+
+  // ALWAYS serve the app on port 5000
+  // this serves both the API and the client.
+  // It is the only port that is not firewalled.
+
   // Check Notion integration health
   app.get("/api/notion/health", async (_req: Request, res: Response) => {
     try {
@@ -156,7 +167,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Notion API routes - all prefixed with /api/notion
-  
+
   // List all databases accessible to the integration
   app.get("/api/notion/databases", async (req: Request, res: Response) => {
     try {
@@ -173,7 +184,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { databaseId } = req.params;
       const validatedData = getDatabaseSchema.parse({ databaseId });
-      
+
       const database = await notionService.getDatabase(validatedData.databaseId);
       res.json({ success: true, database });
     } catch (error: any) {
@@ -189,13 +200,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         databaseId,
         ...req.body
       });
-      
+
       const database = await notionService.updateDatabase(
         validatedData.databaseId,
         validatedData.title,
         validatedData.properties
       );
-      
+
       res.json({ success: true, database });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update database");
@@ -206,7 +217,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/notion/databases", async (req: Request, res: Response) => {
     try {
       const validatedData = createDatabaseSchema.parse(req.body);
-      
+
       const database = await notionService.createDatabase(
         validatedData.parentPageId,
         validatedData.title,
@@ -214,7 +225,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         validatedData.icon,
         validatedData.cover
       );
-      
+
       res.json({ success: true, database });
     } catch (error: any) {
       handleApiError(res, error, "Failed to create database");
@@ -229,14 +240,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         databaseId,
         ...req.body
       });
-      
+
       const page = await notionService.addDatabasePage(
         validatedData.databaseId,
         validatedData.properties,
         validatedData.icon,
         validatedData.children
       );
-      
+
       res.json({ success: true, page });
     } catch (error: any) {
       handleApiError(res, error, "Failed to add page to database");
@@ -251,14 +262,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         databaseId,
         ...req.body
       });
-      
+
       const pages = await notionService.queryDatabase(
         validatedData.databaseId,
         validatedData.filter,
         validatedData.sorts,
         validatedData.pageSize
       );
-      
+
       res.json({ success: true, pages });
     } catch (error: any) {
       handleApiError(res, error, "Failed to query database");
@@ -270,7 +281,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { databaseId } = req.params;
       const validatedData = getDatabaseSchema.parse({ databaseId });
-      
+
       const pages = await notionService.queryDatabase(validatedData.databaseId);
       res.json({ success: true, pages });
     } catch (error: any) {
@@ -283,7 +294,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { pageId } = req.params;
       const validatedData = getPageSchema.parse({ pageId });
-      
+
       const page = await notionService.getPage(validatedData.pageId);
       res.json({ success: true, page });
     } catch (error: any) {
@@ -299,13 +310,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pageId,
         ...req.body
       });
-      
+
       const page = await notionService.updatePage(
         validatedData.pageId,
         validatedData.properties,
         validatedData.archived
       );
-      
+
       res.json({ success: true, page });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update page");
@@ -317,7 +328,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { pageId } = req.params;
       const validatedData = getPageSchema.parse({ pageId });
-      
+
       const page = await notionService.archivePage(validatedData.pageId);
       res.json({ success: true, page });
     } catch (error: any) {
@@ -333,12 +344,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pageId,
         ...req.body
       });
-      
+
       const result = await notionService.appendBlockChildren(
         validatedData.pageId,
         validatedData.children
       );
-      
+
       res.json({ success: true, result });
     } catch (error: any) {
       handleApiError(res, error, "Failed to append blocks to page");
@@ -346,7 +357,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== AIRTABLE API ROUTES =====
-  
+
   // Check Airtable integration health
   app.get("/api/airtable/health", async (_req: Request, res: Response) => {
     try {
@@ -444,7 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== OPENAI API ROUTES =====
-  
+
   // Check OpenAI integration health
   app.get("/api/openai/health", async (_req: Request, res: Response) => {
     try {
@@ -577,19 +588,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to generate moon phase content");
     }
   });
-  
+
   // Generate workflow steps
   app.post("/api/openai/generate-workflow-steps", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { prompt, workflowType, title, description, category } = req.body;
-      
+
       if (!prompt || !workflowType) {
         return res.status(400).json({ 
           success: false, 
           error: "Prompt and workflow type are required" 
         });
       }
-      
+
       const result = await openaiService.generateWorkflowSteps(
         prompt,
         workflowType,
@@ -597,7 +608,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description,
         category
       );
-      
+
       res.json({ success: true, steps: result.steps });
     } catch (error: any) {
       handleApiError(res, error, "Failed to generate workflow steps");
@@ -605,7 +616,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== WORKFLOW API ROUTES =====
-  
+
   // Get all workflows
   app.get("/api/workflows", isAuthenticated, async (_req: Request, res: Response) => {
     try {
@@ -623,12 +634,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ success: false, error: "Invalid workflow ID" });
       }
-      
+
       const workflow = workflowService.getWorkflowById(id);
       if (!workflow) {
         return res.status(404).json({ success: false, error: "Workflow not found" });
       }
-      
+
       res.json({ success: true, workflow });
     } catch (error: any) {
       handleApiError(res, error, "Failed to get workflow");
@@ -664,17 +675,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ success: false, error: "Invalid workflow ID" });
       }
-      
+
       const workflowData = UpdateWorkflowSchema.parse({
         ...req.body,
         id
       });
-      
+
       const workflow = workflowService.updateWorkflow(workflowData);
       if (!workflow) {
         return res.status(404).json({ success: false, error: "Workflow not found" });
       }
-      
+
       res.json({ success: true, workflow });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update workflow");
@@ -688,20 +699,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (isNaN(id)) {
         return res.status(400).json({ success: false, error: "Invalid workflow ID" });
       }
-      
+
       const success = workflowService.deleteWorkflow(id);
       if (!success) {
         return res.status(404).json({ success: false, error: "Workflow not found" });
       }
-      
+
       res.json({ success: true });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete workflow");
     }
   });
-  
+
   // ===== ASTROLOGY API ROUTES =====
-  
+
   // Birth chart generation schema
   const generateChartSchema = z.object({
     name: z.string(),
@@ -710,12 +721,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     birthLocation: z.string(),
     chartType: z.string().default("natal")
   });
-  
+
   // Generate a birth chart
   app.post("/api/astrology/generate-chart", async (req: Request, res: Response) => {
     try {
       const validatedData = generateChartSchema.parse(req.body);
-      
+
       const chartData = await astrologyService.generateBirthChart(
         validatedData.name,
         validatedData.birthDate,
@@ -723,7 +734,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         validatedData.birthLocation,
         validatedData.chartType
       );
-      
+
       res.json({ 
         success: true, 
         chartImage: chartData.chartImage,
@@ -734,27 +745,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to generate birth chart");
     }
   });
-  
+
   // ===== STRIPE PAYMENT ROUTES =====
-  
+
   // Create payment intent schema
   const createPaymentIntentSchema = z.object({
     amount: z.number(),
     currency: z.string().default("usd"),
     metadata: z.record(z.string()).optional()
   });
-  
+
   // Create a payment intent
   app.post("/api/payments/create-intent", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const validatedData = createPaymentIntentSchema.parse(req.body);
-      
+
       const paymentIntent = await stripeService.createPaymentIntent(
         validatedData.amount,
         validatedData.currency,
         validatedData.metadata
       );
-      
+
       res.json({
         success: true,
         clientSecret: paymentIntent.clientSecret,
@@ -764,19 +775,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to create payment intent");
     }
   });
-  
+
   // Create subscription schema
   const createSubscriptionSchema = z.object({
     priceId: z.string(),
     customerId: z.string().optional(),
     metadata: z.record(z.string()).optional()
   });
-  
+
   // Create a subscription
   app.post("/api/payments/create-subscription", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const validatedData = createSubscriptionSchema.parse(req.body);
-      
+
       // If no customerId is provided, create a new customer
       let customerId = validatedData.customerId;
       if (!customerId && req.user) {
@@ -786,25 +797,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
           { userId: req.user.id.toString() }
         );
         customerId = customer.id;
-        
+
         // Here you would typically update the user in your database
         // to store the Stripe customer ID for future use
         // await storage.updateUserStripeCustomerId(req.user.id, customerId);
       }
-      
+
       if (!customerId) {
         return res.status(400).json({
           success: false,
           error: "Customer ID is required"
         });
       }
-      
+
       const subscription = await stripeService.createSubscription(
         customerId,
         validatedData.priceId,
         validatedData.metadata
       );
-      
+
       res.json({
         success: true,
         subscriptionId: subscription.subscriptionId,
@@ -815,20 +826,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to create subscription");
     }
   });
-  
+
   // Get subscription schema
   const getSubscriptionSchema = z.object({
     subscriptionId: z.string()
   });
-  
+
   // Get subscription details
   app.get("/api/payments/subscriptions/:subscriptionId", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { subscriptionId } = req.params;
       const validatedData = getSubscriptionSchema.parse({ subscriptionId });
-      
+
       const subscription = await stripeService.getSubscription(validatedData.subscriptionId);
-      
+
       res.json({
         success: true,
         subscription
@@ -837,15 +848,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to get subscription");
     }
   });
-  
+
   // Cancel subscription
   app.delete("/api/payments/subscriptions/:subscriptionId", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { subscriptionId } = req.params;
       const validatedData = getSubscriptionSchema.parse({ subscriptionId });
-      
+
       const subscription = await stripeService.cancelSubscription(validatedData.subscriptionId);
-      
+
       res.json({
         success: true,
         subscription
@@ -856,7 +867,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== CLIENT MANAGEMENT API ROUTES =====
-  
+
   // Get all clients
   app.get("/api/clients", isAuthenticated, async (_req: Request, res: Response) => {
     try {
@@ -866,23 +877,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch clients");
     }
   });
-  
+
   // Get a specific client
   app.get("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const clientId = parseInt(req.params.id);
       const client = await storage.getClient(clientId);
-      
+
       if (!client) {
         return res.status(404).json({ success: false, error: "Client not found" });
       }
-      
+
       res.json({ success: true, client });
     } catch (error: any) {
       handleApiError(res, error, "Failed to fetch client");
     }
   });
-  
+
   // Create a new client
   app.post("/api/clients", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -893,43 +904,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to create client");
     }
   });
-  
+
   // Update a client
   app.patch("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const clientId = parseInt(req.params.id);
       const clientData = req.body;
-      
+
       const updatedClient = await storage.updateClient(clientId, clientData);
-      
+
       if (!updatedClient) {
         return res.status(404).json({ success: false, error: "Client not found" });
       }
-      
+
       res.json({ success: true, client: updatedClient });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update client");
     }
   });
-  
+
   // Delete a client
   app.delete("/api/clients/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const clientId = parseInt(req.params.id);
       const success = await storage.deleteClient(clientId);
-      
+
       if (!success) {
         return res.status(404).json({ success: false, error: "Client not found" });
       }
-      
+
       res.json({ success: true, message: "Client deleted successfully" });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete client");
     }
   });
-  
+
   // ===== GENERATED CONTENT API ROUTES =====
-  
+
   // Get all generated content
   app.get("/api/content", isAuthenticated, async (_req: Request, res: Response) => {
     try {
@@ -939,18 +950,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch content");
     }
   });
-  
+
   // Get content by type
   app.get("/api/content/type/:contentType", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { contentType } = req.params;
-      const content = await storage.getGeneratedContentByType(contentType);
-      res.json({ success: true, content });
-    } catch (error: any) {
+      const content = await storage: any) {
       handleApiError(res, error, "Failed to fetch content by type");
     }
   });
-  
+
   // Get content by user
   app.get("/api/content/user/:userId", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -961,23 +970,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch content by user");
     }
   });
-  
+
   // Get a specific content item
   app.get("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const contentId = parseInt(req.params.id);
       const content = await storage.getGeneratedContent(contentId);
-      
+
       if (!content) {
         return res.status(404).json({ success: false, error: "Content not found" });
       }
-      
+
       res.json({ success: true, content });
     } catch (error: any) {
       handleApiError(res, error, "Failed to fetch content");
     }
   });
-  
+
   // Create new content
   app.post("/api/content", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -986,50 +995,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         userId: req.user.id
       });
-      
+
       const newContent = await storage.createGeneratedContent(contentData);
       res.status(201).json({ success: true, content: newContent });
     } catch (error: any) {
       handleApiError(res, error, "Failed to create content");
     }
   });
-  
+
   // Update content
   app.patch("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const contentId = parseInt(req.params.id);
       const contentData = req.body;
-      
+
       const updatedContent = await storage.updateGeneratedContent(contentId, contentData);
-      
+
       if (!updatedContent) {
         return res.status(404).json({ success: false, error: "Content not found" });
       }
-      
+
       res.json({ success: true, content: updatedContent });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update content");
     }
   });
-  
+
   // Delete content
   app.delete("/api/content/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const contentId = parseInt(req.params.id);
       const success = await storage.deleteGeneratedContent(contentId);
-      
+
       if (!success) {
         return res.status(404).json({ success: false, error: "Content not found" });
       }
-      
+
       res.json({ success: true, message: "Content deleted successfully" });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete content");
     }
   });
-  
+
   // ===== ORDER MANAGEMENT API ROUTES =====
-  
+
   // Get all orders
   app.get("/api/orders", isAuthenticated, async (_req: Request, res: Response) => {
     try {
@@ -1039,7 +1048,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch orders");
     }
   });
-  
+
   // Get orders by client
   app.get("/api/orders/client/:clientId", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -1050,37 +1059,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch orders by client");
     }
   });
-  
+
   // Get a specific order
   app.get("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const orderId = parseInt(req.params.id);
       const order = await storage.getOrder(orderId);
-      
+
       if (!order) {
         return res.status(404).json({ success: false, error: "Order not found" });
       }
-      
+
       // Get the order items
       const items = await storage.getOrderItems(orderId);
-      
+
       res.json({ success: true, order, items });
     } catch (error: any) {
       handleApiError(res, error, "Failed to fetch order");
     }
   });
-  
+
   // Create a new order
   app.post("/api/orders", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const { orderData, items } = req.body;
-      
+
       // Validate order data
       const validOrderData = insertOrderSchema.parse(orderData);
-      
+
       // Create the order first
       const newOrder = await storage.createOrder(validOrderData);
-      
+
       // Then create each order item
       if (items && Array.isArray(items)) {
         for (const item of items) {
@@ -1090,10 +1099,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       }
-      
+
       // Get the complete order with items
       const orderItems = await storage.getOrderItems(newOrder.id);
-      
+
       res.status(201).json({ 
         success: true, 
         order: newOrder, 
@@ -1103,43 +1112,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to create order");
     }
   });
-  
+
   // Update an order
   app.patch("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const orderId = parseInt(req.params.id);
       const orderData = req.body;
-      
+
       const updatedOrder = await storage.updateOrder(orderId, orderData);
-      
+
       if (!updatedOrder) {
         return res.status(404).json({ success: false, error: "Order not found" });
       }
-      
+
       res.json({ success: true, order: updatedOrder });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update order");
     }
   });
-  
+
   // Delete an order
   app.delete("/api/orders/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const orderId = parseInt(req.params.id);
       const success = await storage.deleteOrder(orderId);
-      
+
       if (!success) {
         return res.status(404).json({ success: false, error: "Order not found" });
       }
-      
+
       res.json({ success: true, message: "Order deleted successfully" });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete order");
     }
   });
-  
+
   // ===== TASK MANAGEMENT API ROUTES =====
-  
+
   // Get all tasks
   app.get("/api/tasks", isAuthenticated, async (_req: Request, res: Response) => {
     try {
@@ -1149,7 +1158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch tasks");
     }
   });
-  
+
   // Get tasks by user
   app.get("/api/tasks/user/:userId", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -1160,23 +1169,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       handleApiError(res, error, "Failed to fetch tasks by user");
     }
   });
-  
+
   // Get a specific task
   app.get("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const taskId = parseInt(req.params.id);
       const task = await storage.getTask(taskId);
-      
+
       if (!task) {
         return res.status(404).json({ success: false, error: "Task not found" });
       }
-      
+
       res.json({ success: true, task });
     } catch (error: any) {
       handleApiError(res, error, "Failed to fetch task");
     }
   });
-  
+
   // Create a new task
   app.post("/api/tasks", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -1185,42 +1194,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         userId: req.user.id
       });
-      
+
       const newTask = await storage.createTask(taskData);
       res.status(201).json({ success: true, task: newTask });
     } catch (error: any) {
       handleApiError(res, error, "Failed to create task");
     }
   });
-  
+
   // Update a task
   app.patch("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const taskId = parseInt(req.params.id);
       const taskData = req.body;
-      
+
       const updatedTask = await storage.updateTask(taskId, taskData);
-      
+
       if (!updatedTask) {
         return res.status(404).json({ success: false, error: "Task not found" });
       }
-      
+
       res.json({ success: true, task: updatedTask });
     } catch (error: any) {
       handleApiError(res, error, "Failed to update task");
     }
   });
-  
+
   // Delete a task
   app.delete("/api/tasks/:id", isAuthenticated, async (req: Request, res: Response) => {
     try {
       const taskId = parseInt(req.params.id);
       const success = await storage.deleteTask(taskId);
-      
+
       if (!success) {
         return res.status(404).json({ success: false, error: "Task not found" });
       }
-      
+
       res.json({ success: true, message: "Task deleted successfully" });
     } catch (error: any) {
       handleApiError(res, error, "Failed to delete task");
@@ -1228,94 +1237,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== INTEGRATION API ROUTES =====
-  
+
   // Check all integrations status
   app.get("/api/integrations/status", checkIntegrationStatus);
-  
+
   // ===== MAKE.COM INTEGRATION ROUTES =====
-  
+
   // Trigger content distribution workflow in Make.com
   app.post("/api/integrations/make/content-distribution", triggerContentDistribution);
-  
+
   // Trigger client onboarding workflow in Make.com
   app.post("/api/integrations/make/client-onboarding", triggerClientOnboarding);
-  
+
   // Receive webhook responses from Make.com workflows
   app.post("/api/integrations/make/webhook", handleMakeResponse);
-  
+
   // ===== PATREON INTEGRATION ROUTES =====
-  
+
   // Get Patreon member information
   app.get("/api/integrations/patreon/members/:memberId", getPatreonMember);
-  
+
   // Create a post on Patreon
   app.post("/api/integrations/patreon/posts", createPatreonPost);
-  
+
   // Handle Patreon webhooks
   app.post("/api/integrations/patreon/webhook", handlePatreonWebhook);
-  
+
   // ===== HUBSPOT INTEGRATION ROUTES =====
-  
+
   // Sync a client to HubSpot
   app.post("/api/integrations/hubspot/contacts", syncHubSpotContact);
-  
+
   // Create a deal in HubSpot
   app.post("/api/integrations/hubspot/deals", createHubSpotDeal);
-  
+
   // ===== GOOGLE CLOUD INTEGRATION ROUTES =====
-  
+
   // Generate a signed upload URL for Google Cloud Storage
   app.post("/api/integrations/google/upload-url", generateGoogleUploadUrl);
-  
+
   // ===== ADDITIONAL NOTION INTEGRATION ROUTES =====
-  
+
   // Get a Notion database by name/type (extension of existing Notion routes)
   app.get("/api/integrations/notion/databases/by-name/:databaseName", getNotionDatabase);
-  
+
   // Create a Notion page with specific template
   app.post("/api/integrations/notion/pages/template", createNotionPage);
-  
+
   // ===== ADDITIONAL AIRTABLE INTEGRATION ROUTES =====
-  
+
   // Get Airtable records by query
   app.post("/api/integrations/airtable/query", getAirtableRecords);
-  
+
   // Create a record in Airtable
   app.post("/api/integrations/airtable/records", createAirtableRecord);
-  
+
   // ===== NOTION TEMPLATES ROUTES =====
-  
+
   // Initialize Notion content templates (call this during startup)
   initializeContentTemplates().catch(err => {
     console.error('Error initializing Notion templates:', err);
   });
-  
+
   // Get content templates by type
   app.get("/api/templates/:type", isAuthenticated, getContentTemplates);
-  
+
   // Add a new content template
   app.post("/api/templates/:type", isAuthenticated, addContentTemplate);
-  
+
   // Update an existing content template
   app.put("/api/templates/:type/:id", isAuthenticated, updateContentTemplate);
-  
+
   // Delete a content template
-  app.delete("/api/templates/:type/:id", isAuthenticated, deleteContentTemplate);
+  app.delete("/api/templates/:type/:id", deleteContentTemplate);
 
   // ===== PATREON INTEGRATION ROUTES =====
-  
+
   // Start the Patreon OAuth flow
   app.get("/api/patreon/auth", isAuthenticated, initiatePatreonAuth);
-  
+
   // Callback for Patreon OAuth
   app.get("/api/patreon/callback", handlePatreonCallback);
-  
+
   // Get Patreon campaign info
   app.get("/api/patreon/campaign", isAuthenticated, getPatreonCampaignInfo);
-  
+
   // Create a post on Patreon
   app.post("/api/patreon/post", isAuthenticated, createPatreonPost);
-  
+
   // Sync content from database to Patreon
   app.post("/api/patreon/sync", isAuthenticated, syncContentToPatreon);
 
