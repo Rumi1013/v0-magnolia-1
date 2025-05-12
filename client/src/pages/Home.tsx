@@ -36,19 +36,15 @@ const Home: React.FC = () => {
             Automate your mystical content creation with AI-powered tools
           </p>
           <div className="flex gap-4 justify-center">
-            <Link href="/ai-tools">
-              <a className="inline-block">
-                <Button className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
-                  Try AI Tools
-                </Button>
-              </a>
+            <Link to="/ai-tools">
+              <Button className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90">
+                Try AI Tools
+              </Button>
             </Link>
-            <Link href="#pricing">
-              <a className="inline-block">
-                <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37]">
-                  View Pricing
-                </Button>
-              </a>
+            <Link to="#pricing">
+              <Button variant="outline" className="border-[#D4AF37] text-[#D4AF37]">
+                View Pricing
+              </Button>
             </Link>
           </div>
         </motion.div>
