@@ -24,6 +24,7 @@ import ClientViewPage from "@/pages/client-view-page";
 import MembershipPage from "@/pages/membership-page";
 import ContentOfferingsPage from "@/pages/content-offerings-page";
 import ContentFulfillmentPage from "@/pages/content-fulfillment-page";
+import AdminIntegrations from "@/pages/admin/integrations";
 import { BirthChartGenerator } from "@/components/BirthChartGenerator";
 import { TieredProductPricing } from "@/components/TieredProductPricing";
 
