@@ -252,11 +252,11 @@ const ContentOfferingsPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#0A192F] min-h-screen py-12">
+    <div className="bg-[#122240] min-h-screen py-12">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="max-w-4xl mx-auto text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-playfair text-[#D4AF37] mb-6">
+          <h1 className="text-4xl md:text-5xl font-playfair text-[#D4AF37] mb-6 animate-float">
             Content Offerings
           </h1>
           <p className="text-xl font-lora text-[#FAF3E0] mb-8 leading-relaxed">
@@ -271,21 +271,21 @@ const ContentOfferingsPage: React.FC = () => {
               placeholder="Search content offerings..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-[#051224] border-[#A3B18A]/30 text-[#FAF3E0] py-6"
+              className="pl-10 bg-[#0D1F35] border-[#A3B18A]/30 text-[#FAF3E0] py-6 hover:border-[#A3B18A]/60 transition-all"
             />
           </div>
         </div>
         
         {/* Content Tabs */}
         <Tabs defaultValue="affirmations" className="w-full">
-          <TabsList className="grid grid-cols-2 md:grid-cols-6 bg-[#051224] mb-8">
+          <TabsList className="grid grid-cols-2 md:grid-cols-6 bg-[#0D1F35] mb-8 p-1 rounded-md">
             {categories.map(category => (
               <TabsTrigger 
                 key={category.id}
                 value={category.id}
-                className="data-[state=active]:bg-[#0A3B4D] data-[state=active]:text-[#FAF3E0] py-3"
+                className="data-[state=active]:bg-[#155268] data-[state=active]:text-[#FAF3E0] data-[state=active]:shadow-md py-3 transition-all duration-300 hover-scale"
               >
-                <category.icon className="h-4 w-4 mr-2" />
+                <category.icon className="h-4 w-4 mr-2 animate-pulse-slow" />
                 <span className="hidden md:inline">{category.name}</span>
                 <span className="md:hidden">{category.id === 'affirmations' ? 'Affirm.' : 
                                            category.id === 'seasonal' ? 'Season.' : 
@@ -300,23 +300,23 @@ const ContentOfferingsPage: React.FC = () => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredContent[category.id]?.length ? (
                   filteredContent[category.id].map(item => (
-                    <Card key={item.id} className="bg-[#051224] border border-[#A3B18A]/30 overflow-hidden hover:border-[#A3B18A]/60 transition-all duration-300">
-                      <div className="h-48 w-full bg-[#0A3B4D]/50 flex items-center justify-center relative">
-                        <category.icon className="h-16 w-16 text-[#D4AF37]/30" />
+                    <Card key={item.id} className="bg-[#0D1F35] border border-[#A3B18A]/30 overflow-hidden hover:border-[#A3B18A]/60 transition-all duration-300 hover-scale">
+                      <div className="h-48 w-full bg-[#155268]/70 flex items-center justify-center relative">
+                        <category.icon className="h-16 w-16 text-[#D4AF37]/30 animate-pulse-slow" />
                         <Badge className={`absolute top-3 right-3 ${getTierColor(item.tier)}`}>
                           {item.tier}
                         </Badge>
                       </div>
                       
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-[#D4AF37] font-playfair">{item.title}</CardTitle>
+                        <CardTitle className="text-[#D4AF37] font-playfair animate-float">{item.title}</CardTitle>
                         <CardDescription className="text-[#FAF3E0]/70 font-lora">
                           {item.description}
                         </CardDescription>
                       </CardHeader>
                       
                       <CardContent className="pt-0">
-                        <div className="bg-[#0A192F] p-3 rounded border border-[#A3B18A]/20 mb-4">
+                        <div className="bg-[#102038] p-3 rounded border border-[#A3B18A]/20 mb-4 animate-shimmer">
                           <h4 className="text-[#D4AF37] text-sm font-medium mb-2">Content Sample:</h4>
                           <p className="text-[#FAF3E0] text-sm italic font-lora">"{item.sample}"</p>
                         </div>
