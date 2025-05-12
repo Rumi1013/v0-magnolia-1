@@ -217,7 +217,30 @@ export class MakeService {
   /**
    * Get predefined Midnight Magnolia workflow blueprints
    */
-  getMidnightMagnoliaBlueprint(blueprintName: string): Record<string, any> | null {
+  getMidnightMagnoliaBlueprint(blueprintId: string): Record<string, any> | null {
+    // Find the template with matching ID from our workflow templates
+    const template = workflowTemplates.find(template => template.id === blueprintId);
+    
+    if (!template) {
+      return null;
+    }
+    
+    // Convert our template format to Make.com API format
+    const blueprint = {
+      name: template.name,
+      description: template.description,
+      scenario: {
+        modules: template.modules,
+        connections: template.connections,
+        metadata: template.metadata || {}
+      }
+    };
+    
+    return blueprint;
+  }
+  
+  /* Original blueprint definitions kept for reference - now using templates from make-workflow-templates.ts
+  getMidnightMagnoliaOldBlueprint(blueprintName: string): Record<string, any> | null {
     const blueprints: Record<string, any> = {
       // Content batch production workflow - Automates monthly content scheduling in Notion
       'monthly-content-batch': {

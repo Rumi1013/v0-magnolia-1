@@ -1,588 +1,451 @@
-import { Client } from '@notionhq/client';
-import { 
-  CreateDatabaseParameters, 
-  QueryDatabaseParameters,
-  UpdateDatabaseParameters,
-  CreatePageParameters
-} from '@notionhq/client/build/src/api-endpoints';
-
 /**
- * Error handling for Notion API
+ * Notion API integration for Midnight Magnolia
+ * 
+ * This file provides basic Notion API integration functions and utilities
+ * for working with Notion databases and pages.
  */
-class NotionApiError extends Error {
-  status: number;
-  code: string;
-  
-  constructor(message: string, status = 500, code = 'notion_error') {
-    super(message);
-    this.name = 'NotionApiError';
-    this.status = status;
-    this.code = code;
-  }
+
+import { Client } from "@notionhq/client";
+import { Request, Response } from "express";
+
+// Make sure we have the required environment variables
+if (!process.env.NOTION_INTEGRATION_SECRET || !process.env.NOTION_PAGE_URL) {
+  console.warn('Missing Notion integration credentials. Notion functionality will be limited.');
 }
 
-// Initialize the Notion client with error handling
-const notion = new Client({
-  auth: process.env.NOTION_INTEGRATION_SECRET,
-});
+// Initialize Notion client if credentials are available
+export const notion = process.env.NOTION_INTEGRATION_SECRET 
+  ? new Client({ auth: process.env.NOTION_INTEGRATION_SECRET }) 
+  : null;
 
-// Validate if API key is set
-if (!process.env.NOTION_INTEGRATION_SECRET) {
-  console.warn('NOTION_INTEGRATION_SECRET environment variable is not set. Notion integration will not work.');
-}
-
-// Extract page ID from Notion page URL
-function extractPageIdFromUrl(pageUrl: string): string {
+// Extract the page ID from the Notion page URL
+export function extractPageIdFromUrl(pageUrl: string): string {
   const match = pageUrl.match(/([a-f0-9]{32})(?:[?#]|$)/i);
   if (match && match[1]) {
     return match[1];
   }
-  throw new NotionApiError('Failed to extract page ID from URL', 400, 'invalid_page_url');
+
+  throw Error("Failed to extract page ID from URL");
 }
 
-// Get the parent page ID for Midnight Magnolia from environment variables
+// Root page ID for the integration
 export const NOTION_PAGE_ID = process.env.NOTION_PAGE_URL 
-  ? extractPageIdFromUrl(process.env.NOTION_PAGE_URL)
+  ? extractPageIdFromUrl(process.env.NOTION_PAGE_URL) 
   : null;
 
-export class NotionService {
-  /**
-   * Creates a new database in a Notion page
-   * @param parentPageId The ID of the parent page where the database will be created
-   * @param title Title of the database
-   * @param properties Object defining the database schema
-   * @returns The created database object
-   */
-  async createDatabase(
-    parentPageId: string,
-    title: string,
-    properties: CreateDatabaseParameters['properties'],
-    icon?: string,
-    cover?: string
-  ) {
-    try {
-      // Clean and validate the parent page ID
-      const cleanPageId = parentPageId.replace(/-/g, '');
-      
-      // Prepare database parameters
-      const params: CreateDatabaseParameters = {
-        parent: {
-          type: "page_id",
-          page_id: cleanPageId,
-        },
-        title: [
-          {
-            type: "text",
-            text: {
-              content: title,
-            },
-          },
-        ],
-        properties: properties,
-      };
-      
-      // Add icon if provided
-      if (icon) {
-        params.icon = {
-          type: "emoji",
-          emoji: icon
-        } as any;
-      }
-      
-      // Add cover if provided
-      if (cover) {
-        params.cover = {
-          type: "external",
-          external: {
-            url: cover
-          }
-        };
-      }
-      
-      const response = await notion.databases.create(params);
-      return response;
-    } catch (error: any) {
-      console.error('Error creating Notion database:', error);
-      
-      // Enhanced error handling with user-friendly messages
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Parent page not found or your integration doesn\'t have access to it. Make sure to share the page with your integration.',
-          404,
-          'page_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid database properties. Please check your schema format.',
-          400,
-          'invalid_schema'
-        );
-      } else if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
+/**
+ * Health check for Notion integration
+ */
+export async function checkNotionHealth(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
   }
 
-  /**
-   * Gets a list of databases the integration has access to
-   * @param query Optional search query to filter databases
-   */
-  async listDatabases(query?: string) {
-    try {
-      const params: any = {
-        filter: {
-          value: 'database',
-          property: 'object'
-        }
-      };
-      
-      // Add search query if provided
-      if (query) {
-        params.query = query;
-      }
-      
-      const response = await notion.search(params);
-      return response.results;
-    } catch (error: any) {
-      console.error('Error listing Notion databases:', error);
-      
-      if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Gets a specific database by ID
-   * @param databaseId The ID of the database to retrieve
-   */
-  async getDatabase(databaseId: string) {
-    try {
-      // Clean the database ID
-      const cleanDatabaseId = databaseId.replace(/-/g, '');
-      
-      const response = await notion.databases.retrieve({
-        database_id: cleanDatabaseId,
-      });
-      
-      return response;
-    } catch (error: any) {
-      console.error('Error getting Notion database:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Database not found or your integration doesn\'t have access to it.',
-          404,
-          'database_not_found'
-        );
-      } else if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Updates an existing database schema
-   * @param databaseId The ID of the database to update
-   * @param title New title for the database (optional)
-   * @param properties New properties for the database (optional)
-   */
-  async updateDatabase(
-    databaseId: string, 
-    title?: string, 
-    properties?: UpdateDatabaseParameters['properties']
-  ) {
-    try {
-      // Clean the database ID
-      const cleanDatabaseId = databaseId.replace(/-/g, '');
-      
-      const params: UpdateDatabaseParameters = {
-        database_id: cleanDatabaseId,
-      };
-      
-      // Add title if provided
-      if (title) {
-        params.title = [
-          {
-            type: "text",
-            text: {
-              content: title,
-            },
-          },
-        ];
-      }
-      
-      // Add properties if provided
-      if (properties) {
-        params.properties = properties;
-      }
-      
-      const response = await notion.databases.update(params);
-      return response;
-    } catch (error: any) {
-      console.error('Error updating Notion database:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Database not found or your integration doesn\'t have access to it.',
-          404,
-          'database_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid database properties. Please check your schema format.',
-          400,
-          'invalid_schema'
-        );
-      }
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Adds a new page (row) to a database
-   * @param databaseId The ID of the database to add the page to
-   * @param properties The properties of the new page
-   * @param icon Optional emoji icon for the page
-   */
-  async addDatabasePage(
-    databaseId: string, 
-    properties: CreatePageParameters['properties'],
-    icon?: string,
-    children?: any[]
-  ) {
-    try {
-      // Clean the database ID
-      const cleanDatabaseId = databaseId.replace(/-/g, '');
-      
-      // Prepare page parameters
-      const params: CreatePageParameters = {
-        parent: {
-          database_id: cleanDatabaseId,
-        },
-        properties: properties,
-      };
-      
-      // Add icon if provided
-      if (icon) {
-        params.icon = {
-          type: "emoji",
-          emoji: icon
-        } as any;
-      }
-      
-      // Add children if provided
-      if (children && children.length > 0) {
-        params.children = children;
-      }
-      
-      const response = await notion.pages.create(params);
-      return response;
-    } catch (error: any) {
-      console.error('Error adding page to Notion database:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Database not found or your integration doesn\'t have access to it.',
-          404,
-          'database_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid page properties. Please check that properties match the database schema.',
-          400,
-          'invalid_properties'
-        );
-      } else if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
-  }
-
-  /**
-   * Lists pages from a specific database with optional filtering and sorting
-   * @param databaseId The ID of the database to query
-   * @param filter Optional filter conditions
-   * @param sorts Optional sorting specifications
-   */
-  async queryDatabase(
-    databaseId: string,
-    filter?: QueryDatabaseParameters['filter'],
-    sorts?: QueryDatabaseParameters['sorts'],
-    pageSize?: number
-  ) {
-    try {
-      // Clean the database ID
-      const cleanDatabaseId = databaseId.replace(/-/g, '');
-      
-      // Prepare query parameters
-      const params: QueryDatabaseParameters = {
-        database_id: cleanDatabaseId,
-      };
-      
-      // Add filter if provided
-      if (filter) {
-        params.filter = filter;
-      }
-      
-      // Add sorts if provided
-      if (sorts) {
-        params.sorts = sorts;
-      }
-      
-      // Add page size if provided
-      if (pageSize) {
-        params.page_size = pageSize;
-      }
-      
-      const response = await notion.databases.query(params);
-      return response.results;
-    } catch (error: any) {
-      console.error('Error querying Notion database:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Database not found or your integration doesn\'t have access to it.',
-          404,
-          'database_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid filter or sort parameters.',
-          400,
-          'invalid_query'
-        );
-      } else if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
-  }
-  
-  /**
-   * Retrieves a single page by its ID
-   * @param pageId The ID of the page to retrieve
-   */
-  async getPage(pageId: string) {
-    try {
-      // Clean the page ID
-      const cleanPageId = pageId.replace(/-/g, '');
-      
-      const response = await notion.pages.retrieve({
-        page_id: cleanPageId,
-      });
-      
-      return response;
-    } catch (error: any) {
-      console.error('Error retrieving Notion page:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Page not found or your integration doesn\'t have access to it.',
-          404,
-          'page_not_found'
-        );
-      } else if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
-  }
-  
-  /**
-   * Updates a page's properties
-   * @param pageId The ID of the page to update
-   * @param properties The properties to update
-   */
-  async updatePage(pageId: string, properties: any, archived: boolean = false) {
-    try {
-      // Clean the page ID
-      const cleanPageId = pageId.replace(/-/g, '');
-      
-      const response = await notion.pages.update({
-        page_id: cleanPageId,
-        properties: properties,
-        archived: archived
-      });
-      
-      return response;
-    } catch (error: any) {
-      console.error('Error updating Notion page:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Page not found or your integration doesn\'t have access to it.',
-          404,
-          'page_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid page properties. Please check the property format.',
-          400,
-          'invalid_properties'
-        );
-      }
-      
-      throw error;
-    }
-  }
-  
-  /**
-   * Archives or deletes a page (soft delete)
-   * @param pageId The ID of the page to archive
-   */
-  async archivePage(pageId: string) {
-    try {
-      // Clean the page ID
-      const cleanPageId = pageId.replace(/-/g, '');
-      
-      const response = await notion.pages.update({
-        page_id: cleanPageId,
-        archived: true,
-      });
-      
-      return response;
-    } catch (error: any) {
-      console.error('Error archiving Notion page:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Page not found or your integration doesn\'t have access to it.',
-          404,
-          'page_not_found'
-        );
-      }
-      
-      throw error;
-    }
-  }
-  
-  /**
-   * Creates a block with content in a page
-   * @param pageId The ID of the page to add blocks to
-   * @param children The block content to add
-   */
-  async appendBlockChildren(pageId: string, children: any[]) {
-    try {
-      // Clean the page ID
-      const cleanPageId = pageId.replace(/-/g, '');
-      
-      const response = await notion.blocks.children.append({
-        block_id: cleanPageId,
-        children: children,
-      });
-      
-      return response;
-    } catch (error: any) {
-      console.error('Error appending blocks to Notion page:', error);
-      
-      if (error.status === 404) {
-        throw new NotionApiError(
-          'Page not found or your integration doesn\'t have access to it.',
-          404,
-          'page_not_found'
-        );
-      } else if (error.code === 'validation_error') {
-        throw new NotionApiError(
-          'Invalid block content. Please check the block format.',
-          400,
-          'invalid_content'
-        );
-      }
-      
-      throw error;
-    }
-  }
-  
-  /**
-   * Utility: Formats a date for Notion properties
-   * @param date JavaScript Date object
-   * @param includeTime Whether to include time in the formatted date
-   * @returns Formatted date object for Notion
-   */
-  formatDate(date: Date, includeTime: boolean = false) {
-    const isoString = date.toISOString();
-    
-    return {
-      start: includeTime ? isoString : isoString.split('T')[0],
-    };
-  }
-  
-  /**
-   * Utility: Formats a rich text array for Notion properties
-   * @param text Text content
-   * @returns Formatted rich text array for Notion
-   */
-  formatRichText(text: string) {
-    return [
-      {
-        type: "text",
-        text: {
-          content: text,
-        },
-      },
-    ];
-  }
-  
-  /**
-   * Utility: Gets current integration user
-   * @returns User information from the Notion API
-   */
-  async getCurrentUser() {
-    try {
-      // Use any type to bypass TypeScript checking for notion.users.me
-      const notionAny = notion as any;
-      const response = await notionAny.users.me();
-      return response;
-    } catch (error: any) {
-      console.error('Error getting current Notion user:', error);
-      
-      if (error.status === 401) {
-        throw new NotionApiError(
-          'Authentication error. Please check your Notion API key.',
-          401,
-          'unauthorized'
-        );
-      }
-      
-      throw error;
-    }
+  try {
+    // Attempt to access the users endpoint to verify the token is valid
+    const response = await notion.users.list({});
+    res.json({ 
+      status: 'ok',
+      message: 'Notion integration is functioning correctly',
+      users_count: response.results.length
+    });
+  } catch (err: any) {
+    console.error('Error checking Notion health:', err);
+    res.status(500).json({ error: err.message });
   }
 }
 
-export const notionService = new NotionService();
+/**
+ * Lists all child databases contained within NOTION_PAGE_ID
+ */
+export async function getNotionDatabases(req: Request, res: Response) {
+  if (!notion || !NOTION_PAGE_ID) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    // Array to store the child databases
+    const childDatabases = [];
+
+    // Query all child blocks in the specified page
+    let hasMore = true;
+    let startCursor: string | undefined = undefined;
+
+    while (hasMore) {
+      const response = await notion.blocks.children.list({
+        block_id: NOTION_PAGE_ID,
+        start_cursor: startCursor,
+      });
+
+      // Process the results
+      for (const block of response.results) {
+        // Check if the block is a child database
+        if (block.type === "child_database") {
+          const databaseId = block.id;
+
+          // Retrieve the database title
+          try {
+            const databaseInfo = await notion.databases.retrieve({
+              database_id: databaseId,
+            });
+
+            // Add the database to our list
+            childDatabases.push(databaseInfo);
+          } catch (error) {
+            console.error(`Error retrieving database ${databaseId}:`, error);
+          }
+        }
+      }
+
+      // Check if there are more results to fetch
+      hasMore = response.has_more;
+      startCursor = response.next_cursor || undefined;
+    }
+
+    res.json(childDatabases);
+  } catch (err: any) {
+    console.error('Error listing Notion databases:', err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Get details for a specific database
+ */
+export async function getNotionDatabase(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { databaseId } = req.params;
+    
+    const database = await notion.databases.retrieve({
+      database_id: databaseId
+    });
+    
+    res.json(database);
+  } catch (err: any) {
+    console.error(`Error retrieving database ${req.params.databaseId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Update a database's properties
+ */
+export async function updateNotionDatabase(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { databaseId } = req.params;
+    const { title, properties } = req.body;
+    
+    // Prepare update parameters
+    const updateParams: any = {
+      database_id: databaseId
+    };
+    
+    // Add title if provided
+    if (title) {
+      updateParams.title = [
+        {
+          type: 'text',
+          text: {
+            content: title
+          }
+        }
+      ];
+    }
+    
+    // Add properties if provided
+    if (properties) {
+      updateParams.properties = properties;
+    }
+    
+    // Update the database
+    const updatedDatabase = await notion.databases.update(updateParams);
+    
+    res.json(updatedDatabase);
+  } catch (err: any) {
+    console.error(`Error updating database ${req.params.databaseId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Create a new database in the root page
+ */
+export async function createNotionDatabase(req: Request, res: Response) {
+  if (!notion || !NOTION_PAGE_ID) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { title, properties } = req.body;
+    
+    if (!title || !properties) {
+      return res.status(400).json({ error: 'Title and properties are required' });
+    }
+    
+    // Create the database
+    const newDatabase = await notion.databases.create({
+      parent: {
+        type: 'page_id',
+        page_id: NOTION_PAGE_ID
+      },
+      title: [
+        {
+          type: 'text',
+          text: {
+            content: title
+          }
+        }
+      ],
+      properties
+    });
+    
+    res.status(201).json(newDatabase);
+  } catch (err: any) {
+    console.error('Error creating Notion database:', err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Create a new page in a database
+ */
+export async function createNotionPage(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { databaseId } = req.params;
+    const { properties, children } = req.body;
+    
+    if (!properties) {
+      return res.status(400).json({ error: 'Properties are required' });
+    }
+    
+    // Create the page
+    const newPage = await notion.pages.create({
+      parent: {
+        database_id: databaseId
+      },
+      properties,
+      ...(children && { children })
+    });
+    
+    res.status(201).json(newPage);
+  } catch (err: any) {
+    console.error(`Error creating page in database ${req.params.databaseId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Query a database with filters
+ */
+export async function queryNotionDatabase(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { databaseId } = req.params;
+    const { filter, sorts, page_size, start_cursor } = req.body;
+    
+    // Build query parameters
+    const queryParams: any = {
+      database_id: databaseId
+    };
+    
+    if (filter) {
+      queryParams.filter = filter;
+    }
+    
+    if (sorts) {
+      queryParams.sorts = sorts;
+    }
+    
+    if (page_size) {
+      queryParams.page_size = page_size;
+    }
+    
+    if (start_cursor) {
+      queryParams.start_cursor = start_cursor;
+    }
+    
+    // Query the database
+    const results = await notion.databases.query(queryParams);
+    
+    res.json(results);
+  } catch (err: any) {
+    console.error(`Error querying database ${req.params.databaseId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Get all pages in a database (simple GET endpoint for basic queries)
+ */
+export async function getNotionDatabasePages(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { databaseId } = req.params;
+    
+    // Query the database without filters
+    const results = await notion.databases.query({
+      database_id: databaseId
+    });
+    
+    res.json(results);
+  } catch (err: any) {
+    console.error(`Error getting pages from database ${req.params.databaseId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Get details for a specific page
+ */
+export async function getNotionPage(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { pageId } = req.params;
+    
+    const page = await notion.pages.retrieve({
+      page_id: pageId
+    });
+    
+    res.json(page);
+  } catch (err: any) {
+    console.error(`Error retrieving page ${req.params.pageId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Update a page's properties
+ */
+export async function updateNotionPage(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { pageId } = req.params;
+    const { properties, archived } = req.body;
+    
+    // Prepare update parameters
+    const updateParams: any = {
+      page_id: pageId
+    };
+    
+    if (properties) {
+      updateParams.properties = properties;
+    }
+    
+    if (archived !== undefined) {
+      updateParams.archived = archived;
+    }
+    
+    // Update the page
+    const updatedPage = await notion.pages.update(updateParams);
+    
+    res.json(updatedPage);
+  } catch (err: any) {
+    console.error(`Error updating page ${req.params.pageId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Archive a page (soft delete)
+ */
+export async function deleteNotionPage(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { pageId } = req.params;
+    
+    // Archive the page (Notion API doesn't support hard deletes)
+    const archivedPage = await notion.pages.update({
+      page_id: pageId,
+      archived: true
+    });
+    
+    res.json({ 
+      success: true,
+      message: 'Page archived successfully',
+      page: archivedPage
+    });
+  } catch (err: any) {
+    console.error(`Error archiving page ${req.params.pageId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Add blocks to a page
+ */
+export async function addBlocksToPage(req: Request, res: Response) {
+  if (!notion) {
+    return res.status(503).json({ 
+      error: 'Notion integration not configured. Please check your environment variables.' 
+    });
+  }
+
+  try {
+    const { pageId } = req.params;
+    const { blocks } = req.body;
+    
+    if (!blocks || !Array.isArray(blocks)) {
+      return res.status(400).json({ error: 'Blocks array is required' });
+    }
+    
+    // Add blocks to the page
+    const response = await notion.blocks.children.append({
+      block_id: pageId,
+      children: blocks
+    });
+    
+    res.json(response);
+  } catch (err: any) {
+    console.error(`Error adding blocks to page ${req.params.pageId}:`, err);
+    res.status(500).json({ error: err.message });
+  }
+}
