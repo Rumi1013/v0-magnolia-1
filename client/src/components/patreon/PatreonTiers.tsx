@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 
 // Brand colors
 const colors = {
-  midnightBlue: "#0A192F",
-  midnightTeal: "#0A3B4D",
+  midnightBlue: "#122240",  // Lightened version
+  midnightTeal: "#114559",  // Lightened version
   magnoliaWhite: "#FAF3E0",
   richGold: "#D4AF37",
   sageGreen: "#A3B18A",
-  darkNavy: "#051224"
+  darkNavy: "#0B1D35"  // Lightened version
 };
 
 // Tier data
@@ -188,10 +188,10 @@ const PatreonTiers: React.FC<PatreonTiersProps> = ({ className = "", compact = f
             
             <CardFooter className="pt-4">
               <Button 
-                className="w-full transition-transform hover:scale-105"
+                className="w-full hover-scale animate-pulse-gold"
                 style={{ backgroundColor: tier.accentColor, color: tier.backgroundColor }}
               >
-                Join {tier.name}
+                <span className="relative z-10">Join {tier.name}</span>
               </Button>
             </CardFooter>
           </Card>
@@ -203,10 +203,10 @@ const PatreonTiers: React.FC<PatreonTiersProps> = ({ className = "", compact = f
           All memberships automatically renew but can be cancelled anytime. Join our community today and begin your transformative journey with Midnight Magnolia.
         </p>
         <Button 
-          className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 hover:text-[#0A192F] px-8"
+          className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 hover:text-[#0A192F] px-8 animate-shimmer hover-scale"
           size="lg"
         >
-          Explore All Membership Benefits
+          <span className="animate-float inline-block">Explore All Membership Benefits</span>
         </Button>
       </div>
     </div>
