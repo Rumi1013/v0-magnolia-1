@@ -6,18 +6,18 @@ import { ArrowRight, BookOpen, Sparkles, Star, Calendar, FileText, MapPin } from
 
 const Home: React.FC = () => {
   return (
-    <div className="bg-[#0A192F] min-h-screen">
+    <div className="bg-[#122240] min-h-screen">
       {/* Hero Section */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[#0A192F]" />
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#D4AF37]/5 to-transparent" />
-          <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-t from-[#A3B18A]/5 to-transparent" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[#122240]" />
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#D4AF37]/5 to-transparent animate-shimmer" />
+          <div className="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-t from-[#A3B18A]/5 to-transparent animate-shimmer" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#D4AF37] mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-[#D4AF37] mb-6 leading-tight animate-float">
               <span className="italic">Midnight</span> Magnolia <br />
               <span className="text-3xl md:text-4xl text-[#FAF3E0]">Creative Content Collection</span>
             </h1>
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 px-8 py-6 text-base"
+                className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 px-8 py-6 text-base animate-pulse-gold hover-scale"
                 asChild
               >
                 <Link to="/membership">
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 px-8 py-6 text-base"
+                className="border-[#A3B18A] text-[#A3B18A] hover:bg-[#A3B18A]/10 px-8 py-6 text-base hover-scale"
                 asChild
               >
                 <Link to="/content-offerings">
@@ -217,20 +217,20 @@ const Home: React.FC = () => {
       </section>
       
       {/* Call to Action */}
-      <section className="py-16 bg-[#0A3B4D]">
+      <section className="py-16 bg-[#114559]">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-6">
+          <h2 className="text-3xl md:text-4xl font-playfair text-[#D4AF37] mb-6 animate-float">
             Begin Your Midnight Magnolia Journey
           </h2>
           <p className="text-xl font-lora text-[#FAF3E0] max-w-2xl mx-auto mb-8">
             Join our community of seekers, dreamers, and creators. Explore our membership tiers and find the one that resonates with your path.
           </p>
           <Button 
-            className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 px-8 py-6 text-lg"
+            className="bg-[#D4AF37] text-[#0A192F] hover:bg-[#D4AF37]/90 px-8 py-6 text-lg animate-pulse-gold hover-scale animate-shimmer"
             asChild
           >
             <Link to="/membership">
-              Explore Membership Options
+              <span className="animate-float inline-block">Explore Membership Options</span>
             </Link>
           </Button>
         </div>
